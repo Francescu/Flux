@@ -1,0 +1,17 @@
+module CURIParser [system] {
+    header "/usr/local/include/uri_parser/uri_parser.h"
+    link "uri_parser"
+    export *
+}
+
+module CLibvenice [system] {
+    header "/usr/local/include/libvenice/libvenice.h"
+    link "venice"
+    export *
+}
+
+module CHTTPParser [system] {
+    header "/usr/local/include/http_parser/http_parser.h"
+    link "http_parser"
+    export *
+}
