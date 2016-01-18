@@ -27,7 +27,7 @@ public struct Route: ResponderType {
     public let path: String
     public let responder: ResponderType
 
-    init(methods: Set<Method>, path: String, responder: ResponderType) {
+    public init(methods: Set<Method>, path: String, responder: ResponderType) {
         self.methods = methods
         self.path = path
         self.responder = responder
