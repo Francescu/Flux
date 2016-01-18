@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37513E171C4C80AB00488AD4 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37513E161C4C80AB00488AD4 /* Trie.swift */; };
+		37513E191C4C80E200488AD4 /* TrieRouteMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37513E181C4C80E200488AD4 /* TrieRouteMatcher.swift */; };
+		37B36EE31C4CB5FE00FE0D01 /* TrieMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */; };
 		B0158A841C4C0456003700D3 /* SSLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0158A831C4C0456003700D3 /* SSLError.swift */; };
 		B0B14CB91C4AD455006ABA9E /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C601C4AD455006ABA9E /* Base64.swift */; };
 		B0B14CBA1C4AD455006ABA9E /* CollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C621C4AD455006ABA9E /* CollectionType.swift */; };
@@ -109,6 +112,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		37513E161C4C80AB00488AD4 /* Trie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
+		37513E181C4C80E200488AD4 /* TrieRouteMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrieRouteMatcher.swift; sourceTree = "<group>"; };
+		37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrieMatcherTests.swift; path = FluxTests/TrieMatcherTests.swift; sourceTree = SOURCE_ROOT; };
 		B0158A831C4C0456003700D3 /* SSLError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLError.swift; sourceTree = "<group>"; };
 		B0B14C5D1C4AD313006ABA9E /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		B0B14C601C4AD455006ABA9E /* Base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
@@ -451,6 +457,8 @@
 				B0B14C981C4AD455006ABA9E /* RouteMatcherType.swift */,
 				B0B14C991C4AD455006ABA9E /* Router.swift */,
 				B0B14C9A1C4AD455006ABA9E /* RouterBuilder.swift */,
+				37513E161C4C80AB00488AD4 /* Trie.swift */,
+				37513E181C4C80E200488AD4 /* TrieRouteMatcher.swift */,
 			);
 			name = Router;
 			path = Flux/HTTP/Router;
@@ -689,6 +697,7 @@
 			isa = PBXGroup;
 			children = (
 				B0B14D051C4AD6AC006ABA9E /* Tests.swift */,
+				37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */,
 			);
 			name = FluxTests;
 			path = CoreTests;
@@ -827,6 +836,7 @@
 			files = (
 				B0B14CDE1C4AD455006ABA9E /* RequestStreamParser.swift in Sources */,
 				B0B14D351C4BBAA5006ABA9E /* SSLServerContext.swift in Sources */,
+				37513E171C4C80AB00488AD4 /* Trie.swift in Sources */,
 				B0B14CEE1C4AD455006ABA9E /* Poller.swift in Sources */,
 				B0B14CBD1C4AD455006ABA9E /* EventListener.swift in Sources */,
 				B0B14CBE1C4AD455006ABA9E /* File.swift in Sources */,
@@ -842,6 +852,7 @@
 				B0B14CD31C4AD455006ABA9E /* RequestParser.swift in Sources */,
 				B0B14CE81C4AD455006ABA9E /* FallibleReceivingChannel.swift in Sources */,
 				B0B14D2F1C4BBAA5006ABA9E /* SSLClientStream.swift in Sources */,
+				37513E191C4C80E200488AD4 /* TrieRouteMatcher.swift in Sources */,
 				B0B14CE21C4AD455006ABA9E /* TCPStreamServer.swift in Sources */,
 				B0B14D101C4AD72F006ABA9E /* ContentNegotiatorMiddleware.swift in Sources */,
 				B0B14D111C4AD72F006ABA9E /* FileResponder.swift in Sources */,
@@ -918,6 +929,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37B36EE31C4CB5FE00FE0D01 /* TrieMatcherTests.swift in Sources */,
 				B0B14D061C4AD6AC006ABA9E /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

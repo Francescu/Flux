@@ -160,7 +160,7 @@ extension Router {
         build(route: builder)
         self.init(
             middleware: middleware,
-            matcher: RouteMatcher(routes: builder.routes),
+            matcher: TrieRouteMatcher(routes: builder.routes),
             fallback: builder.fallback
         )
     }
