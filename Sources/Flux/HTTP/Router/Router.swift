@@ -27,11 +27,11 @@ public struct Router: ResponderType {
     public let matcher: RouteMatcherType
     public let fallback: ResponderType
 
-//    public init(middleware: [MiddlewareType], matcher: RouteMatcherType, fallback: ResponderType) {
-//        self.middleware = middleware
-//        self.matcher = matcher
-//        self.fallback = fallback
-//    }
+    public init(middleware: [MiddlewareType], matcher: RouteMatcherType, fallback: ResponderType) {
+        self.middleware = middleware
+        self.matcher = matcher
+        self.fallback = fallback
+    }
 
     public func respond(request: Request) throws -> Response {
         let responder = matcher.match(request) ?? fallback

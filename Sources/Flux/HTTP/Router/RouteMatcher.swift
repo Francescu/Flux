@@ -70,6 +70,8 @@ public struct RegexRoute: ResponderType {
         var request = request
         let values = regularExpression.groups(request.path)
 
+        request.pathParameter = [:]
+
         for (index, key) in parameterKeys.enumerate() {
             request.pathParameter[key] = values[index]
         }

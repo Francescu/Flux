@@ -47,11 +47,17 @@ public final class RouterBuilder {
     }
 
     public func router(path: String, middleware: MiddlewareType..., router: Router) {
+        let prefix = basePath + path
         let newRoutes = router.matcher.routes.map { route in
             return Route(
                 methods: route.methods,
-                path: basePath + path + route.path,
-                responder: middleware.intercept(route.responder)
+                path: prefix + route.path,
+                responder: middleware.intercept { request in
+                    var request = request
+                    let prefixLength = prefix.characters.count - 1
+                    request.uri.path = request.path.dropFirstCharacters(prefixLength)
+                    return try router.respond(request)
+                }
             )
         }
 
@@ -67,7 +73,7 @@ public final class RouterBuilder {
     }
 
     private func _any(path: String, middleware: [MiddlewareType], responder: ResponderType) {
-        _methods([.GET, .POST, .PUT, .PATCH, .DELETE], path: path, middleware: middleware, responder: responder)
+        _methods(Method.commonMethods, path: path, middleware: middleware, responder: responder)
     }
 
     public func get(path: String, middleware: MiddlewareType..., respond: Respond) {

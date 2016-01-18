@@ -26,8 +26,8 @@ import CURIParser
 
 public struct URI {
     public struct UserInfo: Hashable, CustomStringConvertible {
-        public let username: String
-        public let password: String
+        public var username: String
+        public var password: String
         
         public init(username: String, password: String) {
             self.username = username
@@ -43,13 +43,13 @@ public struct URI {
         }
     }
 
-    public let scheme: String?
-    public let userInfo: UserInfo?
-    public let host: String?
-    public let port: Int?
-    public let path: String?
-    public let query: [String: String]
-    public let fragment: String?
+    public var scheme: String?
+    public var userInfo: UserInfo?
+    public var host: String?
+    public var port: Int?
+    public var path: String?
+    public var query: [String: String]
+    public var fragment: String?
 
     public init(scheme: String? = nil, userInfo: UserInfo? = nil, host: String? = nil, port: Int? = nil, path: String? = nil, query: [String: String] = [:], fragment: String? = nil) {
         self.scheme = scheme

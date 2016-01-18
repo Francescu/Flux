@@ -126,6 +126,10 @@ extension String {
 
         return self[startIndex ..< startIndex.advancedBy(characters.count - endIndex)]
     }
+
+    public func dropFirstCharacters(n: Int) -> String {
+        return self.characters.dropFirst(n).map({String($0)}).joinWithSeparator("")
+    }
 }
 
 public struct CharacterSet {

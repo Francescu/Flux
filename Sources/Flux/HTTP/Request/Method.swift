@@ -66,6 +66,12 @@ public enum Method {
     case UNKNOWN
 }
 
+extension Method {
+    public static var commonMethods: Set<Method> {
+        return [.GET, .POST, .PUT, .PATCH, .DELETE]
+    }
+}
+
 extension Method: CustomStringConvertible {
     public var description: String {
         switch self {

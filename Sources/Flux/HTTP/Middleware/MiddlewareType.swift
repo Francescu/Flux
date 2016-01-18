@@ -53,3 +53,7 @@ extension CollectionType where Self.Generator.Element == MiddlewareType {
 public func chain(middleware middleware: MiddlewareType..., responder: ResponderType) -> ResponderType {
     return middleware.intercept(responder)
 }
+
+public func chain(middleware middleware: MiddlewareType..., respond: Respond) -> ResponderType {
+    return middleware.intercept(Responder(respond: respond))
+}
