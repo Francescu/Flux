@@ -1,4 +1,4 @@
-// Router.swift
+// SSLIO.swift
 //
 // The MIT License (MIT)
 //
@@ -15,26 +15,49 @@
 // copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// IMPLIED, INCLUDINbG BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public struct Router: ResponderType {
-    public let middleware: [MiddlewareType]
-    public let matcher: RouteMatcherType
-    public let fallback: ResponderType
+import COpenSSL
 
-//    public init(middleware: [MiddlewareType], matcher: RouteMatcherType, fallback: ResponderType) {
-//        self.middleware = middleware
-//        self.matcher = matcher
-//        self.fallback = fallback
-//    }
+public class SSLIO {
+    public enum Method {
+		case Memory
 
-    public func respond(request: Request) throws -> Response {
-        let responder = matcher.match(request) ?? fallback
-        return try middleware.intercept(responder).respond(request)
-    }
+        var method: UnsafeMutablePointer<BIO_METHOD> {
+            switch self {
+            case .Memory:
+                return BIO_s_mem()
+            }
+        }
+	}
+
+	internal var bio: UnsafeMutablePointer<BIO>
+
+	public init(method: Method) {
+		OpenSSL.initialize()
+		bio = BIO_new(method.method)
+	}
+
+	public func write(data: [UInt8]) {
+		var data = data
+		BIO_write(bio, &data, Int32(data.count))
+	}
+
+	public func read() -> [UInt8] {
+		var buffer: [UInt8] = Array(count: DEFAULT_BUFFER_SIZE, repeatedValue: 0)
+
+        let readSize = BIO_read(bio, &buffer, Int32(buffer.count))
+
+		if readSize > 0 {
+			return Array(buffer.prefix(Int(readSize)))
+		} else {
+			return []
+		}
+	}
+
 }

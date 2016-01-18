@@ -29,17 +29,17 @@
 #endif
 import CLibvenice
 
-public final class TCPServerSocket {
-    private var socket: tcpsock
+public final class UDPServerSocket {
+    private var socket: udpsock
 
     public var port: Int {
-        return Int(tcpport(self.socket))
+        return Int(udpport(self.socket))
     }
 
     public private(set) var closed = false
 
-    public init(ip: IP, backlog: Int = 10) throws {
-        self.socket = tcplisten(ip.address, Int32(backlog))
+    public init(ip: IP) throws {
+        self.socket = udplisten(ip.address)
 
         if errno != 0 {
             closed = true
@@ -48,7 +48,7 @@ public final class TCPServerSocket {
     }
 
     public init(fileDescriptor: Int32) throws {
-        self.socket = tcpattach(fileDescriptor, 1)
+        self.socket = udpattach(fileDescriptor)
 
         if errno != 0 {
             closed = true
@@ -60,33 +60,49 @@ public final class TCPServerSocket {
         close()
     }
 
-    public func accept(deadline: Deadline = noDeadline) throws -> TCPClientSocket {
+    public func send(ip: IP, data: [UInt8], deadline: Deadline = noDeadline) throws {
         if closed {
             throw TCPError.closedSocketError
         }
 
-        let clientSocket = tcpaccept(socket, deadline)
+        var data = data
+        udpsend(socket, ip.address, &data, data.count)
 
         if errno != 0 {
-            throw TCPError.lastError
+            throw TCPError.lastErrorWithData(data, bytesProcessed: 0, receive: false)
+        }
+    }
+
+    public func receive(bufferSize bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> ([UInt8], IP) {
+        if closed {
+            throw TCPError.closedSocketError
         }
 
-        return TCPClientSocket(socket: clientSocket)
+        var data: [UInt8] = [UInt8](count: bufferSize, repeatedValue: 0)
+        let address = UnsafeMutablePointer<ipaddr>()
+        let bytesProcessed = udprecv(socket, address, &data, data.count, deadline)
+
+        if errno != 0 {
+            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
+        }
+
+        let processedData = processedDataFromSource(data, bytesProcessed: bytesProcessed)
+        let ip = IP(address: address.memory)
+        return (processedData, ip)
     }
 
     public func attach(fileDescriptor: Int32) throws {
         if !closed {
-            tcpclose(socket)
+            udpclose(socket)
         }
 
-        socket = tcpattach(fileDescriptor, 1)
+        socket = udpattach(fileDescriptor)
+        closed = false
 
         if errno != 0 {
             closed = true
             throw TCPError.lastError
         }
-
-        closed = false
     }
 
     public func detach() throws -> Int32 {
@@ -95,13 +111,13 @@ public final class TCPServerSocket {
         }
 
         closed = true
-        return tcpdetach(socket)
+        return udpdetach(socket)
     }
 
     public func close() {
         if !closed {
             closed = true
-            tcpclose(socket)
+            udpclose(socket)
         }
     }
 }

@@ -1,4 +1,4 @@
-// SSL.swift
+// SSLContext.swift
 //
 // The MIT License (MIT)
 //
@@ -22,15 +22,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public protocol SSLType {}
+import COpenSSL
 
-public protocol SSLContextType {}
-
-public protocol SSLClientContextType: SSLContextType {
-    var streamType: SSLClientStreamType.Type { get }
+public enum SSLContextError: ErrorType {
+	case Context
+    case Certificate(description: String)
 }
 
-public protocol SSLClientStreamType: StreamType {
-    init(context: SSLClientContextType, rawStream: StreamType) throws
-}
+public class SSLContext: SSLContextType {
+	internal var context: UnsafeMutablePointer<SSL_CTX>
 
+	public init(method: SSLMethod = .SSLv23, type: SSLMethodType = .Unspecified) {
+		OpenSSL.initialize()
+        context = SSL_CTX_new(getMethodFunc(method, type: type))
+
+        if context == nil {
+            print(lastSSLErrorDescription)
+        }
+	}
+
+	public func useCertificate(certificate: SSLCertificate) {
+        SSL_CTX_use_certificate(context, certificate.certificate)
+	}
+
+	public func usePrivateKey(privateKey: SSLKey) {
+        SSL_CTX_use_PrivateKey(context, privateKey.privateKey)
+	}
+
+	public func setCipherSuites(cipherSuites: String) {
+        SSL_CTX_set_cipher_list(context, cipherSuites)
+	}
+
+	public func setSrtpProfiles(srtpProfiles: String) throws {
+        if SSL_CTX_set_tlsext_use_srtp(context, srtpProfiles) != 1 {
+            throw SSLContextError.Context
+        }
+	}
+
+}

@@ -22,22 +22,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public protocol RouteType: ResponderType {
-    var methods: Set<Method> { get }
-    var path: String { get }
-    var responder: ResponderType { get }
-}
+public struct Route: ResponderType {
+    public let methods: Set<Method>
+    public let path: String
+    public let responder: ResponderType
 
-public protocol RouteMatcherType: ResponderType {
-    var routes: [RouteType] { get set }
-    var fallback: ResponderType { get set }
-    func addRoute(methods methods: Set<Method>, path: String, responder: ResponderType)
-    func match(request: Request) -> RouteType?
-}
+    init(methods: Set<Method>, path: String, responder: ResponderType) {
+        self.methods = methods
+        self.path = path
+        self.responder = responder
+    }
 
-extension RouteMatcherType {
     public func respond(request: Request) throws -> Response {
-        let responder = match(request) ?? fallback
         return try responder.respond(request)
     }
+}
+
+public protocol RouteMatcherType {
+    var routes: [Route] { get }
+    init(routes: [Route])
+    func match(request: Request) -> Route?
 }

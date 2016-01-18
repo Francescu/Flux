@@ -34,17 +34,27 @@ final class TCPStream: StreamType {
         while !socket.closed {
             do {
                 let data = try socket.receiveLowWaterMark(1, highWaterMark: 256, deadline: now + 1 * second)
-                completion {
-                    return data
+                if let string = String(data: data) {
+//                    print(string)
                 }
+//                if data.count > 0 {
+                    completion {
+                        return data
+                    }
+//                }
             } catch TCPError.OperationTimedOut(_, let data) {
-                completion {
-                    return data
-                }
+//                if data.count > 0 {
+                    completion {
+                        return data
+                    }
+//                }
             } catch TCPError.ConnectionResetByPeer(_, let data) {
-                completion {
-                    return data
-                }
+//                if data.count > 0 {
+                    completion {
+                        return data
+                    }
+//                }
+                break
             } catch {
                 completion {
                     throw error

@@ -24,11 +24,14 @@
 
 public final class RouterBuilder {
     let basePath: String
-    var matcher: RouteMatcherType
+    var routes: [Route] = []
+    
+    var fallback: ResponderType = Responder { _ in
+        return Response(status: .NotFound)
+    }
 
-    init(basePath: String, matcher: RouteMatcherType) {
+    init(basePath: String) {
         self.basePath = basePath
-        self.matcher = matcher
     }
 
     public func fallback(middleware middleware: MiddlewareType..., respond: Respond) {
@@ -40,17 +43,19 @@ public final class RouterBuilder {
     }
 
     private func _fallback(middleware: [MiddlewareType], responder: ResponderType) {
-        matcher.fallback = middleware.intercept(responder)
+        fallback = middleware.intercept(responder)
     }
 
     public func router(path: String, middleware: MiddlewareType..., router: Router) {
-        for route in router.matcher.routes {
-            matcher.addRoute(
+        let newRoutes = router.matcher.routes.map { route in
+            return Route(
                 methods: route.methods,
                 path: basePath + path + route.path,
                 responder: middleware.intercept(route.responder)
             )
         }
+
+        routes.appendContentsOf(newRoutes)
     }
 
     public func any(path: String, middleware: MiddlewareType..., respond: Respond) {
@@ -134,18 +139,23 @@ public final class RouterBuilder {
     }
 
     private func _methods(methods: Set<Method>, path: String, middleware: [MiddlewareType], responder: ResponderType) {
-        matcher.addRoute(
+        let route = Route(
             methods: methods,
             path: basePath + path,
             responder: middleware.intercept(responder)
         )
+        routes.append(route)
     }
 }
 
 extension Router {
-    public init(_ basePath: String = "", middleware: MiddlewareType..., matcher: RouteMatcherType = RouteMatcher(), build: (route: RouterBuilder) -> Void) {
-        let builder = RouterBuilder(basePath: basePath, matcher: matcher)
+    public init(_ basePath: String = "", middleware: MiddlewareType..., build: (route: RouterBuilder) -> Void) {
+        let builder = RouterBuilder(basePath: basePath)
         build(route: builder)
-        self.init(middleware: middleware, matcher: matcher)
+        self.init(
+            middleware: middleware,
+            matcher: RouteMatcher(routes: builder.routes),
+            fallback: builder.fallback
+        )
     }
 }

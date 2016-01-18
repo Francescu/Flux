@@ -1,4 +1,4 @@
-// Router.swift
+// OpenSSL.swift
 //
 // The MIT License (MIT)
 //
@@ -15,26 +15,45 @@
 // copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// IMPLIED, INCLUDINbG BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public struct Router: ResponderType {
-    public let middleware: [MiddlewareType]
-    public let matcher: RouteMatcherType
-    public let fallback: ResponderType
+#if os(Linux)
+	import Glibc
+#else
+	import Darwin.C
+#endif
 
-//    public init(middleware: [MiddlewareType], matcher: RouteMatcherType, fallback: ResponderType) {
-//        self.middleware = middleware
-//        self.matcher = matcher
-//        self.fallback = fallback
-//    }
+import COpenSSL
 
-    public func respond(request: Request) throws -> Response {
-        let responder = matcher.match(request) ?? fallback
-        return try middleware.intercept(responder).respond(request)
-    }
+public let DEFAULT_BUFFER_SIZE = 4096
+
+public final class OpenSSL: SSLType {
+
+	private static var _initialize: Void = {
+        print("called once")
+	    SSL_library_init()
+	    SSL_load_error_strings()
+	    ERR_load_crypto_strings()
+	    OPENSSL_config(nil)
+	}()
+
+	public static func initialize() {
+	    let _ = self._initialize
+	}
+
+}
+
+public func SSL_CTX_set_options(ctx: UnsafeMutablePointer<SSL_CTX>, _ op: Int) -> Int {
+	return SSL_CTX_ctrl(ctx, SSL_CTRL_OPTIONS, op, nil)
+}
+
+private let SSL_CTRL_SET_ECDH_AUTO: Int32 = 94
+
+public func SSL_CTX_set_ecdh_auto(ctx: UnsafeMutablePointer<SSL_CTX>, _ onoff: Int) -> Int {
+	return SSL_CTX_ctrl(ctx, SSL_CTRL_SET_ECDH_AUTO, onoff, nil)
 }

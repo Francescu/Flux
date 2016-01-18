@@ -1,4 +1,4 @@
-// SSL.swift
+// SSLServerContext.swift
 //
 // The MIT License (MIT)
 //
@@ -22,15 +22,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public protocol SSLType {}
+import COpenSSL
 
-public protocol SSLContextType {}
+public final class SSLServerContext: SSLContext {
+	public init(certificate: String, privateKey: String, certificateChain: String? = nil) throws {
+		super.init(method: .SSLv23, type: .Server)
+        SSL_CTX_set_verify(context, SSL_VERIFY_NONE, nil)
 
-public protocol SSLClientContextType: SSLContextType {
-    var streamType: SSLClientStreamType.Type { get }
+        if SSL_CTX_set_ecdh_auto(context, 1) != 1 {
+            print(lastSSLErrorDescription)
+        }
+
+        if let certificateChain = certificateChain {
+            if SSL_CTX_use_certificate_chain_file(context, certificateChain) != 1 {
+                throw SSLContextError.Certificate(description: lastSSLErrorDescription)
+            }
+        }
+
+        if SSL_CTX_use_certificate_file(context, certificate, SSL_FILETYPE_PEM) != 1 {
+            throw SSLContextError.Certificate(description: lastSSLErrorDescription)
+        }
+
+        if SSL_CTX_use_PrivateKey_file(context, privateKey, SSL_FILETYPE_PEM) != 1 {
+            throw SSLContextError.Certificate(description: lastSSLErrorDescription)
+        }
+	}
 }
-
-public protocol SSLClientStreamType: StreamType {
-    init(context: SSLClientContextType, rawStream: StreamType) throws
-}
-

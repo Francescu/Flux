@@ -1,4 +1,4 @@
-// Router.swift
+// SSLError.swift
 //
 // The MIT License (MIT)
 //
@@ -15,26 +15,15 @@
 // copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// IMPLIED, INCLUDINbG BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public struct Router: ResponderType {
-    public let middleware: [MiddlewareType]
-    public let matcher: RouteMatcherType
-    public let fallback: ResponderType
+import COpenSSL
 
-//    public init(middleware: [MiddlewareType], matcher: RouteMatcherType, fallback: ResponderType) {
-//        self.middleware = middleware
-//        self.matcher = matcher
-//        self.fallback = fallback
-//    }
-
-    public func respond(request: Request) throws -> Response {
-        let responder = matcher.match(request) ?? fallback
-        return try middleware.intercept(responder).respond(request)
-    }
+var lastSSLErrorDescription: String {
+    return String.fromCString(ERR_reason_error_string(ERR_peek_error())) ?? "Unkown Error"
 }

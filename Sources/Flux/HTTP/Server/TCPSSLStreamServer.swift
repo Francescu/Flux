@@ -1,4 +1,4 @@
-// Router.swift
+// TCPSSLStreamServer.swift
 //
 // The MIT License (MIT)
 //
@@ -22,19 +22,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public struct Router: ResponderType {
-    public let middleware: [MiddlewareType]
-    public let matcher: RouteMatcherType
-    public let fallback: ResponderType
+struct TCPSSLStreamServer: StreamServerType {
+    let port: Int
+    let certificate: String
+    let privateKey: String
+    let certificateChain: String?
 
-//    public init(middleware: [MiddlewareType], matcher: RouteMatcherType, fallback: ResponderType) {
-//        self.middleware = middleware
-//        self.matcher = matcher
-//        self.fallback = fallback
-//    }
+    func accept(completion: (Void throws -> StreamType) -> Void) {
+        do {
+            let ip = try IP(port: 8080)
+            let serverSocket = try TCPServerSocket(ip: ip, backlog: 128)
 
-    public func respond(request: Request) throws -> Response {
-        let responder = matcher.match(request) ?? fallback
-        return try middleware.intercept(responder).respond(request)
+            while true {
+                let socket = try serverSocket.accept()
+                let stream = TCPStream(socket: socket)
+
+                let context = try SSLServerContext(
+                    certificate: certificate,
+                    privateKey: privateKey,
+                    certificateChain: certificateChain
+                )
+
+                let SSLStream = try SSLServerStream(context: context, rawStream: stream)
+                
+                co {
+                    completion {
+                        return SSLStream
+                    }
+                }
+            }
+        } catch {
+            completion {
+                throw error
+            }
+        }
     }
 }

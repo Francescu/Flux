@@ -34,6 +34,13 @@ public struct Server: ServerType {
         self.responder = middleware.intercept(responder)
         self.serializer = serializer
     }
+
+    public init(server: StreamServerType, parser: RequestStreamParserType, middleware: [MiddlewareType], serializer: ResponseStreamSerializerType, respond: Respond) {
+        self.server = server
+        self.parser = parser
+        self.responder = middleware.intercept(Responder(respond: respond))
+        self.serializer = serializer
+    }
 }
 
 extension Server {
@@ -44,6 +51,36 @@ extension Server {
             middleware: middleware,
             responder: responder,
             serializer: serializer
+        )
+    }
+
+    public init(port: Int, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) {
+        self.init(
+            server: TCPStreamServer(port: port),
+            parser: parser,
+            middleware: middleware,
+            serializer: serializer,
+            respond: respond
+        )
+    }
+
+    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) {
+        self.init(
+            server: TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain),
+            parser: parser,
+            middleware: middleware,
+            responder: responder,
+            serializer: serializer
+        )
+    }
+
+    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) {
+        self.init(
+            server: TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain),
+            parser: parser,
+            middleware: middleware,
+            serializer: serializer,
+            respond: respond
         )
     }
 }

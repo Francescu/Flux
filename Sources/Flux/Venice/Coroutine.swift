@@ -90,3 +90,7 @@ public func fork() -> pid_t {
 public var CPUCoreCount: Int {
     return Int(mill_number_of_cores())
 }
+
+infix operator <- {}
+prefix operator <- {}
+prefix operator !<- {}

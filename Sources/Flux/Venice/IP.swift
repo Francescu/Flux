@@ -50,6 +50,10 @@ extension IPMode {
 public struct IP {
     let address: ipaddr
 
+    init(address: ipaddr) {
+        self.address = address
+    }
+
     public init(port: Int, mode: IPMode = .IPV4) throws {
         if port < 0 || port > 0xffff {
             throw IPError(description: "port should be between 0 and 0xffff")

@@ -22,50 +22,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public final class RouteMatcher: RouteMatcherType {
-    public var routes: [RouteType] = []
+public struct RouteMatcher: RouteMatcherType {
+    public let routes: [Route]
+    public let regexRoutes: [(Route, RegexRoute)]
 
-    public var fallback: ResponderType = Responder { request in
-        return Response(status: .NotFound)
+    public init(routes: [Route]) {
+        self.regexRoutes = routes.map {
+            let regexRoute = RegexRoute(route: $0)
+            let route = Route(
+                methods: regexRoute.route.methods,
+                path: regexRoute.route.path,
+                responder: regexRoute
+            )
+            return (route, regexRoute)
+        }
+        self.routes = regexRoutes.map({$0.0})
     }
 
-    public init() {}
-
-    public func addRoute(methods methods: Set<Method>, path: String, responder: ResponderType) {
-        let route = Route(methods: methods, path: path, responder: responder)
-        routes.append(route)
-    }
-
-    public func match(request: Request) -> RouteType? {
-        for route in routes where (route as! Route).matches(request) {
+    public func match(request: Request) -> Route? {
+        for (route, regexRoute) in regexRoutes where regexRoute.matches(request) {
             return route
         }
         return nil
     }
 }
 
-public struct Route: RouteType {
-    public let methods: Set<Method>
-    public let path: String
-    public let responder: ResponderType
-
+public struct RegexRoute: ResponderType {
+    public let route: Route
     private let parameterKeys: [String]
     private let regularExpression: Regex
 
-    public init(methods: Set<Method>, path: String, responder: ResponderType) {
-        self.methods = methods
-        self.path = path
-        self.responder = responder
+    public init(route: Route) {
+        self.route = route
 
         let parameterRegularExpression = try! Regex(pattern: ":([[:alnum:]]+)")
-        let pattern = parameterRegularExpression.replace(path, withTemplate: "([[:alnum:]_-]+)")
+        let pattern = parameterRegularExpression.replace(route.path, withTemplate: "([[:alnum:]_-]+)")
 
-        self.parameterKeys = parameterRegularExpression.groups(path)
+        self.parameterKeys = parameterRegularExpression.groups(route.path)
         self.regularExpression = try! Regex(pattern: "^" + pattern + "$")
     }
 
     public func matches(request: Request) -> Bool {
-        return regularExpression.matches(request.uri.path!) && methods.contains(request.method)
+        return regularExpression.matches(request.uri.path!) && route.methods.contains(request.method)
     }
 
     public func respond(request: Request) throws -> Response {
@@ -76,7 +74,7 @@ public struct Route: RouteType {
             request.pathParameter[key] = values[index]
         }
 
-        return try responder.respond(request)
+        return try route.responder.respond(request)
     }
 }
 
