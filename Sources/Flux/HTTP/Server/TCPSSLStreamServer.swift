@@ -24,9 +24,15 @@
 
 struct TCPSSLStreamServer: StreamServerType {
     let port: Int
-    let certificate: String
-    let privateKey: String
-    let certificateChain: String?
+    let context: SSLServerContext
+
+    init(port: Int, certificate: String, privateKey: String) throws {
+        self.port = port
+        self.context = try SSLServerContext(
+            certificate: certificate,
+            privateKey: privateKey
+        )
+    }
 
     func accept(completion: (Void throws -> StreamType) -> Void) {
         do {
@@ -36,12 +42,6 @@ struct TCPSSLStreamServer: StreamServerType {
             while true {
                 let socket = try serverSocket.accept()
                 let stream = TCPStream(socket: socket)
-
-                let context = try SSLServerContext(
-                    certificate: certificate,
-                    privateKey: privateKey,
-                    certificateChain: certificateChain
-                )
 
                 let SSLStream = try SSLServerStream(context: context, rawStream: stream)
                 

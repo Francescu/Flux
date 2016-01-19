@@ -26,7 +26,7 @@ import COpenSSL
 
 public final class SSLServerContext: SSLContext {
 	public init(certificate: String, privateKey: String, certificateChain: String? = nil) throws {
-		super.init(method: .SSLv23, type: .Server)
+		try super.init(method: .SSLv23, type: .Server)
         SSL_CTX_set_verify(context, SSL_VERIFY_NONE, nil)
 
         if SSL_CTX_set_ecdh_auto(context, 1) != 1 {
@@ -44,6 +44,10 @@ public final class SSLServerContext: SSLContext {
         }
 
         if SSL_CTX_use_PrivateKey_file(context, privateKey, SSL_FILETYPE_PEM) != 1 {
+            throw SSLContextError.Certificate(description: lastSSLErrorDescription)
+        }
+
+        if SSL_CTX_check_private_key(context) != 1 {
             throw SSLContextError.Certificate(description: lastSSLErrorDescription)
         }
 	}

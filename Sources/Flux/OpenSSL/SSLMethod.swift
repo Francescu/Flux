@@ -40,7 +40,7 @@ public enum SSLMethod {
 //	case DTLS		// DTLS 1.0 and 1.2
 }
 
-func getMethodFunc(method: SSLMethod, type: SSLMethodType = .Unspecified) -> UnsafePointer<SSL_METHOD> {
+func getMethod(method: SSLMethod, type: SSLMethodType = .Unspecified) -> UnsafePointer<SSL_METHOD> {
 	switch method {
 	/*case .SSLv2:
 		switch type {

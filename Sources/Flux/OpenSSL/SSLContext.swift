@@ -25,37 +25,43 @@
 import COpenSSL
 
 public enum SSLContextError: ErrorType {
-	case Context
+	case Context(description: String)
     case Certificate(description: String)
 }
 
 public class SSLContext: SSLContextType {
 	internal var context: UnsafeMutablePointer<SSL_CTX>
 
-	public init(method: SSLMethod = .SSLv23, type: SSLMethodType = .Unspecified) {
+	public init(method: SSLMethod = .SSLv23, type: SSLMethodType = .Unspecified) throws {
 		OpenSSL.initialize()
-        context = SSL_CTX_new(getMethodFunc(method, type: type))
+        context = SSL_CTX_new(getMethod(method, type: type))
 
         if context == nil {
-            print(lastSSLErrorDescription)
+            throw SSLContextError.Context(description: lastSSLErrorDescription)
         }
 	}
 
-	public func useCertificate(certificate: SSLCertificate) {
-        SSL_CTX_use_certificate(context, certificate.certificate)
+	public func useCertificate(certificate: SSLCertificate) throws {
+        if SSL_CTX_use_certificate(context, certificate.certificate) != 1 {
+            throw SSLContextError.Context(description: lastSSLErrorDescription)
+        }
 	}
 
-	public func usePrivateKey(privateKey: SSLKey) {
-        SSL_CTX_use_PrivateKey(context, privateKey.privateKey)
+	public func usePrivateKey(privateKey: SSLKey) throws {
+        if SSL_CTX_use_PrivateKey(context, privateKey.privateKey) != 1 {
+            throw SSLContextError.Context(description: lastSSLErrorDescription)
+        }
 	}
 
-	public func setCipherSuites(cipherSuites: String) {
-        SSL_CTX_set_cipher_list(context, cipherSuites)
+	public func setCipherSuites(cipherSuites: String) throws {
+        if SSL_CTX_set_cipher_list(context, cipherSuites) != 1 {
+            throw SSLContextError.Context(description: lastSSLErrorDescription)
+        }
 	}
 
 	public func setSrtpProfiles(srtpProfiles: String) throws {
         if SSL_CTX_set_tlsext_use_srtp(context, srtpProfiles) != 1 {
-            throw SSLContextError.Context
+            throw SSLContextError.Context(description: lastSSLErrorDescription)
         }
 	}
 

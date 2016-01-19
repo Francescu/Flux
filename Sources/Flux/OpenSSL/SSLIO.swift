@@ -36,27 +36,49 @@ public class SSLIO {
         }
 	}
 
-	internal var bio: UnsafeMutablePointer<BIO>
+    enum SSLIOError: ErrorType {
+        case BIO(description: String)
+        case UnsupportedMethod(description: String)
+    }
 
-	public init(method: Method) {
+    var bio: UnsafeMutablePointer<BIO>
+
+	public init(method: Method) throws {
 		OpenSSL.initialize()
 		bio = BIO_new(method.method)
+
+        if bio == nil {
+            throw SSLIOError.BIO(description: lastSSLErrorDescription)
+        }
 	}
 
-	public func write(data: [UInt8]) {
+	public func write(data: [UInt8]) throws {
 		var data = data
-		BIO_write(bio, &data, Int32(data.count))
+        let result = BIO_write(bio, &data, Int32(data.count))
+
+        if result == -2 {
+            throw SSLIOError.UnsupportedMethod(description: lastSSLErrorDescription)
+        }
+
+        if result < 1 {
+            print("coiso")
+        }
 	}
 
-	public func read() -> [UInt8] {
+	public func read() throws -> [UInt8] {
 		var buffer: [UInt8] = Array(count: DEFAULT_BUFFER_SIZE, repeatedValue: 0)
 
-        let readSize = BIO_read(bio, &buffer, Int32(buffer.count))
+        let result = BIO_read(bio, &buffer, Int32(buffer.count))
 
-		if readSize > 0 {
-			return Array(buffer.prefix(Int(readSize)))
+        if result == -2 {
+            throw SSLIOError.UnsupportedMethod(description: lastSSLErrorDescription)
+        }
+
+		if result > 0 {
+			return Array(buffer.prefix(Int(result)))
 		} else {
-			return []
+			print("coiso")
+            return []
 		}
 	}
 

@@ -33,9 +33,7 @@ import COpenSSL
 public let DEFAULT_BUFFER_SIZE = 4096
 
 public final class OpenSSL: SSLType {
-
 	private static var _initialize: Void = {
-        print("called once")
 	    SSL_library_init()
 	    SSL_load_error_strings()
 	    ERR_load_crypto_strings()
@@ -45,7 +43,6 @@ public final class OpenSSL: SSLType {
 	public static func initialize() {
 	    let _ = self._initialize
 	}
-
 }
 
 public func SSL_CTX_set_options(ctx: UnsafeMutablePointer<SSL_CTX>, _ op: Int) -> Int {

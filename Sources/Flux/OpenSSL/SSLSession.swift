@@ -78,9 +78,20 @@ public class SSLSession {
         SSL_set_bio(ssl, readIO.bio, writeIO.bio)
 	}
 
+    public func SSL_is_init_finished(ssl: UnsafeMutablePointer<SSL>) -> Bool {
+        return (SSL_state(ssl) == SSL_ST_OK)
+    }
+
 	public func doHandshake() {
-		SSL_do_handshake(ssl)
-        print(state)
+		let result = SSL_do_handshake(ssl)
+        print(result)
+
+        print(SSL_is_init_finished(ssl))
+        
+        if result < 0 {
+            let code = SSL_get_error(ssl, result)
+            print(code)
+        }
 	}
 
 	public func write(data: [UInt8]) {

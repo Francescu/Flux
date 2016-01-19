@@ -28,8 +28,8 @@ public final class SSLServerStream: StreamType {
 	private let rawStream: StreamType
 	private let context: SSLServerContext
 	private let ssl: SSLSession
-	private let readIO = SSLIO(method: .Memory)
-	private let writeIO = SSLIO(method: .Memory)
+	private let readIO = try! SSLIO(method: .Memory)
+	private let writeIO = try! SSLIO(method: .Memory)
 
 	public init(context: SSLServerContext, rawStream: StreamType) throws {		
 		OpenSSL.initialize()
@@ -39,7 +39,6 @@ public final class SSLServerStream: StreamType {
 
 		ssl = SSLSession(context: context)
 		ssl.setIO(readIO: readIO, writeIO: writeIO)
-
 		SSL_set_accept_state(ssl.ssl)
 	}
 
@@ -52,20 +51,21 @@ public final class SSLServerStream: StreamType {
                     return
                 }
 
-				self.readIO.write(data)
+				try self.readIO.write(data)
 
-				if self.ssl.state != .OK {
-					self.ssl.doHandshake()
-					try self.checkSSLOutput()
-				} else {
-					let data = self.ssl.read()
-                    
-					if data.count > 0 {
-						completion {
-                            return data
-                        }
-					}
-				}
+                while self.ssl.state != .OK {
+                    self.ssl.doHandshake()
+                    try self.checkSSLOutput()
+                    try self.readIO.write(data)
+                }
+
+                let aData = self.ssl.read()
+                
+                if aData.count > 0 {
+                    completion {
+                        return aData
+                    }
+                }
 			} catch {
 				completion {
                     throw error
@@ -88,7 +88,7 @@ public final class SSLServerStream: StreamType {
 	}
 
 	private func checkSSLOutput() throws {
-		let data = writeIO.read()
+		let data = try writeIO.read()
 
 		guard data.count > 0 else {
             return

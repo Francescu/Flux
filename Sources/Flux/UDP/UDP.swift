@@ -29,7 +29,7 @@
 #endif
 import CLibvenice
 
-public final class UDPServerSocket {
+public final class UDPSocket {
     private var socket: udpsock
 
     public var port: Int {
@@ -60,7 +60,7 @@ public final class UDPServerSocket {
         close()
     }
 
-    public func send(ip: IP, data: [UInt8], deadline: Deadline = noDeadline) throws {
+    public func send(ip ip: IP, data: [UInt8], deadline: Deadline = noDeadline) throws {
         if closed {
             throw TCPError.closedSocketError
         }
@@ -73,22 +73,20 @@ public final class UDPServerSocket {
         }
     }
 
-    public func receive(bufferSize bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> ([UInt8], IP) {
+    public func receive(ip ip: IP, bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> [UInt8] {
         if closed {
             throw TCPError.closedSocketError
         }
 
         var data: [UInt8] = [UInt8](count: bufferSize, repeatedValue: 0)
-        let address = UnsafeMutablePointer<ipaddr>()
-        let bytesProcessed = udprecv(socket, address, &data, data.count, deadline)
+        var address = ip.address
+        let bytesProcessed = udprecv(socket, &address, &data, data.count, deadline)
 
         if errno != 0 {
             throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
         }
 
-        let processedData = processedDataFromSource(data, bytesProcessed: bytesProcessed)
-        let ip = IP(address: address.memory)
-        return (processedData, ip)
+        return processedDataFromSource(data, bytesProcessed: bytesProcessed)
     }
 
     public func attach(fileDescriptor: Int32) throws {

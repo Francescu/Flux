@@ -64,9 +64,9 @@ extension Server {
         )
     }
 
-    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) {
+    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) throws {
         self.init(
-            server: TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain),
+            server: try TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey),
             parser: parser,
             middleware: middleware,
             responder: responder,
@@ -74,9 +74,9 @@ extension Server {
         )
     }
 
-    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) {
+    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) throws {
         self.init(
-            server: TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain),
+            server: try TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey),
             parser: parser,
             middleware: middleware,
             serializer: serializer,
