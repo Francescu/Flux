@@ -93,3 +93,11 @@ public struct IP {
         }
     }
 }
+
+extension IP: CustomStringConvertible {
+    public var description: String {
+        var buffer: [Int8] = [Int8](count: 46, repeatedValue: 0)
+        ipaddrstr(address, &buffer)
+        return String.fromCString(buffer)!
+    }
+}

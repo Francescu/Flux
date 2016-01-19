@@ -20,9 +20,9 @@ class HTTPTests: XCTestCase {
         do {
             let listenIP = try IP(port: 40000)
             let socket = try UDPSocket(ip: listenIP)
-            let receiveIP = try IP(address: "127.0.0.1", port: 40000)
-            let data = try socket.receive(ip: receiveIP)
+            let (data, ip) = try socket.receive()
             print(String(data: data))
+            print(ip)
         } catch {
             print(error)
         }
