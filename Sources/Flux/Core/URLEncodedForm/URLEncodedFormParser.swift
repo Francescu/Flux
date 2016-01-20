@@ -30,8 +30,8 @@ enum URLEncodedFormParseError: ErrorType {
 public struct URLEncodedFormParser: InterchangeDataParser {
     public init() {}
     
-    public func parse(data: DataConvertible) throws -> InterchangeData {
-        guard let string = try? String(data: data.data) else {
+    public func parse(data: Data) throws -> InterchangeData {
+        guard let string = try? String(data: data) else {
             throw URLEncodedFormParseError.UnsupportedEncoding
         }
 

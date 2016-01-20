@@ -23,7 +23,13 @@
 // SOFTWARE.
 
 public protocol InterchangeDataParser {
-    func parse(data: DataConvertible) throws -> InterchangeData
+    func parse(data: Data) throws -> InterchangeData
+}
+
+public extension InterchangeDataParser {
+    public func parse(convertible: DataConvertible) throws -> InterchangeData {
+        return try parse(convertible.data)
+    }
 }
 
 public protocol InterchangeDataSerializer {

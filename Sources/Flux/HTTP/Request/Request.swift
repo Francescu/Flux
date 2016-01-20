@@ -43,9 +43,9 @@ public struct Request: MessageType {
 }
 
 extension Request {
-    public init(method: Method, uri: URI, headers: [String: String] = [:], body convertible: DataConvertible = Data()) {
+    public init(method: Method, uri: URI, headers: [String: String] = [:], body: Data = nil) {
         var headers = headers
-        headers["Content-Length"] = "\(convertible.data.count)"
+        headers["Content-Length"] = "\(body.count)"
 
         self.init(
             method: method,
@@ -53,17 +53,25 @@ extension Request {
             majorVersion: 1,
             minorVersion: 1,
             headers: headers,
-            body: convertible.data
+            body: body
         )
     }
+    
+    public init(method: Method, uri: URI, headers: [String: String] = [:], body convertible: DataConvertible) {
+        self.init(method: method, uri: uri, headers: headers, body: convertible.data)
+    }
 
-    public init(method: Method, uri: String, headers: [String: String] = [:], body convertible: DataConvertible = Data()) throws {
+    public init(method: Method, uri: String, headers: [String: String] = [:], body: Data = nil) throws {
         self.init(
             method: method,
             uri: try URI(string: uri),
             headers: headers,
-            body: convertible.data
+            body: body
         )
+    }
+    
+    public init(method: Method, uri: String, headers: [String: String] = [:], body convertible: DataConvertible) throws {
+        try self.init(method: method, uri: uri, headers: headers, body: convertible.data)
     }
 
     public var connection: String? {

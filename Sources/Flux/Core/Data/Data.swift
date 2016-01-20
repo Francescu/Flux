@@ -30,6 +30,7 @@ public protocol DataConvertible {
     init(data: Data) throws
 }
 
+
 public struct Data {
     private var bytes: [Byte]
 
@@ -54,17 +55,6 @@ extension Int: UnsafeDataConvertible {}
 extension UInt: UnsafeDataConvertible {}
 extension Float: UnsafeDataConvertible {}
 extension Double: UnsafeDataConvertible {}
-
-
-extension Data: DataConvertible {
-    public var data: Data {
-        return self
-    }
-    
-    public init(data: Data) {
-        self = data
-    }
-}
 
 extension Data {
     public init() {

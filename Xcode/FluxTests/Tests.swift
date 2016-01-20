@@ -41,11 +41,4 @@ class HTTPTests: XCTestCase {
             print(error)
         }
     }
-
-    func testData() {
-        let dataA: Data = Data("oi") + Data([65, 66, 89])
-        let dataB: Data = "tchau"
-        let dataC = dataA + dataB
-        print(dataC)
-    }
 }

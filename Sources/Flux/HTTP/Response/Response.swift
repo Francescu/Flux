@@ -43,16 +43,16 @@ public struct Response: MessageType {
 }
 
 extension Response {
-    public init(status: Status, headers: [String: String] = [:], body convertible: DataConvertible = Data(), upgrade: (StreamType -> Void)? = nil) {
+    public init(status: Status, headers: [String: String] = [:], body: Data = nil, upgrade: (StreamType -> Void)? = nil) {
         var headers = headers
-        headers["Content-Length"] = "\(convertible.data.count)"
+        headers["Content-Length"] = "\(body.count)"
 
         self.init(
             status: status,
             majorVersion: 1,
             minorVersion: 1,
             headers: headers,
-            body: convertible.data,
+            body: body,
             upgrade: upgrade
         )
     }
