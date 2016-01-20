@@ -100,6 +100,13 @@
 		B0B14D371C4BBAA5006ABA9E /* SSLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14D2B1C4BBAA5006ABA9E /* SSLSession.swift */; };
 		B0B14D391C4BC3F4006ABA9E /* TCPSSLStreamServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14D381C4BC3F4006ABA9E /* TCPSSLStreamServer.swift */; };
 		B0C08DBC1C2A3C300088B16D /* Flux.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C08DB11C2A3C300088B16D /* Flux.framework */; };
+		B71ADF771C4FA49C0065A276 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF6F1C4FA49C0065A276 /* Connection.swift */; };
+		B71ADF781C4FA49C0065A276 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF701C4FA49C0065A276 /* Field.swift */; };
+		B71ADF791C4FA49C0065A276 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF711C4FA49C0065A276 /* Result.swift */; };
+		B71ADF7A1C4FA49C0065A276 /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF721C4FA49C0065A276 /* Row.swift */; };
+		B71ADF7B1C4FA49C0065A276 /* SQLParameterConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF731C4FA49C0065A276 /* SQLParameterConvertible.swift */; };
+		B71ADF7C1C4FA49C0065A276 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF741C4FA49C0065A276 /* Value.swift */; };
+		B71ADF7D1C4FA49C0065A276 /* MigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF761C4FA49C0065A276 /* MigrationManager.swift */; };
 		B7D04A741C4E4E44006C4F2F /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A731C4E4E44006C4F2F /* Date.swift */; };
 		B7D04A7D1C4E94FA006C4F2F /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A7B1C4E94FA006C4F2F /* Regex.swift */; };
 		B7D04A7E1C4E94FA006C4F2F /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A7C1C4E94FA006C4F2F /* Time.swift */; };
@@ -213,6 +220,13 @@
 		B0C08DB11C2A3C300088B16D /* Flux.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Flux.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0C08DBB1C2A3C300088B16D /* FluxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FluxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0C08E911C2C76000088B16D /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		B71ADF6F1C4FA49C0065A276 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
+		B71ADF701C4FA49C0065A276 /* Field.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
+		B71ADF711C4FA49C0065A276 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		B71ADF721C4FA49C0065A276 /* Row.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
+		B71ADF731C4FA49C0065A276 /* SQLParameterConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLParameterConvertible.swift; sourceTree = "<group>"; };
+		B71ADF741C4FA49C0065A276 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
+		B71ADF761C4FA49C0065A276 /* MigrationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MigrationManager.swift; sourceTree = "<group>"; };
 		B7D04A731C4E4E44006C4F2F /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		B7D04A7B1C4E94FA006C4F2F /* Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
 		B7D04A7C1C4E94FA006C4F2F /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
@@ -727,6 +741,7 @@
 		B0C08E481C2C3A410088B16D /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				B71ADF6C1C4FA49C0065A276 /* DB */,
 				B0B14D1F1C4BBAA5006ABA9E /* OpenSSL */,
 				B0B14CA31C4AD455006ABA9E /* Venice */,
 				B0B14C6C1C4AD455006ABA9E /* InterchangeData */,
@@ -744,6 +759,45 @@
 			);
 			name = Sources;
 			path = ../Sources;
+			sourceTree = "<group>";
+		};
+		B71ADF6C1C4FA49C0065A276 /* DB */ = {
+			isa = PBXGroup;
+			children = (
+				B71ADF6D1C4FA49C0065A276 /* SQL */,
+			);
+			name = DB;
+			path = Flux/DB;
+			sourceTree = "<group>";
+		};
+		B71ADF6D1C4FA49C0065A276 /* SQL */ = {
+			isa = PBXGroup;
+			children = (
+				B71ADF6E1C4FA49C0065A276 /* Core */,
+				B71ADF751C4FA49C0065A276 /* Migration */,
+			);
+			path = SQL;
+			sourceTree = "<group>";
+		};
+		B71ADF6E1C4FA49C0065A276 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				B71ADF6F1C4FA49C0065A276 /* Connection.swift */,
+				B71ADF701C4FA49C0065A276 /* Field.swift */,
+				B71ADF711C4FA49C0065A276 /* Result.swift */,
+				B71ADF721C4FA49C0065A276 /* Row.swift */,
+				B71ADF731C4FA49C0065A276 /* SQLParameterConvertible.swift */,
+				B71ADF741C4FA49C0065A276 /* Value.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		B71ADF751C4FA49C0065A276 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				B71ADF761C4FA49C0065A276 /* MigrationManager.swift */,
+			);
+			path = Migration;
 			sourceTree = "<group>";
 		};
 		B7D04A721C4E4E44006C4F2F /* Date */ = {
@@ -878,10 +932,12 @@
 				B0B14CEE1C4AD455006ABA9E /* Poller.swift in Sources */,
 				B0B14CBD1C4AD455006ABA9E /* EventListener.swift in Sources */,
 				B0B14CBE1C4AD455006ABA9E /* File.swift in Sources */,
+				B71ADF791C4FA49C0065A276 /* Result.swift in Sources */,
 				B0B14CC11C4AD455006ABA9E /* JSONParser.swift in Sources */,
 				B0B14D131C4AD72F006ABA9E /* MultipartBodyParserMiddleware.swift in Sources */,
 				B0B14CE71C4AD455006ABA9E /* FallibleReceivable.swift in Sources */,
 				B0B14CE11C4AD455006ABA9E /* ServerType.swift in Sources */,
+				B71ADF781C4FA49C0065A276 /* Field.swift in Sources */,
 				B0B14D371C4BBAA5006ABA9E /* SSLSession.swift in Sources */,
 				B0A918A71C4F6510002A2A98 /* Dictionary.swift in Sources */,
 				B0B14CC91C4AD455006ABA9E /* URLEncodedFormParser.swift in Sources */,
@@ -912,6 +968,7 @@
 				B0B14CC81C4AD455006ABA9E /* URI.swift in Sources */,
 				B0B14D321C4BBAA5006ABA9E /* SSLIO.swift in Sources */,
 				B0B14CEA1C4AD455006ABA9E /* FallibleSendingChannel.swift in Sources */,
+				B71ADF7D1C4FA49C0065A276 /* MigrationManager.swift in Sources */,
 				B0B14CDB1C4AD455006ABA9E /* RouteMatcherType.swift in Sources */,
 				B0B14CF01C4AD455006ABA9E /* ReceivingChannel.swift in Sources */,
 				B0B14CD21C4AD455006ABA9E /* ParseError.swift in Sources */,
@@ -934,9 +991,11 @@
 				B0B14CD11C4AD455006ABA9E /* Method+Parser.swift in Sources */,
 				B0B14CBF1C4AD455006ABA9E /* Int.swift in Sources */,
 				B0B14CEC1C4AD455006ABA9E /* IPError.swift in Sources */,
+				B71ADF7B1C4FA49C0065A276 /* SQLParameterConvertible.swift in Sources */,
 				B0B14CBC1C4AD455006ABA9E /* EventEmitter.swift in Sources */,
 				B0B14CF31C4AD455006ABA9E /* SendingChannel.swift in Sources */,
 				B0B14CEF1C4AD455006ABA9E /* Receivable.swift in Sources */,
+				B71ADF7C1C4FA49C0065A276 /* Value.swift in Sources */,
 				B0B14CE31C4AD455006ABA9E /* TCPStream.swift in Sources */,
 				B0B14CCA1C4AD455006ABA9E /* URLEncodedFormSerializer.swift in Sources */,
 				B0B14D121C4AD72F006ABA9E /* LoggerMiddleware.swift in Sources */,
@@ -951,6 +1010,8 @@
 				B0B14CC31C4AD455006ABA9E /* MediaType.swift in Sources */,
 				B0B14CD91C4AD455006ABA9E /* Status.swift in Sources */,
 				B0B14CE51C4AD455006ABA9E /* Coroutine.swift in Sources */,
+				B71ADF771C4FA49C0065A276 /* Connection.swift in Sources */,
+				B71ADF7A1C4FA49C0065A276 /* Row.swift in Sources */,
 				B0B14D2E1C4BBAA5006ABA9E /* SSLClientContext.swift in Sources */,
 				B0B14D361C4BBAA5006ABA9E /* SSLServerStream.swift in Sources */,
 				B0B14CC71C4AD455006ABA9E /* String.swift in Sources */,
