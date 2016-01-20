@@ -105,9 +105,9 @@
 		B71ADF791C4FA49C0065A276 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF711C4FA49C0065A276 /* Result.swift */; };
 		B71ADF7A1C4FA49C0065A276 /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF721C4FA49C0065A276 /* Row.swift */; };
 		B71ADF7B1C4FA49C0065A276 /* QueryParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF731C4FA49C0065A276 /* QueryParameter.swift */; };
-		B71ADF7C1C4FA49C0065A276 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF741C4FA49C0065A276 /* Value.swift */; };
 		B71ADF7D1C4FA49C0065A276 /* MigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF761C4FA49C0065A276 /* MigrationManager.swift */; };
 		B71ADF841C4FAAF70065A276 /* SQLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF821C4FAAE50065A276 /* SQLTests.swift */; };
+		B77775441C50359C004325E6 /* Coder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77775431C50359C004325E6 /* Coder.swift */; };
 		B7D04A741C4E4E44006C4F2F /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A731C4E4E44006C4F2F /* Date.swift */; };
 		B7D04A7D1C4E94FA006C4F2F /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A7B1C4E94FA006C4F2F /* Regex.swift */; };
 		B7D04A7E1C4E94FA006C4F2F /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A7C1C4E94FA006C4F2F /* Time.swift */; };
@@ -226,9 +226,9 @@
 		B71ADF711C4FA49C0065A276 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		B71ADF721C4FA49C0065A276 /* Row.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
 		B71ADF731C4FA49C0065A276 /* QueryParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryParameter.swift; sourceTree = "<group>"; };
-		B71ADF741C4FA49C0065A276 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		B71ADF761C4FA49C0065A276 /* MigrationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MigrationManager.swift; sourceTree = "<group>"; };
 		B71ADF821C4FAAE50065A276 /* SQLTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLTests.swift; path = FluxTests/SQLTests.swift; sourceTree = SOURCE_ROOT; };
+		B77775431C50359C004325E6 /* Coder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coder.swift; sourceTree = "<group>"; };
 		B7D04A731C4E4E44006C4F2F /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		B7D04A7B1C4E94FA006C4F2F /* Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
 		B7D04A7C1C4E94FA006C4F2F /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
@@ -311,6 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				B0B14C641C4AD455006ABA9E /* Data.swift */,
+				B77775431C50359C004325E6 /* Coder.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -791,7 +792,6 @@
 				B71ADF711C4FA49C0065A276 /* Result.swift */,
 				B71ADF721C4FA49C0065A276 /* Row.swift */,
 				B71ADF731C4FA49C0065A276 /* QueryParameter.swift */,
-				B71ADF741C4FA49C0065A276 /* Value.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1006,7 +1006,6 @@
 				B0B14CBC1C4AD455006ABA9E /* EventEmitter.swift in Sources */,
 				B0B14CF31C4AD455006ABA9E /* SendingChannel.swift in Sources */,
 				B0B14CEF1C4AD455006ABA9E /* Receivable.swift in Sources */,
-				B71ADF7C1C4FA49C0065A276 /* Value.swift in Sources */,
 				B0B14CE31C4AD455006ABA9E /* TCPStream.swift in Sources */,
 				B0B14CCA1C4AD455006ABA9E /* URLEncodedFormSerializer.swift in Sources */,
 				B0B14D121C4AD72F006ABA9E /* LoggerMiddleware.swift in Sources */,
@@ -1029,6 +1028,7 @@
 				B0B14CCB1C4AD455006ABA9E /* Client.swift in Sources */,
 				B0B14CBA1C4AD455006ABA9E /* CollectionType.swift in Sources */,
 				B0B14D141C4AD72F006ABA9E /* Request+Content.swift in Sources */,
+				B77775441C50359C004325E6 /* Coder.swift in Sources */,
 				B0B14CF61C4AD455006ABA9E /* TCPServerSocket.swift in Sources */,
 				B0B14D151C4AD72F006ABA9E /* Response+Content.swift in Sources */,
 				B0B14CF71C4AD455006ABA9E /* Ticker.swift in Sources */,

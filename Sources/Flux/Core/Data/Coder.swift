@@ -1,8 +1,8 @@
-// Int.swift
+// Coder.swift
 //
 // The MIT License (MIT)
 //
-// Copyright (c) 2015 Zewo
+// Copyright (c) 2016 Zewo
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
-extension Int {
-    public init(hexString: String) throws {
-        struct Error: ErrorType {}
-
-        let map = [
-            "0": 0,  "1": 1,  "2": 2,  "3": 3,
-            "4": 4,  "5": 5,  "6": 6,  "7": 7,
-            "8": 8,  "9": 9,  "A": 10, "B": 11,
-            "C": 12, "D": 13, "E": 14, "F": 15
-        ]
-
-        let number = try hexString.uppercaseString.unicodeScalars.reduce(0) {
-            let character = String($1)
-            if character == " " { return $0 }
-            guard let digit = map[character] else { throw Error() }
-            return $0 * 16 + digit
-        }
-
-        self.init(number)
+public struct Coder<T> {
+    
+    public let data: Data
+    
+    public init(value: T) {
+        data = Data(value: value)
+    }
+    
+    public var value: T {
+        return data.convert()
     }
 }

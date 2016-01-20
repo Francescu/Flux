@@ -93,7 +93,7 @@ public class MigrationsManager<T: Connection> {
             return nil
         }
         
-        return result.first?["to_version"]?.integer
+        return (try? result.first?.valueWithFieldName("to_version")) ?? nil
     }
     
     public var latestVersion: Int? {

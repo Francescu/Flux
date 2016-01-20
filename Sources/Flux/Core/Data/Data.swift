@@ -38,6 +38,23 @@ public struct Data {
     }
 }
 
+public protocol UnsafeDataConvertible: DataConvertible {}
+
+public extension UnsafeDataConvertible {
+    public var data: Data {
+        return Data(value: self)
+    }
+    
+    public init(data: Data) {
+        self = data.convert()
+    }
+}
+
+extension Int: UnsafeDataConvertible {}
+extension UInt: UnsafeDataConvertible {}
+extension Float: UnsafeDataConvertible {}
+extension Double: UnsafeDataConvertible {}
+
 
 extension Data: DataConvertible {
     public var data: Data {
@@ -49,10 +66,22 @@ extension Data: DataConvertible {
     }
 }
 
-
 extension Data {
     public init() {
         self.bytes = []
+    }
+    
+    internal func convert<T>() -> T {
+        return bytes.withUnsafeBufferPointer {
+            return UnsafePointer<T>($0.baseAddress).memory
+        }
+    }
+    
+    internal init<T>(value: T) {
+        var value = value
+        self.bytes = withUnsafePointer(&value) {
+            Array(UnsafeBufferPointer(start: UnsafePointer<Byte>($0), count: sizeof(T)))
+        }
     }
 
     public init(_ convertible: DataConvertible) {
