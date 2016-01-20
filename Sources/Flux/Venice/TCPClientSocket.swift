@@ -104,8 +104,10 @@ public final class TCPClientSocket {
             throw TCPError.closedSocketError
         }
 
-        var data = Data(count: highWaterMark, repeatedValue: 0)
-        let bytesProcessed = tcprecvlh(socket, &data, lowWaterMark, highWaterMark, deadline)
+        var bytes: [UInt8] = [UInt8](count: highWaterMark, repeatedValue: 0)
+        let bytesProcessed = tcprecvlh(socket, &bytes, lowWaterMark, highWaterMark, deadline)
+        
+        let data = Data(bytes: bytes)
 
         if errno != 0 {
             throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
@@ -119,9 +121,11 @@ public final class TCPClientSocket {
             throw TCPError.closedSocketError
         }
 
-        var data = Data(count: bufferSize, repeatedValue: 0)
-        let bytesProcessed = tcprecvuntil(socket, &data, data.count, delimiter, delimiter.utf8.count, deadline)
+        var bytes: [UInt8] = [UInt8](count: bufferSize, repeatedValue: 0)
+        let bytesProcessed = tcprecvuntil(socket, &bytes, bytes.count, delimiter, delimiter.utf8.count, deadline)
 
+        let data = Data(bytes: bytes)
+        
         if errno != 0 {
             throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
         }

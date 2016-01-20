@@ -252,6 +252,7 @@ extension Data {
     public mutating func withUnsafeMutableBufferPointer<R>(@noescape body: (inout UnsafeMutableBufferPointer<Byte>) throws -> R) rethrows -> R {
         return try bytes.withUnsafeMutableBufferPointer(body)
     }
+    
 
     public mutating func popLast() -> Byte? {
         return bytes.popLast()

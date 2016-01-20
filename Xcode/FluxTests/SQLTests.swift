@@ -22,9 +22,7 @@ class SQLTests: XCTestCase {
     }
 
     func testExample() {
-        let statement: Statement = "SELECT * FROM users where id = \(1)"
-        
-        print(statement)
+
     }
 
     func testPerformanceExample() {
