@@ -28,17 +28,17 @@ extension String {
         let percentCharacter: UInt8 = 37
         let plusCharacter: UInt8 = 43
 
-        var encodedData: [UInt8] = [] + URLEncodedString.utf8
-        var decodedData: [UInt8] = []
+        var encodedBytes: [UInt8] = [] + URLEncodedString.utf8
+        var decodedBytes: [UInt8] = []
         var i = 0
 
-        while i < encodedData.count {
-            let currentCharacter = encodedData[i]
+        while i < encodedBytes.count {
+            let currentCharacter = encodedBytes[i]
 
             switch currentCharacter {
             case percentCharacter:
-                let unicodeA = UnicodeScalar(encodedData[i + 1])
-                let unicodeB = UnicodeScalar(encodedData[i + 2])
+                let unicodeA = UnicodeScalar(encodedBytes[i + 1])
+                let unicodeB = UnicodeScalar(encodedBytes[i + 2])
 
                 let hexString = "\(unicodeA)\(unicodeB)"
 
@@ -46,34 +46,34 @@ extension String {
                     return nil
                 }
 
-                decodedData.append(UInt8(character))
+                decodedBytes.append(UInt8(character))
                 i += 3
 
             case plusCharacter:
-                decodedData.append(spaceCharacter)
+                decodedBytes.append(spaceCharacter)
                 i++
 
             default:
-                decodedData.append(currentCharacter)
+                decodedBytes.append(currentCharacter)
                 i++
             }
         }
 
-        self.init(data: decodedData)
+        self.init(bytes: decodedBytes)
     }
 
-    public init?(data: [Int8]) {
-        if let string = String.fromCString(data + [0]) {
+    public init?(bytes: [Int8]) {
+        if let string = String.fromCString(bytes + [0]) {
             self.init(string)
         } else {
             return nil
         }
     }
 
-    public init?(data: Data) {
+    public init?(bytes: [UInt8]) {
         var string = ""
         var decoder = UTF8()
-        var generator = data.generate()
+        var generator = bytes.generate()
         var finished = false
 
         while !finished {
@@ -86,6 +86,10 @@ extension String {
         }
 
         self.init(string)
+    }
+
+    public init?(data: Data) {
+        self.init(bytes: data.bytes)
     }
 
     public func splitBy(separator: Character, allowEmptySlices: Bool = false) -> [String] {
@@ -140,6 +144,6 @@ public struct CharacterSet {
 
 extension String: DataConvertible {
     public var data: Data {
-        return Data(utf8)
+        return Data(bytes: [Byte](utf8))
     }
 }

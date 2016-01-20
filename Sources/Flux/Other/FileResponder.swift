@@ -22,24 +22,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public struct FileResponder: ResponderType {
-    let basePath: String
-
-    public init(basePath: String) {
-        self.basePath = basePath
-    }
-
-    public func respond(request: Request) throws -> Response {
-        if request.method != .GET {
-            return Response(status: .MethodNotAllowed)
-        }
-
-        var path = request.path
-
-        if path == "/" {
-            path = "/index.html"
-        }
-
-        return Response(status: .OK, filePath: basePath + path)
-    }
-}
+//public struct FileResponder: ResponderType {
+//    let basePath: String
+//
+//    public init(basePath: String) {
+//        self.basePath = basePath
+//    }
+//
+//    public func respond(request: Request) throws -> Response {
+//        if request.method != .GET {
+//            return Response(status: .MethodNotAllowed)
+//        }
+//
+//        var path = request.path
+//
+//        if path == "/" {
+//            path = "/index.html"
+//        }
+//
+//        return Response(status: .OK, filePath: basePath + path)
+//    }
+//}

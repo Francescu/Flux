@@ -35,13 +35,13 @@ public struct LoggerMiddleware: MiddlewareType {
 
     public func respond(request: Request, chain: ChainType) throws -> Response {
         let response = try chain.proceed(request)
-        log("========================================\n")
+        log("================================================================================\n")
         log("Request:\n")
         log("\(request)\n")
-        log("----------------------------------------\n")
+        log("--------------------------------------------------------------------------------\n")
         log("Response:\n")
         log("\(response)\n")
-        log("========================================\n\n")
+        log("================================================================================\n\n")
         return response
     }
 
@@ -57,13 +57,13 @@ public struct DebugLoggerMiddleware: MiddlewareType {
 
     public func respond(request: Request, chain: ChainType) throws -> Response {
         let response = try chain.proceed(request)
-        log("========================================\n")
+        log("================================================================================\n")
         log("Request:\n")
         log("\(request.debugDescription)\n")
-        log("----------------------------------------\n")
+        log("--------------------------------------------------------------------------------\n")
         log("Response:\n")
         log("\(response.debugDescription)\n")
-        log("========================================\n\n")
+        log("================================================================================\n\n")
         return response
     }
 

@@ -68,7 +68,12 @@ public struct RegexRoute: ResponderType {
 
     public func respond(request: Request) throws -> Response {
         var request = request
-        let values = regularExpression.groups(request.path)
+
+        guard let path = request.path else {
+            return Response(status: .BadRequest)
+        }
+
+        let values = regularExpression.groups(path)
 
         request.pathParameter = [:]
 

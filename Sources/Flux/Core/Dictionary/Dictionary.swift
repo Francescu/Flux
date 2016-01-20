@@ -1,4 +1,4 @@
-// Response+File.swift
+// Dictionary.swift
 //
 // The MIT License (MIT)
 //
@@ -22,12 +22,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//extension Response {
-//    public init(status: Status, headers: [String: String] = [:], filePath: String) {
-//        if let file = try? File(path: filePath, mode: .Read), body = try? file.read() {
-//            self.init(status: status, headers: headers, body: body)
-//        } else {
-//            self.init(status: .NotFound)
-//        }
-//    }
-//}
+func +<Key, Value>(var lhs: Dictionary<Key, Value>, rhs: Dictionary<Key, Value>) -> Dictionary<Key, Value> {
+    for (key, value) in rhs {
+        lhs[key] = value
+    }
+
+    return lhs
+}
+
+func +=<Key, Value>(inout lhs: Dictionary<Key, Value>, rhs: Dictionary<Key, Value>) {
+    lhs = lhs + rhs
+}

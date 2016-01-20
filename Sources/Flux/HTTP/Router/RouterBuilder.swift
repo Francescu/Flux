@@ -48,14 +48,20 @@ public final class RouterBuilder {
 
     public func router(path: String, middleware: MiddlewareType..., router: Router) {
         let prefix = basePath + path
+
         let newRoutes = router.matcher.routes.map { route in
             return Route(
                 methods: route.methods,
                 path: prefix + route.path,
                 responder: middleware.intercept { request in
                     var request = request
+
+                    guard let path = request.path else {
+                        return Response(status: .BadRequest)
+                    }
+
                     let prefixLength = prefix.characters.count - 1
-                    request.uri.path = request.path.dropFirstCharacters(prefixLength)
+                    request.uri.path = path.dropFirstCharacters(prefixLength)
                     return try router.respond(request)
                 }
             )

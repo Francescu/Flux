@@ -36,7 +36,7 @@ extension Response {
         self.init(
             status: status,
             headers: headers,
-            body: [],
+            body: Data(),
             upgrade: upgrade
         )
 

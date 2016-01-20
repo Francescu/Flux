@@ -22,19 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-extension CollectionType where Self.Generator.Element == UInt8 {
-    public var hexString: String {
-        var string = ""
-        for (index, value) in self.enumerate() {
-            if index % 2 == 0 && index > 0 {
-                string += " "
-            }
-            string += (value < 16 ? "0" : "") + String(value, radix: 16)
-        }
-        return string
-    }
-}
-
 extension CollectionType {
     public subscript (safe index: Self.Index) -> Self.Generator.Element? {
         return indices.contains(index) ? self[index] : nil

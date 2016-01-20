@@ -28,11 +28,11 @@ public class JSONSerializer: InterchangeDataSerializer {
     public init() {}
 
     public func serialize(data: InterchangeData) -> Data {
-        return serialize(data).data
+        return serializeToString(data).data
     }
 
-    public func serialize(JSONValue: InterchangeData) -> String {
-        switch JSONValue {
+    public func serializeToString(data: InterchangeData) -> String {
+        switch data {
         case .NullValue: return "null"
         case .BooleanValue(let b): return b ? "true" : "false"
         case .NumberValue(let n): return serializeNumber(n)
@@ -54,7 +54,7 @@ public class JSONSerializer: InterchangeDataSerializer {
         var s = "["
 
         for i in 0 ..< a.count {
-            s += serialize(a[i])
+            s += serializeToString(a[i])
 
             if i != (a.count - 1) {
                 s += ","
@@ -89,7 +89,7 @@ public final class PrettyJSONSerializer: JSONSerializer {
         for i in 0 ..< a.count {
             s += "\n"
             s += indent()
-            s += serialize(a[i])
+            s += serializeToString(a[i])
 
             if i != (a.count - 1) {
                 s += ","

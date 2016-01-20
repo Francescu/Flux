@@ -33,27 +33,21 @@ final class TCPStream: StreamType {
     func receive(completion: (Void throws -> Data) -> Void) {
         while !socket.closed {
             do {
-                let data = try socket.receiveLowWaterMark(1, highWaterMark: 256, deadline: now + 1 * second)
-                if let string = String(data: data) {
-//                    print(string)
+                let bytes = try socket.receiveLowWaterMark(1, highWaterMark: 256, deadline: now + 1 * second)
+                let data = Data(bytes: bytes)
+                completion {
+                    return data
                 }
-//                if data.count > 0 {
-                    completion {
-                        return data
-                    }
-//                }
-            } catch TCPError.OperationTimedOut(_, let data) {
-//                if data.count > 0 {
-                    completion {
-                        return data
-                    }
-//                }
-            } catch TCPError.ConnectionResetByPeer(_, let data) {
-//                if data.count > 0 {
-                    completion {
-                        return data
-                    }
-//                }
+            } catch TCPError.OperationTimedOut(_, let bytes) {
+                let data = Data(bytes: bytes)
+                completion {
+                    return data
+                }
+            } catch TCPError.ConnectionResetByPeer(_, let bytes) {
+                let data = Data(bytes: bytes)
+                completion {
+                    return data
+                }
                 break
             } catch {
                 completion {
@@ -64,7 +58,7 @@ final class TCPStream: StreamType {
     }
 
     func send(data: Data) throws {
-        try self.socket.send(data)
+        try self.socket.send(data.bytes)
     }
 
     func flush() throws {

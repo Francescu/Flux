@@ -94,13 +94,8 @@ public final class RequestParser {
 }
 
 extension RequestParser {
-    public func parse(data: Data) throws {
-        var data = data
-        try parse(&data, length: data.count)
-    }
-
-    public func parse(string: String) throws {
-        var data = string.utf8.map { Int8($0) }
+    public func parse(convertible: DataConvertible) throws {
+        var data = convertible.data.bytes
         try parse(&data, length: data.count)
     }
 }

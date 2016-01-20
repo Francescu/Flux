@@ -37,7 +37,7 @@ extension Request {
             method: method,
             uri: uri,
             headers: headers,
-            body: []
+            body: Data()
         )
 
         self.content = content

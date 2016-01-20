@@ -66,7 +66,7 @@ public struct MultipartBodyParserMiddleware: MiddlewareType {
             mediaType = request.contentType,
             boundary = mediaType.parameters["boundary"]
             where mediaType == multipartFormMediaType  {
-                request.multipartBody = try self.getMultipartsFromBody(Data(request.body), boundary: boundary)
+                request.multipartBody = try self.getMultipartsFromBody(request.body, boundary: boundary)
         }
 
         return try chain.proceed(request)
@@ -92,7 +92,7 @@ public struct MultipartBodyParserMiddleware: MiddlewareType {
             }
 
             if let bytes = bytes {
-                return String(data: bytes)
+                return String(bytes: bytes)
             }
 
             return nil
@@ -139,7 +139,7 @@ public struct MultipartBodyParserMiddleware: MiddlewareType {
 
             if let bytes = bytes {
                 let bytesWithoutBoundary = bytes[0 ..< bytes.count - boundaryLastIndex - 3]
-                return Data(Array(bytesWithoutBoundary))
+                return Data(bytes: Array(bytesWithoutBoundary))
             }
 
             return nil

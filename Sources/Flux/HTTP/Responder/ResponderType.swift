@@ -32,7 +32,9 @@ public protocol ResponderType: ChainType {
 
 extension ResponderType {
     public func proceed(request: Request) throws -> Response {
-        return try respond(request)
+        var response = try respond(request)
+        response.storage += request.storage
+        return response
     }
 }
 

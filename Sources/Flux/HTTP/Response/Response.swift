@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public struct Response {
+public struct Response: MessageType {
     public var status: Status
     public var majorVersion: Int
     public var minorVersion: Int
@@ -43,49 +43,18 @@ public struct Response {
 }
 
 extension Response {
-    public init(status: Status, headers: [String: String] = [:], body: Data = [], upgrade: (StreamType -> Void)? = nil) {
+    public init(status: Status, headers: [String: String] = [:], body convertible: DataConvertible = Data(), upgrade: (StreamType -> Void)? = nil) {
         var headers = headers
-        headers["Content-Length"] = "\(body.count)"
+        headers["Content-Length"] = "\(convertible.data.count)"
 
-        self.status = status
-        self.majorVersion = 1
-        self.minorVersion = 1
-        self.headers = headers
-        self.body = body
-        self.upgrade = upgrade
-    }
-
-    public init(status: Status, headers: [String: String] = [:], body: DataConvertible, upgrade: (StreamType -> Void)? = nil) {
         self.init(
             status: status,
+            majorVersion: 1,
+            minorVersion: 1,
             headers: headers,
-            body: body.data,
+            body: convertible.data,
             upgrade: upgrade
         )
-    }
-
-    public func getHeader(header: String) -> String? {
-        for (key, value) in headers where key.lowercaseString == header.lowercaseString {
-            return value
-        }
-        return nil
-    }
-
-    public mutating func setHeader(header: String, value: String?) {
-        self.headers[header] = value
-    }
-
-    public var contentType: MediaType? {
-        get {
-            if let contentType = getHeader("content-type") {
-                return MediaType(string: contentType)
-            }
-            return nil
-        }
-
-        set {
-            setHeader("content-type", value: newValue?.description)
-        }
     }
 
     public var statusCode: Int {
@@ -95,51 +64,23 @@ extension Response {
     public var reasonPhrase: String {
         return status.reasonPhrase
     }
-
-    public var bodyString: String? {
-        return String(data: body)
-    }
-
-    public var bodyHexString: String {
-        return body.hexString
-    }
 }
 
 extension Response: CustomStringConvertible {
+    public var statusLineDescription: String {
+        return "HTTP/1.1 \(statusCode) \(reasonPhrase)"
+    }
+
     public var description: String {
-        var string = "HTTP/1.1 \(statusCode) \(reasonPhrase)\n"
-
-        for (header, value) in headers {
-            string += "\(header): \(value)\n"
-        }
-
-        if body.count > 0 {
-            if let bodyString = bodyString {
-                string += "\n" + bodyString
-            } else  {
-                string += "\n" + bodyHexString
-            }
-        }
-
-        return string
+        return statusLineDescription + "\n" +
+            headerDescription + "\n\n" +
+            bodyDescription
     }
 }
 
 extension Response: CustomDebugStringConvertible {
     public var debugDescription: String {
-        var string = description
-
-        string += "\n\nStorage:\n"
-
-        if storage.count == 0 {
-            string += "-\n"
-        }
-
-        for (key, value) in storage {
-            string += "\(key): \(value)\n"
-        }
-
-        return string
+        return description + "\n\n" + storageDescription
     }
 }
 

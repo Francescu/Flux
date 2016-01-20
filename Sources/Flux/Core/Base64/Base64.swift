@@ -171,12 +171,12 @@ private class Base64Decoder {
 
 public final class Base64 {
 	public static func encode(data: Data, charsPerLine: Int? = nil, specialChars: String? = nil) -> Data {
-		let encoder = Base64Encoder(bytes: data, charsPerLine: charsPerLine, specialChars: specialChars)
-		return encoder.output
+		let encoder = Base64Encoder(bytes: data.bytes, charsPerLine: charsPerLine, specialChars: specialChars)
+        return Data(bytes: encoder.output)
 	}
 
 	public static func decode(data: Data) -> Data {
-		let decoder = Base64Decoder(bytes: data)
-		return decoder.output
+		let decoder = Base64Decoder(bytes: data.bytes)
+		return Data(bytes: decoder.output)
 	}
 }

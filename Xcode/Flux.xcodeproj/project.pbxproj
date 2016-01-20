@@ -11,6 +11,8 @@
 		37513E191C4C80E200488AD4 /* TrieRouteMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37513E181C4C80E200488AD4 /* TrieRouteMatcher.swift */; };
 		37B36EE31C4CB5FE00FE0D01 /* TrieMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */; };
 		B0158A841C4C0456003700D3 /* SSLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0158A831C4C0456003700D3 /* SSLError.swift */; };
+		B068CBB51C4F447000EF0B3E /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B068CBB41C4F447000EF0B3E /* MessageType.swift */; };
+		B0A918A71C4F6510002A2A98 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A918A61C4F6510002A2A98 /* Dictionary.swift */; };
 		B0B14CB91C4AD455006ABA9E /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C601C4AD455006ABA9E /* Base64.swift */; };
 		B0B14CBA1C4AD455006ABA9E /* CollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C621C4AD455006ABA9E /* CollectionType.swift */; };
 		B0B14CBB1C4AD455006ABA9E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C641C4AD455006ABA9E /* Data.swift */; };
@@ -119,6 +121,8 @@
 		37513E181C4C80E200488AD4 /* TrieRouteMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrieRouteMatcher.swift; sourceTree = "<group>"; };
 		37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrieMatcherTests.swift; path = FluxTests/TrieMatcherTests.swift; sourceTree = SOURCE_ROOT; };
 		B0158A831C4C0456003700D3 /* SSLError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLError.swift; sourceTree = "<group>"; };
+		B068CBB41C4F447000EF0B3E /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageType.swift; path = Message/MessageType.swift; sourceTree = "<group>"; };
+		B0A918A61C4F6510002A2A98 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Dictionary.swift; path = Dictionary/Dictionary.swift; sourceTree = "<group>"; };
 		B0B14C5D1C4AD313006ABA9E /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		B0B14C601C4AD455006ABA9E /* Base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
 		B0B14C621C4AD455006ABA9E /* CollectionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionType.swift; sourceTree = "<group>"; };
@@ -234,9 +238,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B068CBB31C4F445300EF0B3E /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				B068CBB41C4F447000EF0B3E /* MessageType.swift */,
+			);
+			name = Message;
+			sourceTree = "<group>";
+		};
+		B0A918A51C4F64FE002A2A98 /* Dictionary */ = {
+			isa = PBXGroup;
+			children = (
+				B0A918A61C4F6510002A2A98 /* Dictionary.swift */,
+			);
+			name = Dictionary;
+			sourceTree = "<group>";
+		};
 		B0B14C5E1C4AD455006ABA9E /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				B0A918A51C4F64FE002A2A98 /* Dictionary */,
 				B0B14C611C4AD455006ABA9E /* CollectionType */,
 				B0B14C791C4AD455006ABA9E /* String */,
 				B0B14C6A1C4AD455006ABA9E /* Int */,
@@ -378,6 +399,7 @@
 		B0B14C801C4AD455006ABA9E /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
+				B068CBB31C4F445300EF0B3E /* Message */,
 				B0B14C811C4AD455006ABA9E /* Client */,
 				B0B14C871C4AD455006ABA9E /* Middleware */,
 				B0B14C891C4AD455006ABA9E /* Parser */,
@@ -861,6 +883,7 @@
 				B0B14CE71C4AD455006ABA9E /* FallibleReceivable.swift in Sources */,
 				B0B14CE11C4AD455006ABA9E /* ServerType.swift in Sources */,
 				B0B14D371C4BBAA5006ABA9E /* SSLSession.swift in Sources */,
+				B0A918A71C4F6510002A2A98 /* Dictionary.swift in Sources */,
 				B0B14CC91C4AD455006ABA9E /* URLEncodedFormParser.swift in Sources */,
 				B0B14CF11C4AD455006ABA9E /* Select.swift in Sources */,
 				B0B14D301C4BBAA5006ABA9E /* SSLContext.swift in Sources */,
@@ -881,6 +904,7 @@
 				B0B14CD61C4AD455006ABA9E /* Request.swift in Sources */,
 				B0B14CE41C4AD455006ABA9E /* Channel.swift in Sources */,
 				B0B14D311C4BBAA5006ABA9E /* SSLDWrap.swift in Sources */,
+				B068CBB51C4F447000EF0B3E /* MessageType.swift in Sources */,
 				B0B14CD51C4AD455006ABA9E /* Method.swift in Sources */,
 				B0B14CF41C4AD455006ABA9E /* TCPClientSocket.swift in Sources */,
 				B0B14CCF1C4AD455006ABA9E /* TCPStreamClient.swift in Sources */,
@@ -1092,6 +1116,7 @@
 				PRODUCT_NAME = Flux;
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = $SRCROOT;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
@@ -1122,6 +1147,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.FluxTests;
 				PRODUCT_NAME = FluxTests;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};

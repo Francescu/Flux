@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public struct Request {
+public struct Request: MessageType {
     public var method: Method
     public var uri: URI
     public var majorVersion: Int
@@ -43,83 +43,47 @@ public struct Request {
 }
 
 extension Request {
-    public init(method: Method, uri: URI, headers: [String: String] = [:], body: Data = []) {
+    public init(method: Method, uri: URI, headers: [String: String] = [:], body convertible: DataConvertible = Data()) {
         var headers = headers
-        headers["Content-Length"] = "\(body.count)"
-        
-        self.method = method
-        self.uri = uri
-        self.majorVersion = 1
-        self.minorVersion = 1
-        self.headers = headers
-        self.body = body
-    }
+        headers["Content-Length"] = "\(convertible.data.count)"
 
-    public init(method: Method, uri: URI, headers: [String: String] = [:], body: DataConvertible) {
         self.init(
             method: method,
             uri: uri,
+            majorVersion: 1,
+            minorVersion: 1,
             headers: headers,
-            body: body.data
+            body: convertible.data
         )
     }
 
-    public init(method: Method, uri: String, headers: [String: String] = [:], body: Data = []) throws {
+    public init(method: Method, uri: String, headers: [String: String] = [:], body convertible: DataConvertible = Data()) throws {
         self.init(
             method: method,
             uri: try URI(string: uri),
             headers: headers,
-            body: body
+            body: convertible.data
         )
     }
 
-    public init(method: Method, uri: String, headers: [String: String] = [:], body: DataConvertible) throws {
-        self.init(
-            method: method,
-            uri: try URI(string: uri),
-            headers: headers,
-            body: body.data
-        )
-    }
-
-    public func getHeader(header: String) -> String? {
-        for (key, value) in headers where key.lowercaseString == header.lowercaseString {
-            return value
-        }
-        return nil
-    }
-
-    public mutating func setHeader(header: String, value: String?) {
-        self.headers[header] = value
+    public var connection: String? {
+        return getHeader("Connection")?.lowercaseString
     }
 
     public var isKeepAlive: Bool {
         if minorVersion == 0 {
-            return getHeader("Connection")?.lowercaseString == "keep-alive"
-        } else {
-            return getHeader("Connection")?.lowercaseString != "close"
+            return connection == "keep-alive"
         }
+
+        return connection != "close"
     }
 
     public var isUpgrade: Bool {
-        return getHeader("Connection")?.lowercaseString == "upgrade"
-    }
-
-    public var contentType: MediaType? {
-        get {
-            if let contentType = getHeader("content-type") {
-                return MediaType(string: contentType)
-            }
-            return nil
-        }
-
-        set {
-            setHeader("Content-Type", value: newValue?.description)
-        }
+        return connection == "upgrade"
     }
 
     public var accept: [MediaType] {
-get {
+        get {
             var acceptedMediaTypes: [MediaType] = []
 
             if let acceptString = getHeader("accept") {
@@ -144,58 +108,30 @@ get {
         }
     }
 
-    public var path: String {
-        return uri.path!
+    public var path: String? {
+        return uri.path
     }
 
     public var query: [String: String] {
         return uri.query
     }
-
-    public var bodyString: String? {
-        return String(data: body)
-    }
-
-    public var bodyHexString: String {
-        return body.hexString
-    }
 }
 
 extension Request: CustomStringConvertible {
+    public var requestLineDescription: String {
+        return "\(method) \(uri) HTTP/\(majorVersion).\(minorVersion)"
+    }
+
     public var description: String {
-        var string = "\(method) \(uri) HTTP/\(majorVersion).\(minorVersion)\n"
-
-        for (header, value) in headers {
-            string += "\(header): \(value)\n"
-        }
-
-        if body.count > 0 {
-            if let bodyString = bodyString {
-                string += "\n" + bodyString
-            } else  {
-                string += "\n" + bodyHexString
-            }
-        }
-        
-        return string
+        return requestLineDescription + "\n" +
+            headerDescription + "\n\n" +
+            bodyDescription
     }
 }
 
 extension Request: CustomDebugStringConvertible {
     public var debugDescription: String {
-        var string = description
-
-        string += "\n\nStorage:\n"
-
-        if storage.count == 0 {
-            string += "-\n"
-        }
-
-        for (key, value) in storage {
-            string += "\(key): \(value)\n"
-        }
-
-        return string
+        return description + "\n\n" + storageDescription
     }
 }
 

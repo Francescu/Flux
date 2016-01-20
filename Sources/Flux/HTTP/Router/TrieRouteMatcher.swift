@@ -63,7 +63,11 @@ public struct TrieRouteMatcher: RouteMatcherType, CustomStringConvertible {
     }
     
     public func match(request: Request) -> Route? {
-        let components = request.path.splitBy("/")
+        guard let path = request.path else {
+            return nil
+        }
+
+        let components = path.splitBy("/")
         
         // topmost route node. children are searched for route matches,
         // if they match, that matching node gets set to head

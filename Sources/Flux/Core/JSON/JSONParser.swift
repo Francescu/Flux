@@ -58,17 +58,9 @@ enum JSONParseError: ErrorType, CustomStringConvertible {
 
 public struct JSONParser: InterchangeDataParser {
     public init() {}
-    
-    public func parse(string: String) throws -> InterchangeData {
-        return try GenericJSONParser(string.utf8).parse()
-    }
 
-    public func parse(data: [UInt8]) throws -> InterchangeData {
-        return try GenericJSONParser(data).parse()
-    }
-
-    public func parse(data: [Int8]) throws -> InterchangeData {
-        return try parse(data.map({UInt8(bitPattern: $0)}))
+    public func parse(data: DataConvertible) throws -> InterchangeData {
+        return try GenericJSONParser(data.data).parse()
     }
 }
 
