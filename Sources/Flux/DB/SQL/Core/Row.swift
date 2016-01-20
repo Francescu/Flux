@@ -23,6 +23,10 @@
 // SOFTWARE.
 
 
+public protocol SQLValueConvertible {
+    init(data: Data)
+}
+
 public protocol Row {
     typealias ValueType: Value
     
@@ -36,5 +40,14 @@ public protocol Row {
 public extension Row {
     public subscript(fieldName: String) -> ValueType? {
         return valuesByName[fieldName]
+    }
+    
+    public func valueWithFieldName<T: SQLValueConvertible>(fieldName: String) throws -> T? {
+        guard let value = valuesByName[fieldName] as? Data else {
+            fatalError()
+        }
+        
+        return T(data: value)
+        
     }
 }

@@ -79,7 +79,7 @@ extension Value {
     }
     
     public var string: String? {
-        return String(data: data)
+        return try? String(data: data)
     }
     
     public var description: String {

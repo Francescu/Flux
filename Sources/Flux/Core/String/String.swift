@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 extension String {
-    public init?(URLEncodedString: String) {
+    public init(URLEncodedString: String) throws {
         let spaceCharacter: UInt8 = 32
         let percentCharacter: UInt8 = 37
         let plusCharacter: UInt8 = 43
@@ -43,7 +43,7 @@ extension String {
                 let hexString = "\(unicodeA)\(unicodeB)"
 
                 guard let character = Int(hexString: hexString) else {
-                    return nil
+                    throw Data.Error.ConversionError
                 }
 
                 decodedBytes.append(UInt8(character))
@@ -51,45 +51,35 @@ extension String {
 
             case plusCharacter:
                 decodedBytes.append(spaceCharacter)
-                i++
+                i += 1
 
             default:
                 decodedBytes.append(currentCharacter)
-                i++
+                i += 1
             }
         }
 
-        self.init(bytes: decodedBytes)
+        try self.init(data: Data(bytes: decodedBytes))
     }
 
-    public init?(bytes: [Int8]) {
-        if let string = String.fromCString(bytes + [0]) {
-            self.init(string)
-        } else {
-            return nil
-        }
-    }
 
-    public init?(bytes: [UInt8]) {
+    public init(data: Data) throws {
         var string = ""
         var decoder = UTF8()
-        var generator = bytes.generate()
+        var generator = data.generate()
         var finished = false
-
+        
         while !finished {
             let decodingResult = decoder.decode(&generator)
             switch decodingResult {
             case .Result(let char): string.append(char)
             case .EmptyInput: finished = true
-            case .Error: return nil
+            case .Error:
+                throw Data.Error.ConversionError
             }
         }
-
+        
         self.init(string)
-    }
-
-    public init?(data: Data) {
-        self.init(bytes: data.bytes)
     }
 
     public func splitBy(separator: Character, allowEmptySlices: Bool = false) -> [String] {

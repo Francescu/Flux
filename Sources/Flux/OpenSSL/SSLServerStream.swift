@@ -51,12 +51,12 @@ public final class SSLServerStream: StreamType {
                     return
                 }
 
-				try self.readIO.write(data.bytes)
+				try self.readIO.write(data)
 
                 while self.ssl.state != .OK {
                     self.ssl.doHandshake()
                     try self.checkSSLOutput()
-                    try self.readIO.write(data.bytes)
+                    try self.readIO.write(data)
                 }
 
                 let aData = self.ssl.read()
@@ -75,7 +75,7 @@ public final class SSLServerStream: StreamType {
 	}
 
 	public func send(data: Data) throws {
-		ssl.write(data.bytes)
+		ssl.write(Array(data))
 		try checkSSLOutput()
 	}
 
@@ -88,12 +88,12 @@ public final class SSLServerStream: StreamType {
 	}
 
 	private func checkSSLOutput() throws {
-		let bytes = try writeIO.read()
+		let data = try writeIO.read()
 
-		guard bytes.count > 0 else {
+		guard data.count > 0 else {
             return
         }
 
-		try rawStream.send(Data(bytes: bytes))
+		try rawStream.send(data)
 	}
 }

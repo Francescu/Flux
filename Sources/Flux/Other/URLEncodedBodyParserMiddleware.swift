@@ -73,8 +73,8 @@ public struct URLEncodedBodyParserMiddleware: MiddlewareType {
             let tokens = parameter.splitBy("=")
 
             if tokens.count >= 2 {
-                let key = String(URLEncodedString: tokens[0])
-                let value = String(URLEncodedString: tokens[1])
+                let key = try? String(URLEncodedString: tokens[0])
+                let value = try? String(URLEncodedString: tokens[1])
 
                 if let key = key, value = value {
                     parameters[key] = value

@@ -60,7 +60,7 @@ public final class UDPSocket {
         close()
     }
 
-    public func send(ip ip: IP, data: [UInt8], deadline: Deadline = noDeadline) throws {
+    public func send(ip ip: IP, data: Data, deadline: Deadline = noDeadline) throws {
         if closed {
             throw TCPError.closedSocketError
         }
@@ -73,12 +73,12 @@ public final class UDPSocket {
         }
     }
 
-    public func receive(bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> ([UInt8], IP) {
+    public func receive(bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> (Data, IP) {
         if closed {
             throw TCPError.closedSocketError
         }
 
-        var data: [UInt8] = [UInt8](count: bufferSize, repeatedValue: 0)
+        var data = Data(count: bufferSize, repeatedValue: 0)
 
         var address = ipaddr()
         let bytesProcessed = udprecv(socket, &address, &data, data.count, deadline)

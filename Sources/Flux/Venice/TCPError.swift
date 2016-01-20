@@ -31,14 +31,14 @@ import CLibvenice
 
 public enum TCPError: ErrorType {
     case Unknown(description: String)
-    case ConnectionResetByPeer(description: String, data: [UInt8])
-    case NoBufferSpaceAvailabe(description: String, data: [UInt8])
-    case OperationTimedOut(description: String, data: [UInt8])
+    case ConnectionResetByPeer(description: String, data: Data)
+    case NoBufferSpaceAvailabe(description: String, data: Data)
+    case OperationTimedOut(description: String, data: Data)
     case ClosedSocket(description: String)
 
-    static func lastErrorWithData(source: [UInt8], bytesProcessed: Int, receive: Bool) -> TCPError {
+    static func lastErrorWithData(source: Data, bytesProcessed: Int, receive: Bool) -> TCPError {
         let description = String.fromCString(strerror(errno))!
-        let data: [UInt8]
+        let data: Data
         if receive {
             data = processedDataFromSource(source, bytesProcessed: bytesProcessed)
         } else {

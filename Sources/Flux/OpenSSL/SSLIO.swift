@@ -52,7 +52,7 @@ public class SSLIO {
         }
 	}
 
-	public func write(data: [UInt8]) throws {
+	public func write(data: Data) throws {
 		var data = data
         let result = BIO_write(bio, &data, Int32(data.count))
 
@@ -65,7 +65,7 @@ public class SSLIO {
         }
 	}
 
-	public func read() throws -> [UInt8] {
+	public func read() throws -> Data {
 		var buffer: [UInt8] = Array(count: DEFAULT_BUFFER_SIZE, repeatedValue: 0)
 
         let result = BIO_read(bio, &buffer, Int32(buffer.count))
@@ -75,10 +75,10 @@ public class SSLIO {
         }
 
 		if result > 0 {
-			return Array(buffer.prefix(Int(result)))
+            return Data(bytes: Array(buffer.prefix(Int(result))))
 		} else {
 			print("coiso")
-            return []
+            return Data()
 		}
 	}
 

@@ -68,14 +68,14 @@ extension URI {
 
         if u.field_set & 1 != 0 {
             let string = URI.getSubstring(string, start: u.scheme_start, end: u.scheme_end)
-            scheme = String(URLEncodedString: string)
+            scheme = try String(URLEncodedString: string)
         } else {
             scheme = nil
         }
 
         if u.field_set & 2 != 0 {
             let string = URI.getSubstring(string, start: u.host_start, end: u.host_end)
-            host = String(URLEncodedString: string)
+            host = try String(URLEncodedString: string)
         } else {
             host = nil
         }
@@ -88,7 +88,7 @@ extension URI {
 
         if u.field_set & 8 != 0 {
             let string = URI.getSubstring(string, start: u.path_start, end: u.path_end)
-            path = String(URLEncodedString: string)
+            path = try String(URLEncodedString: string)
         } else {
             path = nil
         }
@@ -102,7 +102,7 @@ extension URI {
 
         if u.field_set & 32 != 0 {
             let string = URI.getSubstring(string, start: u.fragment_start, end: u.fragment_end)
-            fragment = String(URLEncodedString: string)
+            fragment = try String(URLEncodedString: string)
         } else {
             fragment = nil
         }
@@ -123,8 +123,8 @@ extension URI {
         let userInfoElements = userInfoString.splitBy(":")
         if userInfoElements.count == 2 {
             if let
-                username = String(URLEncodedString: userInfoElements[0]),
-                password = String(URLEncodedString: userInfoElements[1]) {
+                username = try? String(URLEncodedString: userInfoElements[0]),
+                password = try? String(URLEncodedString: userInfoElements[1]) {
                     return URI.UserInfo(
                         username: username,
                         password: password
@@ -141,13 +141,13 @@ extension URI {
         for tuple in queryTuples {
             let queryElements = tuple.splitBy("=")
             if queryElements.count == 1 {
-                if let name = String(URLEncodedString: queryElements[0]) {
+                if let name = try? String(URLEncodedString: queryElements[0]) {
                     query[name] = ""
                 }
             } else if queryElements.count == 2 {
                 if let
-                    name = String(URLEncodedString: queryElements[0]),
-                    value = String(URLEncodedString: queryElements[1]) {
+                    name = try? String(URLEncodedString: queryElements[0]),
+                    value = try? String(URLEncodedString: queryElements[1]) {
                         query[name] = value
                 }
             }

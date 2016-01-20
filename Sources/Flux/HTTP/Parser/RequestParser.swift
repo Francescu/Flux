@@ -95,7 +95,7 @@ public final class RequestParser {
 
 extension RequestParser {
     public func parse(convertible: DataConvertible) throws {
-        var data = convertible.data.bytes
+        var data = Array(convertible.data)
         try parse(&data, length: data.count)
     }
 }

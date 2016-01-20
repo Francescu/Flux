@@ -37,12 +37,12 @@ private class Base64Encoder {
 	var charsPerLine: Int?
 	var stepcount: Int = 0
 
-	let bytes: [UInt8]
+	let bytes: Data
 
 	var offset = 0
-	var output: [UInt8] = []
+	var output = Data()
 
-	init(bytes: [UInt8], charsPerLine: Int? = nil, specialChars: String? = nil) {
+	init(bytes: Data, charsPerLine: Int? = nil, specialChars: String? = nil) {
 		self.charsPerLine = charsPerLine
 		self.bytes = bytes
 		self.chars = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".unicodeScalars) + Array((specialChars ?? "+/").unicodeScalars)
@@ -125,16 +125,16 @@ private class Base64Decoder {
 
 	var step: Step = .A
 
-	let bytes: [UInt8]
+	let bytes: Data
 	var offset = 0
 
-	var output: [UInt8]
+	var output: Data
 	var outputOffset = 0
 
-	init(bytes: [UInt8]) {
-		self.bytes = bytes
-		self.output = [UInt8](count: bytes.count, repeatedValue: 0)
-		guard bytes.count > 0 else { return }
+	init(data: Data) {
+		self.bytes = data
+        self.output = Data(bytes: [UInt8](count: data.count, repeatedValue: 0))
+		guard data.count > 0 else { return }
 		decodeBlock()
 	}
 
@@ -171,12 +171,10 @@ private class Base64Decoder {
 
 public final class Base64 {
 	public static func encode(data: Data, charsPerLine: Int? = nil, specialChars: String? = nil) -> Data {
-		let encoder = Base64Encoder(bytes: data.bytes, charsPerLine: charsPerLine, specialChars: specialChars)
-        return Data(bytes: encoder.output)
+		return Base64Encoder(bytes: data, charsPerLine: charsPerLine, specialChars: specialChars).output
 	}
 
 	public static func decode(data: Data) -> Data {
-		let decoder = Base64Decoder(bytes: data.bytes)
-		return Data(bytes: decoder.output)
+		return Base64Decoder(data: data).output
 	}
 }

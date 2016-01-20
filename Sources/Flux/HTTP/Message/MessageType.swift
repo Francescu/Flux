@@ -95,6 +95,6 @@ extension MessageType {
     }
 
     public var bodyString: String? {
-        return String(data: body)
+        return try? String(data: body)
     }
 }

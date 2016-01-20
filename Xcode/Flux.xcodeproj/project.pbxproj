@@ -104,9 +104,10 @@
 		B71ADF781C4FA49C0065A276 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF701C4FA49C0065A276 /* Field.swift */; };
 		B71ADF791C4FA49C0065A276 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF711C4FA49C0065A276 /* Result.swift */; };
 		B71ADF7A1C4FA49C0065A276 /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF721C4FA49C0065A276 /* Row.swift */; };
-		B71ADF7B1C4FA49C0065A276 /* SQLParameterConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF731C4FA49C0065A276 /* SQLParameterConvertible.swift */; };
+		B71ADF7B1C4FA49C0065A276 /* QueryParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF731C4FA49C0065A276 /* QueryParameter.swift */; };
 		B71ADF7C1C4FA49C0065A276 /* Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF741C4FA49C0065A276 /* Value.swift */; };
 		B71ADF7D1C4FA49C0065A276 /* MigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF761C4FA49C0065A276 /* MigrationManager.swift */; };
+		B71ADF841C4FAAF70065A276 /* SQLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF821C4FAAE50065A276 /* SQLTests.swift */; };
 		B7D04A741C4E4E44006C4F2F /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A731C4E4E44006C4F2F /* Date.swift */; };
 		B7D04A7D1C4E94FA006C4F2F /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A7B1C4E94FA006C4F2F /* Regex.swift */; };
 		B7D04A7E1C4E94FA006C4F2F /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A7C1C4E94FA006C4F2F /* Time.swift */; };
@@ -224,9 +225,10 @@
 		B71ADF701C4FA49C0065A276 /* Field.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
 		B71ADF711C4FA49C0065A276 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		B71ADF721C4FA49C0065A276 /* Row.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
-		B71ADF731C4FA49C0065A276 /* SQLParameterConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLParameterConvertible.swift; sourceTree = "<group>"; };
+		B71ADF731C4FA49C0065A276 /* QueryParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryParameter.swift; sourceTree = "<group>"; };
 		B71ADF741C4FA49C0065A276 /* Value.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Value.swift; sourceTree = "<group>"; };
 		B71ADF761C4FA49C0065A276 /* MigrationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MigrationManager.swift; sourceTree = "<group>"; };
+		B71ADF821C4FAAE50065A276 /* SQLTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLTests.swift; path = FluxTests/SQLTests.swift; sourceTree = SOURCE_ROOT; };
 		B7D04A731C4E4E44006C4F2F /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		B7D04A7B1C4E94FA006C4F2F /* Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
 		B7D04A7C1C4E94FA006C4F2F /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
@@ -731,6 +733,7 @@
 		B0C08DBF1C2A3C300088B16D /* FluxTests */ = {
 			isa = PBXGroup;
 			children = (
+				B71ADF821C4FAAE50065A276 /* SQLTests.swift */,
 				B0B14D051C4AD6AC006ABA9E /* Tests.swift */,
 				37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */,
 			);
@@ -774,6 +777,7 @@
 			isa = PBXGroup;
 			children = (
 				B71ADF6E1C4FA49C0065A276 /* Core */,
+				B777753E1C4FAEFF004325E6 /* Model */,
 				B71ADF751C4FA49C0065A276 /* Migration */,
 			);
 			path = SQL;
@@ -786,7 +790,7 @@
 				B71ADF701C4FA49C0065A276 /* Field.swift */,
 				B71ADF711C4FA49C0065A276 /* Result.swift */,
 				B71ADF721C4FA49C0065A276 /* Row.swift */,
-				B71ADF731C4FA49C0065A276 /* SQLParameterConvertible.swift */,
+				B71ADF731C4FA49C0065A276 /* QueryParameter.swift */,
 				B71ADF741C4FA49C0065A276 /* Value.swift */,
 			);
 			path = Core;
@@ -798,6 +802,13 @@
 				B71ADF761C4FA49C0065A276 /* MigrationManager.swift */,
 			);
 			path = Migration;
+			sourceTree = "<group>";
+		};
+		B777753E1C4FAEFF004325E6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		B7D04A721C4E4E44006C4F2F /* Date */ = {
@@ -991,7 +1002,7 @@
 				B0B14CD11C4AD455006ABA9E /* Method+Parser.swift in Sources */,
 				B0B14CBF1C4AD455006ABA9E /* Int.swift in Sources */,
 				B0B14CEC1C4AD455006ABA9E /* IPError.swift in Sources */,
-				B71ADF7B1C4FA49C0065A276 /* SQLParameterConvertible.swift in Sources */,
+				B71ADF7B1C4FA49C0065A276 /* QueryParameter.swift in Sources */,
 				B0B14CBC1C4AD455006ABA9E /* EventEmitter.swift in Sources */,
 				B0B14CF31C4AD455006ABA9E /* SendingChannel.swift in Sources */,
 				B0B14CEF1C4AD455006ABA9E /* Receivable.swift in Sources */,
@@ -1034,6 +1045,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37B36EE31C4CB5FE00FE0D01 /* TrieMatcherTests.swift in Sources */,
+				B71ADF841C4FAAF70065A276 /* SQLTests.swift in Sources */,
 				B0B14D061C4AD6AC006ABA9E /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

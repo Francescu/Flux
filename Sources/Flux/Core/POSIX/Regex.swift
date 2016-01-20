@@ -145,7 +145,7 @@ public final class Regex {
             let templateArray = Array<UInt8>(template.utf8)
             replacedStringArray.replaceRange(start ..<  end, with: templateArray)
 
-            guard let _replacedString = String(bytes: replacedStringArray) else {
+            guard let _replacedString = try? String(data: Data(bytes: replacedStringArray)) else {
                 break
             }
 

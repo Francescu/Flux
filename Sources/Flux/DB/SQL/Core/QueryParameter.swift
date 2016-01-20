@@ -24,46 +24,46 @@
 
 import Foundation
 
-public enum SQLParameterConvertibleType {
+public enum QueryParameter {
     case Binary([UInt8])
     case Text(String)
 }
 
-public protocol SQLParameterConvertible {
-    var SQLParameterData: SQLParameterConvertibleType { get }
+public protocol QueryParameterType {
+    var queryParameterValue: QueryParameter { get }
 }
 
-extension Int: SQLParameterConvertible {
-    public var SQLParameterData: SQLParameterConvertibleType {
+extension Int: QueryParameterType {
+    public var queryParameterValue: QueryParameter {
         return .Text(String(self))
     }
 }
 
-extension UInt: SQLParameterConvertible {
-    public var SQLParameterData: SQLParameterConvertibleType {
+extension UInt: QueryParameterType {
+    public var queryParameterValue: QueryParameter {
         return .Text(String(self))
     }
 }
 
-extension Double: SQLParameterConvertible {
-    public var SQLParameterData: SQLParameterConvertibleType {
+extension Double: QueryParameterType {
+    public var queryParameterValue: QueryParameter {
         return .Text(String(self))
     }
 }
-extension Float: SQLParameterConvertible {
-    public var SQLParameterData: SQLParameterConvertibleType {
+extension Float: QueryParameterType {
+    public var queryParameterValue: QueryParameter {
         return .Text(String(self))
     }
 }
 
-extension String: SQLParameterConvertible {
-    public var SQLParameterData: SQLParameterConvertibleType {
+extension String: QueryParameterType {
+    public var queryParameterValue: QueryParameter {
         return .Text(self)
     }
 }
 
-extension NSData: SQLParameterConvertible {
-    public var SQLParameterData: SQLParameterConvertibleType {
+extension NSData: QueryParameterType {
+    public var queryParameterValue: QueryParameter {
         
         var a = [UInt8](count: length / sizeof(UInt8), repeatedValue: 0)
         getBytes(&a, length: length)

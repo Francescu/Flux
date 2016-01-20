@@ -26,21 +26,33 @@ public typealias Byte = UInt8
 
 public protocol DataConvertible {
     var data: Data { get }
+    
+    init(data: Data) throws
 }
 
 public struct Data {
-    public var bytes: [Byte]
+    public enum Error: ErrorType {
+        case ConversionError
+    }
+    
+    private var bytes: [Byte]
 
     public init(bytes: [Byte]) {
         self.bytes = bytes
     }
 }
 
+
 extension Data: DataConvertible {
     public var data: Data {
         return self
     }
+    
+    public init(data: Data) {
+        self = data
+    }
 }
+
 
 extension Data {
     public init() {
@@ -216,7 +228,7 @@ extension Data: StringInterpolationConvertible {
 
 extension Data: CustomStringConvertible {
     public var description: String {
-        if let string = String(data: self) {
+        if let string = try? String(data: self) {
             return string
         }
 

@@ -57,7 +57,7 @@ public class File {
 	}
 	
 	public func write(data: Data) throws {
-		let count = fwrite(data.bytes, 1, data.count, fp)
+		let count = fwrite(Array(data), 1, data.count, fp)
 		guard count == data.count else { throw Error.WriteError(String.fromCString(strerror(ferror(fp))) ?? "") }
 	}
 	

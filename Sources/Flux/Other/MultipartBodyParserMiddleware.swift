@@ -76,7 +76,7 @@ public struct MultipartBodyParserMiddleware: MiddlewareType {
         var multiparts: [Multipart] = []
         var generator = body.generate()
 
-        func getLine() -> String? {
+        func getLine() throws -> String? {
             let carriageReturn: UInt8 = 13
             let newLine: UInt8 = 10
             var bytes: [UInt8]? = .None
@@ -92,14 +92,14 @@ public struct MultipartBodyParserMiddleware: MiddlewareType {
             }
 
             if let bytes = bytes {
-                return String(bytes: bytes)
+                return try String(data: Data(bytes: bytes))
             }
 
             return nil
         }
 
-        func getData(var boundary: String) -> Data? {
-            boundary = "--\(boundary)"
+        func getData(boundary: String) -> Data? {
+            var boundary = "--\(boundary)"
             let boundaryLastIndex = boundary.utf8.count - 1
             var boundaryIndex = boundaryLastIndex
             var bytes: [UInt8]? = nil
@@ -145,14 +145,14 @@ public struct MultipartBodyParserMiddleware: MiddlewareType {
             return nil
         }
 
-        while let boundaryLine = getLine() {
+        while let boundaryLine = try getLine() {
             if boundaryLine == "--\(boundary)" {
                 let contentDisposition: String
                 var contentDispositionParameters: [String: String] = [:]
                 var contentType: String? = .None
                 let body: Data
 
-                if let contentDispositionLine = getLine() {
+                if let contentDispositionLine = try getLine() {
                     let contentDispositionArray = contentDispositionLine.splitBy(";")
                     let contentDispositionToken = contentDispositionArray[0]
                     contentDisposition = contentDispositionToken.splitBy(":")[1].trim()
@@ -165,13 +165,13 @@ public struct MultipartBodyParserMiddleware: MiddlewareType {
                         contentDispositionParameters[parameterKey] = parameterValue
                     }
 
-                    if let secondLine = getLine() {
+                    if let secondLine = try getLine() {
                         if secondLine == "" {
                             body = getData(boundary)!
                         } else {
                             let contentTypeLine = secondLine
                             contentType = contentTypeLine.splitBy(":")[1].trim()
-                            getLine()
+                            try getLine()
                             body = getData(boundary)!
                         }
 

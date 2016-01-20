@@ -32,18 +32,11 @@ public struct Migration {
             throw MigrationError(description: "up.sql not found at \(upPath)")
         }
         
-        guard let upStatement = String(data: try File(path: upPath).read()) else {
-            throw MigrationError(description: "Unable to read file \(upPath)")
-        }
-        
-        self.upStatement = upStatement
+    
+        self.upStatement = try String(data: try File(path: upPath).read())
         
         if File.fileExistsAtPath(downPath, isDirectory: &isDirectory) && !isDirectory {
-            guard let downStatement = try String(data: File(path: downPath).read()) else {
-                throw MigrationError(description: "Unable to read file \(downPath)")
-            }
-            
-            self.downStatement = downStatement
+            self.downStatement = try String(data: File(path: downPath).read())
         }
         else {
             self.downStatement = nil

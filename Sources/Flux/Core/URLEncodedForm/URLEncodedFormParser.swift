@@ -31,7 +31,7 @@ public struct URLEncodedFormParser: InterchangeDataParser {
     public init() {}
     
     public func parse(data: DataConvertible) throws -> InterchangeData {
-        guard let string = String(data: data.data) else {
+        guard let string = try? String(data: data.data) else {
             throw URLEncodedFormParseError.UnsupportedEncoding
         }
 
@@ -41,12 +41,10 @@ public struct URLEncodedFormParser: InterchangeDataParser {
             let tokens = parameter.splitBy("=")
 
             if tokens.count == 2 {
-                let key = String(URLEncodedString: tokens[0])
-                let value = String(URLEncodedString: tokens[1])
+                let key = try String(URLEncodedString: tokens[0])
+                let value = try String(URLEncodedString: tokens[1])
 
-                if let key = key, value = value {
-                    interchangeData[key] = InterchangeData.from(value)
-                }
+                interchangeData[key] = InterchangeData.from(value)
             } else {
                 throw URLEncodedFormParseError.MalformedURLEncodedForm
             }
