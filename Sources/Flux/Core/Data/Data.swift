@@ -31,10 +31,6 @@ public protocol DataConvertible {
 }
 
 public struct Data {
-    public enum Error: ErrorType {
-        case ConversionError
-    }
-    
     private var bytes: [Byte]
 
     public init(bytes: [Byte]) {
@@ -131,7 +127,7 @@ extension Data {
 extension Data: MutableCollectionType {
     public func generate() -> AnyGenerator<Byte> {
         var index = 0
-        return anyGenerator {
+        return AnyGenerator {
             let byte = self.bytes[safe: index]
             index += 1
             return byte

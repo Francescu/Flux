@@ -205,7 +205,7 @@ extension GenericJSONParser {
 
             while let d = hexToDigit(nextChar) {
                 advance()
-                length++
+                length += 1
 
                 if length > 8 {
                     break
@@ -266,7 +266,7 @@ extension GenericJSONParser {
                 if let value = digitToInt(currentChar) {
                     fraction += (Double(value) * factor)
                     factor /= 10
-                    fractionLength++
+                    fractionLength += 1
                 } else {
                     break
                 }
@@ -297,7 +297,7 @@ extension GenericJSONParser {
             while cur != end {
                 if let value = digitToInt(currentChar) {
                     exponent = (exponent * 10) + Int64(value)
-                    exponentLength++
+                    exponentLength += 1
                 } else {
                     break
                 }
@@ -443,17 +443,17 @@ extension GenericJSONParser {
     
     private func advance() {
         assert(cur != end, "out of range")
-        cur++
+        cur = cur.successor()
         
         if cur != end {
             switch currentChar {
                 
             case Char(ascii: "\n"):
-                lineNumber++
+                lineNumber += 1
                 columnNumber = 1
                 
             default:
-                columnNumber++
+                columnNumber += 1
             }
         }
     }

@@ -22,8 +22,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+
 extension Int {
-    public init?(hexString: String) {
+    public init(hexString: String) throws {
         struct Error: ErrorType {}
 
         let map = [
@@ -33,17 +34,13 @@ extension Int {
             "C": 12, "D": 13, "E": 14, "F": 15
         ]
 
-        let number = try? hexString.uppercaseString.unicodeScalars.reduce(0) {
+        let number = try hexString.uppercaseString.unicodeScalars.reduce(0) {
             let character = String($1)
             if character == " " { return $0 }
             guard let digit = map[character] else { throw Error() }
             return $0 * 16 + digit
         }
 
-        if let number = number {
-            self.init(number)
-        } else {
-            return nil
-        }
+        self.init(number)
     }
 }

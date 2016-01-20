@@ -42,9 +42,7 @@ extension String {
 
                 let hexString = "\(unicodeA)\(unicodeB)"
 
-                guard let character = Int(hexString: hexString) else {
-                    throw Data.Error.ConversionError
-                }
+                let character = try Int(hexString: hexString)
 
                 decodedBytes.append(UInt8(character))
                 i += 3
@@ -64,6 +62,7 @@ extension String {
 
 
     public init(data: Data) throws {
+        struct Error: ErrorType {}
         var string = ""
         var decoder = UTF8()
         var generator = data.generate()
@@ -75,7 +74,7 @@ extension String {
             case .Result(let char): string.append(char)
             case .EmptyInput: finished = true
             case .Error:
-                throw Data.Error.ConversionError
+                throw Error()
             }
         }
         

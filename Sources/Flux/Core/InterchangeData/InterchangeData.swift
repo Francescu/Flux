@@ -313,7 +313,7 @@ extension InterchangeData: CustomStringConvertible {
 
         func serializeArray(a: [InterchangeData]) -> String {
             var s = "["
-            indentLevel++
+            indentLevel += 1
 
             for i in 0 ..< a.count {
                 s += "\n"
@@ -325,13 +325,13 @@ extension InterchangeData: CustomStringConvertible {
                 }
             }
 
-            indentLevel--
+            indentLevel -= 1
             return s + "\n" + indent() + "]"
         }
 
         func serializeObject(o: [String: InterchangeData]) -> String {
             var s = "{"
-            indentLevel++
+            indentLevel += 1
             var i = 0
 
             for (key, value) in o {
@@ -339,12 +339,13 @@ extension InterchangeData: CustomStringConvertible {
                 s += indent()
                 s += "\(escapeAsJSONString(key)): \(serialize(value))"
 
-                if i++ != (o.count - 1) {
+                if i != (o.count - 1) {
                     s += ","
                 }
+                i += 1
             }
             
-            indentLevel--
+            indentLevel -= 1
             return s + "\n" + indent() + "}"
         }
         

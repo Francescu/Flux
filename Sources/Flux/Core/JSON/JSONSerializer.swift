@@ -70,9 +70,10 @@ public class JSONSerializer: InterchangeDataSerializer {
 
         for entry in o {
             s += "\(escapeAsJSONString(entry.0)):\(serialize(entry.1))"
-            if i++ != (o.count - 1) {
+            if i != (o.count - 1) {
                 s += ","
             }
+            i += 1
         }
 
         return s + "}"
@@ -84,7 +85,7 @@ public final class PrettyJSONSerializer: JSONSerializer {
 
     override public func serializeArray(a: [InterchangeData]) -> String {
         var s = "["
-        indentLevel++
+        indentLevel += 1
 
         for i in 0 ..< a.count {
             s += "\n"
@@ -96,13 +97,13 @@ public final class PrettyJSONSerializer: JSONSerializer {
             }
         }
 
-        indentLevel--
+        indentLevel -= 1
         return s + "\n" + indent() + "]"
     }
 
     override public func serializeObject(o: [String: InterchangeData]) -> String {
         var s = "{"
-        indentLevel++
+        indentLevel += 1
         var i = 0
 
         for (key, value) in o {
@@ -110,12 +111,14 @@ public final class PrettyJSONSerializer: JSONSerializer {
             s += indent()
             s += "\(escapeAsJSONString(key)): \(serialize(value))"
 
-            if i++ != (o.count - 1) {
+            if i != (o.count - 1) {
                 s += ","
             }
+            
+            i += 1
         }
 
-        indentLevel--
+        indentLevel -= 1
         return s + "\n" + indent() + "}"
     }
 

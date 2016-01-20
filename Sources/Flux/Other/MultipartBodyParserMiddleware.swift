@@ -125,7 +125,7 @@ public struct MultipartBodyParserMiddleware: MiddlewareType {
 
                 while let crazyByte = getByteForReversedIndex(boundaryIndex) {
                     if crazyByte == getByteForIndex(boundaryIndex) {
-                        boundaryIndex--
+                        boundaryIndex -= 1
                     } else {
                         boundaryIndex = boundaryLastIndex
                         break
