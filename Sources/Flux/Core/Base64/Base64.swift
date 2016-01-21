@@ -62,23 +62,23 @@ private class Base64Encoder {
 		switch step {
 		case .A:
 			result = (fragment & 0x0fc) >> 2
-			output.append(encodeValue(result))
+			output.appendByte(encodeValue(result))
 			result = (fragment & 0x003) << 4
 			step = .B
 		case .B:
 			result |= (fragment & 0x0f0) >> 4
-			output.append(encodeValue(result))
+			output.appendByte(encodeValue(result))
 			result = (fragment & 0x00f) << 2
 			step = .C
 		case .C:
 			result |= (fragment & 0x0c0) >> 6
-			output.append(encodeValue(result))
+			output.appendByte(encodeValue(result))
 			result  = (fragment & 0x03f) >> 0
-			output.append(encodeValue(result))
+			output.appendByte(encodeValue(result))
 			if let charsPerLine = self.charsPerLine {
 				stepcount += 1
 				if stepcount == charsPerLine/4 {
-					output.append(Base64Encoder.newlineChar)
+					output.appendByte(Base64Encoder.newlineChar)
 					stepcount = 0
 				}
 			}
@@ -97,15 +97,15 @@ private class Base64Encoder {
 		case .A:
 			break
 		case .B:
-			output.append(encodeValue(result))
-			output.append(Base64Encoder.paddingChar)
-			output.append(Base64Encoder.paddingChar)
+			output.appendByte(encodeValue(result))
+			output.appendByte(Base64Encoder.paddingChar)
+			output.appendByte(Base64Encoder.paddingChar)
 		case .C:
-			output.append(encodeValue(result))
-			output.append(Base64Encoder.paddingChar)
+			output.appendByte(encodeValue(result))
+			output.appendByte(Base64Encoder.paddingChar)
 		}
 		if let _ = self.charsPerLine {
-			output.append(Base64Encoder.newlineChar)
+			output.appendByte(Base64Encoder.newlineChar)
 		}
 	}
 

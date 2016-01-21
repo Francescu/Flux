@@ -26,17 +26,7 @@ public typealias Byte = UInt8
 
 public protocol DataConvertible {
     var data: Data { get }
-    
     init(data: Data) throws
-}
-
-
-public struct Data {
-    private var bytes: [Byte]
-
-    public init(bytes: [Byte]) {
-        self.bytes = bytes
-    }
 }
 
 public protocol UnsafeDataConvertible: DataConvertible {}
@@ -45,9 +35,17 @@ public extension UnsafeDataConvertible {
     public var data: Data {
         return Data(value: self)
     }
-    
+
     public init(data: Data) {
         self = data.convert()
+    }
+}
+
+public struct Data {
+    private var bytes: [Byte]
+
+    public init(bytes: [Byte]) {
+        self.bytes = bytes
     }
 }
 
@@ -60,19 +58,6 @@ extension Data {
     public init() {
         self.bytes = []
     }
-    
-    internal func convert<T>() -> T {
-        return bytes.withUnsafeBufferPointer {
-            return UnsafePointer<T>($0.baseAddress).memory
-        }
-    }
-    
-    internal init<T>(value: T) {
-        var value = value
-        self.bytes = withUnsafePointer(&value) {
-            Array(UnsafeBufferPointer(start: UnsafePointer<Byte>($0), count: sizeof(T)))
-        }
-    }
 
     public init(_ convertible: DataConvertible) {
         self.bytes = convertible.data.bytes
@@ -84,62 +69,6 @@ extension Data {
 
     public init<C: CollectionType where C.Generator.Element == Byte>(_ bytes: C) {
         self.bytes = [Byte](bytes)
-    }
-
-    public mutating func replaceRange<C: CollectionType where C.Generator.Element == Byte>(subRange: Range<Int>, with newElements: C) {
-        bytes.replaceRange(subRange, with: newElements)
-    }
-
-    public mutating func reserveCapacity(minimumCapacity: Int) {
-        bytes.reserveCapacity(minimumCapacity)
-    }
-
-    public mutating func append(newElement: Byte) {
-        bytes.append(newElement)
-    }
-
-    public mutating func appendContentsOf<S: SequenceType where S.Generator.Element == Byte>(newElements: S) {
-        bytes.appendContentsOf(newElements)
-    }
-
-    public mutating func insert(newElement: Byte, atIndex i: Int) {
-        bytes.insert(newElement, atIndex: i)
-    }
-
-    public mutating func insertContentsOf<S : CollectionType where S.Generator.Element == Byte>(newElements: S, at i: Int) {
-        bytes.insertContentsOf(newElements, at: i)
-    }
-
-    public mutating func removeAtIndex(index: Int) -> Byte {
-        return bytes.removeAtIndex(index)
-    }
-
-    public mutating func removeFirst() -> Byte {
-        return bytes.removeFirst()
-    }
-
-    public mutating func removeFirst(n: Int) {
-        bytes.removeFirst(n)
-    }
-
-    public mutating func removeRange(subRange: Range<Int>) {
-        bytes.removeRange(subRange)
-    }
-
-    public mutating func removeAll(keepCapacity keepCapacity: Bool = true) {
-        bytes.removeAll(keepCapacity: keepCapacity)
-    }
-
-    public init(count: Int, repeatedValue: Byte) {
-        self.init(bytes: [Byte](count: count, repeatedValue: repeatedValue))
-    }
-
-    public var capacity: Int {
-        return bytes.capacity
-    }
-
-    public var isEmpty: Bool {
-        return bytes.isEmpty
     }
 }
 
@@ -175,27 +104,14 @@ extension Data: MutableCollectionType {
         }
     }
 
-    public subscript (bounds: Range<Int>) -> ArraySlice<Byte> {
+    public subscript (bounds: Range<Int>) -> Data {
         get {
-            return bytes[bounds]
+            return Data(bytes[bounds])
         }
 
         set {
-            bytes[bounds] = newValue
+            bytes[bounds] = ArraySlice<Byte>(newValue.bytes)
         }
-    }
-}
-
-extension Data {
-    public var hexDescription: String {
-        var string = ""
-        for (index, value) in self.enumerate() {
-            if index % 2 == 0 && index > 0 {
-                string += " "
-            }
-            string += (value < 16 ? "0" : "") + String(value, radix: 16)
-        }
-        return string
     }
 }
 
@@ -241,6 +157,19 @@ extension Data: StringInterpolationConvertible {
     }
 }
 
+extension Data {
+    public var hexDescription: String {
+        var string = ""
+        for (index, value) in self.enumerate() {
+            if index % 2 == 0 && index > 0 {
+                string += " "
+            }
+            string += (value < 16 ? "0" : "") + String(value, radix: 16)
+        }
+        return string
+    }
+}
+
 extension Data: CustomStringConvertible {
     public var description: String {
         if let string = try? String(data: self) {
@@ -264,6 +193,19 @@ extension Data: NilLiteralConvertible {
 }
 
 extension Data {
+    internal func convert<T>() -> T {
+        return bytes.withUnsafeBufferPointer {
+            return UnsafePointer<T>($0.baseAddress).memory
+        }
+    }
+
+    internal init<T>(value: T) {
+        var value = value
+        self.bytes = withUnsafePointer(&value) {
+            Array(UnsafeBufferPointer(start: UnsafePointer<Byte>($0), count: sizeof(T)))
+        }
+    }
+
     public func withUnsafeBufferPointer<R>(@noescape body: (UnsafeBufferPointer<Byte>) throws -> R) rethrows -> R {
         return try bytes.withUnsafeBufferPointer(body)
     }
@@ -271,9 +213,69 @@ extension Data {
     public mutating func withUnsafeMutableBufferPointer<R>(@noescape body: (inout UnsafeMutableBufferPointer<Byte>) throws -> R) rethrows -> R {
         return try bytes.withUnsafeMutableBufferPointer(body)
     }
-    
 
-    public mutating func popLast() -> Byte? {
+    public static func bufferWithSize(size: Int) -> Data {
+        return Data([UInt8](count: size, repeatedValue: 0))
+    }
+
+
+    public mutating func replaceBytesInRange<C: CollectionType where C.Generator.Element == Byte>(subRange: Range<Int>, with newBytes: C) {
+        bytes.replaceRange(subRange, with: newBytes)
+    }
+
+    public mutating func reserveCapacity(minimumCapacity: Int) {
+        bytes.reserveCapacity(minimumCapacity)
+    }
+
+    public mutating func appendByte(newByte: Byte) {
+        bytes.append(newByte)
+    }
+
+    public mutating func appendBytes<S: SequenceType where S.Generator.Element == Byte>(newBytes: S) {
+        bytes.appendContentsOf(newBytes)
+    }
+
+    public mutating func insertByte(newByte: Byte, atIndex i: Int) {
+        bytes.insert(newByte, atIndex: i)
+    }
+
+    public mutating func insertBytes<S : CollectionType where S.Generator.Element == Byte>(newBytes: S, at i: Int) {
+        bytes.insertContentsOf(newBytes, at: i)
+    }
+
+    public mutating func removeByteAtIndex(index: Int) -> Byte {
+        return bytes.removeAtIndex(index)
+    }
+
+    public mutating func removeFirstByte() -> Byte {
+        return bytes.removeFirst()
+    }
+
+    public mutating func removeFirstBytes(n: Int) {
+        bytes.removeFirst(n)
+    }
+
+    public mutating func removeBytesInRange(subRange: Range<Int>) {
+        bytes.removeRange(subRange)
+    }
+
+    public mutating func removeAllBytes(keepCapacity keepCapacity: Bool = true) {
+        bytes.removeAll(keepCapacity: keepCapacity)
+    }
+
+    public init(count: Int, repeatedValue: Byte) {
+        self.init(bytes: [Byte](count: count, repeatedValue: repeatedValue))
+    }
+
+    public var capacity: Int {
+        return bytes.capacity
+    }
+
+    public var isEmpty: Bool {
+        return bytes.isEmpty
+    }
+
+    public mutating func popLastByte() -> Byte? {
         return bytes.popLast()
     }
 }
@@ -282,11 +284,31 @@ public func +=<S : SequenceType where S.Generator.Element == Byte>(inout lhs: Da
     return lhs.bytes += rhs
 }
 
+public func +=(inout lhs: Data, rhs: Data) {
+    return lhs.bytes += rhs.bytes
+}
+
 public func +=(inout lhs: Data, rhs: DataConvertible) {
-    return lhs.bytes += rhs.data.bytes
+    return lhs += rhs.data
 }
 
 @warn_unused_result
-public func +(lhs: DataConvertible, rhs: DataConvertible) -> Data {
-    return Data(bytes: lhs.data.bytes + rhs.data.bytes)
+public func +(lhs: Data, rhs: Data) -> Data {
+    return Data(bytes: lhs.bytes + rhs.bytes)
+}
+
+@warn_unused_result
+public func +(lhs: Data, rhs: DataConvertible) -> Data {
+    return lhs + rhs.data
+}
+
+@warn_unused_result
+public func +(lhs: DataConvertible, rhs: Data) -> Data {
+    return lhs.data + rhs
+}
+
+extension CollectionType {
+    subscript (safe index: Self.Index) -> Self.Generator.Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
 }

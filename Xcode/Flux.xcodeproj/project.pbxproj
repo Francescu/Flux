@@ -14,7 +14,6 @@
 		B068CBB51C4F447000EF0B3E /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B068CBB41C4F447000EF0B3E /* MessageType.swift */; };
 		B0A918A71C4F6510002A2A98 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A918A61C4F6510002A2A98 /* Dictionary.swift */; };
 		B0B14CB91C4AD455006ABA9E /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C601C4AD455006ABA9E /* Base64.swift */; };
-		B0B14CBA1C4AD455006ABA9E /* CollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C621C4AD455006ABA9E /* CollectionType.swift */; };
 		B0B14CBB1C4AD455006ABA9E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C641C4AD455006ABA9E /* Data.swift */; };
 		B0B14CBC1C4AD455006ABA9E /* EventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C661C4AD455006ABA9E /* EventEmitter.swift */; };
 		B0B14CBD1C4AD455006ABA9E /* EventListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C671C4AD455006ABA9E /* EventListener.swift */; };
@@ -100,6 +99,8 @@
 		B0B14D371C4BBAA5006ABA9E /* SSLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14D2B1C4BBAA5006ABA9E /* SSLSession.swift */; };
 		B0B14D391C4BC3F4006ABA9E /* TCPSSLStreamServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14D381C4BC3F4006ABA9E /* TCPSSLStreamServer.swift */; };
 		B0C08DBC1C2A3C300088B16D /* Flux.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C08DB11C2A3C300088B16D /* Flux.framework */; };
+		B0DCBDFC1C51073A00B2AFA3 /* TCPSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBDFB1C51073A00B2AFA3 /* TCPSocket.swift */; };
+		B0DCBDFE1C510B2600B2AFA3 /* UDPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBDFD1C510B2600B2AFA3 /* UDPError.swift */; };
 		B71ADF771C4FA49C0065A276 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF6F1C4FA49C0065A276 /* Connection.swift */; };
 		B71ADF781C4FA49C0065A276 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF701C4FA49C0065A276 /* Field.swift */; };
 		B71ADF791C4FA49C0065A276 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF711C4FA49C0065A276 /* Result.swift */; };
@@ -133,7 +134,6 @@
 		B0A918A61C4F6510002A2A98 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Dictionary.swift; path = Dictionary/Dictionary.swift; sourceTree = "<group>"; };
 		B0B14C5D1C4AD313006ABA9E /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		B0B14C601C4AD455006ABA9E /* Base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
-		B0B14C621C4AD455006ABA9E /* CollectionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionType.swift; sourceTree = "<group>"; };
 		B0B14C641C4AD455006ABA9E /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		B0B14C661C4AD455006ABA9E /* EventEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEmitter.swift; sourceTree = "<group>"; };
 		B0B14C671C4AD455006ABA9E /* EventListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListener.swift; sourceTree = "<group>"; };
@@ -221,6 +221,8 @@
 		B0C08DB11C2A3C300088B16D /* Flux.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Flux.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0C08DBB1C2A3C300088B16D /* FluxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FluxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0C08E911C2C76000088B16D /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		B0DCBDFB1C51073A00B2AFA3 /* TCPSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPSocket.swift; sourceTree = "<group>"; };
+		B0DCBDFD1C510B2600B2AFA3 /* UDPError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UDPError.swift; path = ../Sources/Flux/UDP/UDPError.swift; sourceTree = "<group>"; };
 		B71ADF6F1C4FA49C0065A276 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		B71ADF701C4FA49C0065A276 /* Field.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
 		B71ADF711C4FA49C0065A276 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -274,7 +276,6 @@
 			isa = PBXGroup;
 			children = (
 				B0A918A51C4F64FE002A2A98 /* Dictionary */,
-				B0B14C611C4AD455006ABA9E /* CollectionType */,
 				B0B14C791C4AD455006ABA9E /* String */,
 				B0B14C6A1C4AD455006ABA9E /* Int */,
 				B0B14C631C4AD455006ABA9E /* Data */,
@@ -297,14 +298,6 @@
 				B0B14C601C4AD455006ABA9E /* Base64.swift */,
 			);
 			path = Base64;
-			sourceTree = "<group>";
-		};
-		B0B14C611C4AD455006ABA9E /* CollectionType */ = {
-			isa = PBXGroup;
-			children = (
-				B0B14C621C4AD455006ABA9E /* CollectionType.swift */,
-			);
-			path = CollectionType;
 			sourceTree = "<group>";
 		};
 		B0B14C631C4AD455006ABA9E /* Data */ = {
@@ -599,9 +592,10 @@
 		B0B14D001C4AD4C6006ABA9E /* TCP */ = {
 			isa = PBXGroup;
 			children = (
+				B0DCBDFB1C51073A00B2AFA3 /* TCPSocket.swift */,
 				B0B14CB41C4AD455006ABA9E /* TCPClientSocket.swift */,
-				B0B14CB51C4AD455006ABA9E /* TCPError.swift */,
 				B0B14CB61C4AD455006ABA9E /* TCPServerSocket.swift */,
+				B0B14CB51C4AD455006ABA9E /* TCPError.swift */,
 			);
 			name = TCP;
 			path = Flux/Venice;
@@ -675,6 +669,7 @@
 			isa = PBXGroup;
 			children = (
 				B0B14D1D1C4B2610006ABA9E /* UDP.swift */,
+				B0DCBDFD1C510B2600B2AFA3 /* UDPError.swift */,
 			);
 			name = UDP;
 			path = ../Xcode;
@@ -937,8 +932,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0DCBDFE1C510B2600B2AFA3 /* UDPError.swift in Sources */,
 				B0B14CDE1C4AD455006ABA9E /* RequestStreamParser.swift in Sources */,
 				B0B14D351C4BBAA5006ABA9E /* SSLServerContext.swift in Sources */,
+				B0DCBDFC1C51073A00B2AFA3 /* TCPSocket.swift in Sources */,
 				37513E171C4C80AB00488AD4 /* Trie.swift in Sources */,
 				B0B14CEE1C4AD455006ABA9E /* Poller.swift in Sources */,
 				B0B14CBD1C4AD455006ABA9E /* EventListener.swift in Sources */,
@@ -1026,7 +1023,6 @@
 				B0B14D361C4BBAA5006ABA9E /* SSLServerStream.swift in Sources */,
 				B0B14CC71C4AD455006ABA9E /* String.swift in Sources */,
 				B0B14CCB1C4AD455006ABA9E /* Client.swift in Sources */,
-				B0B14CBA1C4AD455006ABA9E /* CollectionType.swift in Sources */,
 				B0B14D141C4AD72F006ABA9E /* Request+Content.swift in Sources */,
 				B77775441C50359C004325E6 /* Coder.swift in Sources */,
 				B0B14CF61C4AD455006ABA9E /* TCPServerSocket.swift in Sources */,

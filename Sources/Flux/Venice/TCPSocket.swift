@@ -1,4 +1,4 @@
-// CollectionType.swift
+// TCPSocket.swift
 //
 // The MIT License (MIT)
 //
@@ -22,8 +22,56 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-extension CollectionType {
-    public subscript (safe index: Self.Index) -> Self.Generator.Element? {
-        return indices.contains(index) ? self[index] : nil
+import CLibvenice
+
+//public typealias Deadline = Int64
+//let noDeadline: Deadline = -1
+//public typealias FileDescriptor = Int32
+
+public class TCPSocket {
+    var socket: tcpsock
+    public private(set) var closed = false
+
+    public var port: Int {
+        return Int(tcpport(socket))
+    }
+
+    init(socket: tcpsock) throws {
+        self.socket = socket
+        try TCPError.assertNoError()
+    }
+
+    deinit {
+        if !closed {
+            tcpclose(socket)
+        }
+    }
+
+    func attach(fileDescriptor: FileDescriptor, isServer: Bool) throws {
+        if !closed {
+            try close()
+        }
+
+        socket = tcpattach(fileDescriptor, isServer ? 1 : 0)
+        try TCPError.assertNoError()
+        closed = false
+    }
+
+    public func detach() throws -> FileDescriptor {
+        try assertNotClosed()
+        closed = true
+        return tcpdetach(socket)
+    }
+
+    public func close() throws {
+        try assertNotClosed()
+        closed = true
+        tcpclose(socket)
+    }
+    
+    func assertNotClosed() throws {
+        if closed {
+            throw TCPError.closedSocketError
+        }
     }
 }

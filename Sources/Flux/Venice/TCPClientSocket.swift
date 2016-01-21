@@ -22,168 +22,114 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
 import CLibvenice
 
-public final class TCPClientSocket {
-    private var socket: tcpsock
-    public private(set) var closed = false
-
-    init(socket: tcpsock) {
-        self.socket = socket
+public final class TCPClientSocket: TCPSocket {
+    override init(socket: tcpsock) throws {
+        try super.init(socket: socket)
     }
 
     public init(ip: IP, deadline: Deadline = noDeadline) throws {
-        self.socket = tcpconnect(ip.address, deadline)
-
-        if errno != 0 {
-            closed = true
-            throw TCPError.lastError
-        }
+        try super.init(socket: tcpconnect(ip.address, deadline))
     }
 
-    public init(fileDescriptor: Int32) throws {
-        self.socket = tcpattach(fileDescriptor, 0)
-
-        if errno != 0 {
-            closed = true
-            throw TCPError.lastError
-        }
-    }
-
-    deinit {
-        close()
+    public init(fileDescriptor: FileDescriptor) throws {
+        try super.init(socket: tcpattach(fileDescriptor, 0))
     }
 
     public func send(data: Data, deadline: Deadline = noDeadline) throws {
-        if closed {
-            throw TCPError.closedSocketError
+        try assertNotClosed()
+
+        let bytesProcessed = data.withUnsafeBufferPointer {
+            tcpsend(socket, $0.baseAddress, $0.count, deadline)
         }
 
-        var data = data
-        let bytesProcessed = tcpsend(socket, &data, data.count, deadline)
-
-        if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: false)
-        }
+        try TCPError.assertNoSendErrorWithData(data, bytesProcessed: bytesProcessed)
     }
 
     public func flush(deadline: Deadline = noDeadline) throws {
-        if closed {
-            throw TCPError.closedSocketError
-        }
+        try assertNotClosed()
 
         tcpflush(socket, deadline)
 
-        if errno != 0 {
-            throw TCPError.lastError
-        }
+        try TCPError.assertNoError()
     }
 
     public func receive(bufferSize bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> Data {
-        if closed {
-            throw TCPError.closedSocketError
+        try assertNotClosed()
+
+        var data = Data.bufferWithSize(bufferSize)
+        let bytesProcessed = data.withUnsafeMutableBufferPointer {
+            tcprecv(socket, $0.baseAddress, $0.count, deadline)
         }
 
-        var data = Data(count: bufferSize, repeatedValue: 0)
-        let bytesProcessed = tcprecv(socket, &data, data.count, deadline)
-
-        if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
-        }
-
+        try TCPError.assertNoReceiveErrorWithData(data, bytesProcessed: bytesProcessed)
         return processedDataFromSource(data, bytesProcessed: bytesProcessed)
     }
 
-    public func receiveLowWaterMark(lowWaterMark: Int = 256, highWaterMark: Int = 256, deadline: Deadline = noDeadline) throws -> Data {
-        if closed {
-            throw TCPError.closedSocketError
+    public func receiveWithLowWaterMark(lowWaterMark: Int = 1, highWaterMark: Int = 256, deadline: Deadline = noDeadline) throws -> Data {
+        try assertNotClosed()
+
+        var data = Data.bufferWithSize(highWaterMark)
+        let bytesProcessed = data.withUnsafeMutableBufferPointer {
+            tcprecvlh(socket, $0.baseAddress, lowWaterMark, highWaterMark, deadline)
         }
 
-        var bytes: [UInt8] = [UInt8](count: highWaterMark, repeatedValue: 0)
-        let bytesProcessed = tcprecvlh(socket, &bytes, lowWaterMark, highWaterMark, deadline)
-        
-        let data = Data(bytes: bytes)
-
-        if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
-        }
-
+        try TCPError.assertNoReceiveErrorWithData(data, bytesProcessed: bytesProcessed)
         return processedDataFromSource(data, bytesProcessed: bytesProcessed)
     }
 
     public func receive(bufferSize bufferSize: Int = 256, untilDelimiter delimiter: String, deadline: Deadline = noDeadline) throws -> Data {
-        if closed {
-            throw TCPError.closedSocketError
+        try assertNotClosed()
+
+        var data = Data.bufferWithSize(bufferSize)
+        let bytesProcessed = data.withUnsafeMutableBufferPointer {
+            tcprecvuntil(socket, $0.baseAddress, $0.count, delimiter, delimiter.utf8.count, deadline)
         }
-
-        var bytes: [UInt8] = [UInt8](count: bufferSize, repeatedValue: 0)
-        let bytesProcessed = tcprecvuntil(socket, &bytes, bytes.count, delimiter, delimiter.utf8.count, deadline)
-
-        let data = Data(bytes: bytes)
         
-        if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
-        }
-
+        try TCPError.assertNoReceiveErrorWithData(data, bytesProcessed: bytesProcessed)
         return processedDataFromSource(data, bytesProcessed: bytesProcessed)
     }
 
-    public func attach(fileDescriptor: Int32) throws {
-        if !closed {
-            tcpclose(socket)
-        }
-
-        socket = tcpattach(fileDescriptor, 0)
-
-        if errno != 0 {
-            throw TCPError.lastError
-        }
-
-        closed = false
+    public func attach(fileDescriptor: FileDescriptor) throws {
+        try super.attach(fileDescriptor, isServer: false)
     }
-
-    public func detach() throws -> Int32 {
-        if closed {
-            throw TCPError.closedSocketError
-        }
-
-        closed = true
-        return tcpdetach(socket)
-    }
-
-    public func close() {
-        if !closed {
-            closed = true
-            tcpclose(socket)
-        }
-    }
-}
-
-func remainingDataFromSource(data: Data, bytesProcessed: Int) -> Data {
-    return Data(data[data.count - bytesProcessed ..< data.count])
-}
-
-func processedDataFromSource(data: Data, bytesProcessed: Int) -> Data {
-    return Data(data[0 ..< bytesProcessed])
 }
 
 extension TCPClientSocket {
-    public func sendString(string: String, deadline: Deadline = noDeadline) throws {
-        try send(string.data, deadline: deadline)
+    public func send(convertible: DataConvertible, deadline: Deadline = noDeadline) throws {
+        try send(convertible.data, deadline: deadline)
     }
 
-    public func receiveString(bufferSize bufferSize: Int = 256, untilDelimiter delimiter: String, deadline: Deadline = noDeadline) throws -> String? {
-        let result = try receive(bufferSize: bufferSize, untilDelimiter: delimiter, deadline: deadline)
-        return try String(data: result)
-    }
-
-    public func receiveString(bufferSize bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> String? {
+    public func receiveString(bufferSize bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> String {
         let result = try receive(bufferSize: bufferSize, deadline: deadline)
         return try String(data: result)
     }
+
+    public func receiveString(bufferSize bufferSize: Int = 256, untilDelimiter delimiter: String, deadline: Deadline = noDeadline) throws -> String {
+        let result = try receive(bufferSize: bufferSize, untilDelimiter: delimiter, deadline: deadline)
+        return try String(data: result)
+    }
 }
+
+//extension String {
+//    init(data: Data) throws {
+//        struct Error: ErrorType {}
+//        var string = ""
+//        var decoder = UTF8()
+//        var generator = data.generate()
+//        var finished = false
+//
+//        while !finished {
+//            let decodingResult = decoder.decode(&generator)
+//            switch decodingResult {
+//            case .Result(let char): string.append(char)
+//            case .EmptyInput: finished = true
+//            case .Error:
+//                throw Error()
+//            }
+//        }
+//
+//        self.init(string)
+//    }
+//}

@@ -23,7 +23,6 @@
 // SOFTWARE.
 
 public struct Coder<T> {
-    
     public let data: Data
     
     public init(value: T) {

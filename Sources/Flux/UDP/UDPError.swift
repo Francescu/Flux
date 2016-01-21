@@ -1,4 +1,4 @@
-// TCPError.swift
+// UDPError.swift
 //
 // The MIT License (MIT)
 //
@@ -28,24 +28,23 @@
     import Darwin.C
 #endif
 
-public enum TCPError: ErrorType {
+public enum UDPError: ErrorType {
     case Unknown(description: String)
     case ConnectionResetByPeer(description: String, data: Data)
     case NoBufferSpaceAvailabe(description: String, data: Data)
     case OperationTimedOut(description: String, data: Data)
     case ClosedSocket(description: String)
 
-    static func lastReceiveErrorWithData(source: Data, bytesProcessed: Int) -> TCPError {
+    static func lastReceiveErrorWithData(source: Data, bytesProcessed: Int) -> UDPError {
         let data = processedDataFromSource(source, bytesProcessed: bytesProcessed)
         return lastErrorWithData(data)
     }
 
-    static func lastSendErrorWithData(source: Data, bytesProcessed: Int) -> TCPError {
-        let data = remainingDataFromSource(source, bytesProcessed: bytesProcessed)
-        return lastErrorWithData(data)
+    static func lastSendErrorWithData(source: Data) -> UDPError {
+        return lastErrorWithData(source)
     }
 
-    static func lastErrorWithData(data: Data) -> TCPError {
+    static func lastErrorWithData(data: Data) -> UDPError {
         switch errno {
         case ECONNRESET:
             return .ConnectionResetByPeer(description: lastErrorDescription, data: data)
@@ -58,47 +57,41 @@ public enum TCPError: ErrorType {
         }
     }
 
-    static var lastErrorDescription: String {
-        return String.fromCString(strerror(errno))!
+static var lastErrorDescription: String {
+    return String.fromCString(strerror(errno))!
     }
 
-    static var lastError: TCPError {
-        // TODO: Switch on errno
-        return .Unknown(description: lastErrorDescription)
+static var lastError: UDPError {
+    // TODO: Switch on errno
+    return .Unknown(description: lastErrorDescription)
     }
 
-    static var closedSocketError: TCPError {
-        return TCPError.ClosedSocket(description: "Closed socket")
+static var closedSocketError: UDPError {
+    return UDPError.ClosedSocket(description: "Closed socket")
     }
 
     static func assertNoError() throws {
         if errno != 0 {
-            throw TCPError.lastError
+            throw UDPError.lastError
         }
     }
 
     static func assertNoReceiveErrorWithData(data: Data, bytesProcessed: Int) throws {
         if errno != 0 {
-            throw TCPError.lastReceiveErrorWithData(data, bytesProcessed: bytesProcessed)
-        }
-    }
-
-    static func assertNoSendErrorWithData(data: Data, bytesProcessed: Int) throws {
-        if errno != 0 {
-            throw TCPError.lastSendErrorWithData(data, bytesProcessed: bytesProcessed)
+            throw UDPError.lastReceiveErrorWithData(data, bytesProcessed: bytesProcessed)
         }
     }
 }
 
-func remainingDataFromSource(data: Data, bytesProcessed: Int) -> Data {
-    return data[data.count - bytesProcessed ..< data.count]
-}
+//func remainingDataFromSource(data: Data, bytesProcessed: Int) -> Data {
+//    return data[data.count - bytesProcessed ..< data.count]
+//}
+//
+//func processedDataFromSource(data: Data, bytesProcessed: Int) -> Data {
+//    return data[0 ..< bytesProcessed]
+//}
 
-func processedDataFromSource(data: Data, bytesProcessed: Int) -> Data {
-    return data[0 ..< bytesProcessed]
-}
-
-extension TCPError: CustomStringConvertible {
+extension UDPError: CustomStringConvertible {
     public var description: String {
         switch self {
         case Unknown(let description):

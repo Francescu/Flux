@@ -22,86 +22,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
 import CLibvenice
 
-public final class TCPServerSocket {
-    private var socket: tcpsock
-
-    public var port: Int {
-        return Int(tcpport(self.socket))
-    }
-
-    public private(set) var closed = false
-
+public final class TCPServerSocket: TCPSocket {
     public init(ip: IP, backlog: Int = 10) throws {
-        self.socket = tcplisten(ip.address, Int32(backlog))
-
-        if errno != 0 {
-            closed = true
-            throw TCPError.lastError
-        }
+        try super.init(socket: tcplisten(ip.address, Int32(backlog)))
     }
 
-    public init(fileDescriptor: Int32) throws {
-        self.socket = tcpattach(fileDescriptor, 1)
-
-        if errno != 0 {
-            closed = true
-            throw TCPError.lastError
-        }
-    }
-
-    deinit {
-        close()
+    public init(fileDescriptor: FileDescriptor) throws {
+        try super.init(socket: tcpattach(fileDescriptor, 1))
     }
 
     public func accept(deadline: Deadline = noDeadline) throws -> TCPClientSocket {
-        if closed {
-            throw TCPError.closedSocketError
-        }
-
-        let clientSocket = tcpaccept(socket, deadline)
-
-        if errno != 0 {
-            throw TCPError.lastError
-        }
-
-        return TCPClientSocket(socket: clientSocket)
+        try assertNotClosed()
+        return try TCPClientSocket(socket: tcpaccept(socket, deadline))
     }
 
-    public func attach(fileDescriptor: Int32) throws {
-        if !closed {
-            tcpclose(socket)
-        }
-
-        socket = tcpattach(fileDescriptor, 1)
-
-        if errno != 0 {
-            closed = true
-            throw TCPError.lastError
-        }
-
-        closed = false
-    }
-
-    public func detach() throws -> Int32 {
-        if closed {
-            throw TCPError.closedSocketError
-        }
-
-        closed = true
-        return tcpdetach(socket)
-    }
-
-    public func close() {
-        if !closed {
-            closed = true
-            tcpclose(socket)
-        }
+    public func attach(fileDescriptor: FileDescriptor) throws {
+        try super.attach(fileDescriptor, isServer: true)
     }
 }

@@ -84,7 +84,7 @@ public final class SSLServerStream: StreamType {
     }
 
 	public func close() {
-		rawStream.close()
+        rawStream.close()
 	}
 
 	private func checkSSLOutput() throws {

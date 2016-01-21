@@ -24,7 +24,9 @@
 
 import CLibvenice
 
-public struct PollEvent : OptionSetType {
+public typealias FileDescriptor = Int32
+
+public struct PollEvent: OptionSetType {
     public let rawValue: Int
 
     public init(rawValue: Int) {
@@ -35,7 +37,7 @@ public struct PollEvent : OptionSetType {
     public static let Write = PollEvent(rawValue: Int(FDW_OUT))
 }
 
-public struct PollResult : OptionSetType {
+public struct PollResult: OptionSetType {
     public let rawValue: Int
 
     public init(rawValue: Int) {
@@ -49,7 +51,7 @@ public struct PollResult : OptionSetType {
 }
 
 /// Polls file descriptor for events
-public func pollFileDescriptor(fileDescriptor: Int32, events: PollEvent, deadline: Deadline = noDeadline) -> PollResult {
+public func pollFileDescriptor(fileDescriptor: FileDescriptor, events: PollEvent, deadline: Deadline = noDeadline) -> PollResult {
     let event = mill_fdwait(fileDescriptor, Int32(events.rawValue), deadline, "pollFileDescriptor")
     return PollResult(rawValue: Int(event))
 }

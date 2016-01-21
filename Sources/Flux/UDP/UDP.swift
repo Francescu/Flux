@@ -1,4 +1,4 @@
-// TCPServerSocket.swift
+// UDPServerSocket.swift
 //
 // The MIT License (MIT)
 //
@@ -31,95 +31,83 @@ import CLibvenice
 
 public final class UDPSocket {
     private var socket: udpsock
-
-    public var port: Int {
-        return Int(udpport(self.socket))
-    }
-
     public private(set) var closed = false
 
-    public init(ip: IP) throws {
-        self.socket = udplisten(ip.address)
-
-        if errno != 0 {
-            closed = true
-            throw TCPError.lastError
-        }
+    public var port: Int {
+        return Int(udpport(socket))
     }
 
-    public init(fileDescriptor: Int32) throws {
-        self.socket = udpattach(fileDescriptor)
+    public init(socket: udpsock) throws {
+        self.socket = socket
+        try UDPError.assertNoError()
+    }
 
-        if errno != 0 {
-            closed = true
-            throw TCPError.lastError
-        }
+    public convenience init(ip: IP) throws {
+        try self.init(socket: udplisten(ip.address))
+    }
+
+    public convenience init(fileDescriptor: Int32) throws {
+        try self.init(socket: udpattach(fileDescriptor))
     }
 
     deinit {
-        close()
-    }
-
-    public func send(ip ip: IP, data: Data, deadline: Deadline = noDeadline) throws {
-        if closed {
-            throw TCPError.closedSocketError
-        }
-
-        var data = data
-        udpsend(socket, ip.address, &data, data.count)
-
-        if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: 0, receive: false)
-        }
-    }
-
-    public func receive(bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> (Data, IP) {
-        if closed {
-            throw TCPError.closedSocketError
-        }
-
-        var data = Data(count: bufferSize, repeatedValue: 0)
-
-        var address = ipaddr()
-        let bytesProcessed = udprecv(socket, &address, &data, data.count, deadline)
-
-        if errno != 0 {
-            throw TCPError.lastErrorWithData(data, bytesProcessed: bytesProcessed, receive: true)
-        }
-
-        let processedData = processedDataFromSource(data, bytesProcessed: bytesProcessed)
-        let ip = IP(address: address)
-
-        return (processedData, ip)
-    }
-
-    public func attach(fileDescriptor: Int32) throws {
         if !closed {
             udpclose(socket)
         }
-
-        socket = udpattach(fileDescriptor)
-        closed = false
-
-        if errno != 0 {
-            closed = true
-            throw TCPError.lastError
-        }
     }
 
-    public func detach() throws -> Int32 {
-        if closed {
-            throw TCPError.closedSocketError
+    public func send(ip ip: IP, data: Data, deadline: Deadline = noDeadline) throws {
+        try assertNotClosed()
+
+        data.withUnsafeBufferPointer {
+            udpsend(socket, ip.address, $0.baseAddress, $0.count)
         }
 
+        try UDPError.assertNoError()
+    }
+
+    public func receive(bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> (Data, IP) {
+        try assertNotClosed()
+
+        var address = ipaddr()
+        var data = Data.bufferWithSize(bufferSize)
+
+        let bytesProcessed = data.withUnsafeMutableBufferPointer {
+            udprecv(socket, &address, $0.baseAddress, $0.count, deadline)
+        }
+
+        try TCPError.assertNoReceiveErrorWithData(data, bytesProcessed: bytesProcessed)
+
+        let processedData = processedDataFromSource(data, bytesProcessed: bytesProcessed)
+        let ip = IP(address: address)
+        return (processedData, ip)
+    }
+
+    public func attach(fileDescriptor: FileDescriptor) throws {
+        if !closed {
+            try close()
+        }
+
+        socket = udpattach(fileDescriptor)
+        try TCPError.assertNoError()
+        closed = false
+    }
+
+    public func detach() throws -> FileDescriptor {
+        try assertNotClosed()
         closed = true
         return udpdetach(socket)
     }
 
-    public func close() {
-        if !closed {
-            closed = true
-            udpclose(socket)
+    public func close() throws {
+        try assertNotClosed()
+        closed = true
+        udpclose(socket)
+    }
+
+    func assertNotClosed() throws {
+        if closed {
+            throw TCPError.closedSocketError
         }
     }
 }
