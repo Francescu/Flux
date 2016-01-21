@@ -22,11 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
 import CLibvenice
 
 public enum IPMode {
@@ -34,9 +29,7 @@ public enum IPMode {
     case IPV6
     case IPV4Prefered
     case IPV6Prefered
-}
 
-extension IPMode {
     var code: Int32 {
         switch self {
         case .IPV4: return 1
@@ -50,53 +43,27 @@ extension IPMode {
 public struct IP {
     let address: ipaddr
 
-    init(address: ipaddr) {
+    init(address: ipaddr) throws {
         self.address = address
+        try IPError.assertNoError()
     }
 
-    public init(port: Int, mode: IPMode = .IPV4) throws {
-        if port < 0 || port > 0xffff {
-            throw IPError(description: "port should be between 0 and 0xffff")
-        }
-
-        self.address = iplocal(nil, Int32(port), mode.code)
-
-        if errno != 0 {
-            let description = IPError.lastSystemErrorDescription
-            throw IPError(description: description)
-        }
+    public init(port: UInt16, mode: IPMode = .IPV4) throws {
+        try self.init(address: iplocal(nil, Int32(port), mode.code))
     }
 
-    public init(networkInterface: String, port: Int, mode: IPMode = .IPV4) throws {
-        if port < 0 || port > 0xffff {
-            throw IPError(description: "port should be between 0 and 0xffff")
-        }
-
-        self.address = iplocal(networkInterface, Int32(port), mode.code)
-
-        if errno != 0 {
-            let description = IPError.lastSystemErrorDescription
-            throw IPError(description: description)
-        }
+    public init(networkInterface: String, port: UInt16, mode: IPMode = .IPV4) throws {
+        try self.init(address: iplocal(networkInterface, Int32(port), mode.code))
     }
 
-    public init(address: String, port: Int, mode: IPMode = .IPV4, deadline: Deadline = noDeadline) throws {
-        if port < 0 || port > 0xffff {
-            throw IPError(description: "port should be between 0 and 0xffff")
-        }
-        
-        self.address = ipremote(address, Int32(port), mode.code, deadline)
-
-        if errno != 0 {
-            let description = IPError.lastSystemErrorDescription
-            throw IPError(description: description)
-        }
+    public init(address: String, port: UInt16, mode: IPMode = .IPV4, deadline: Deadline = noDeadline) throws {
+        try self.init(address: ipremote(address, Int32(port), mode.code, deadline))
     }
 }
 
 extension IP: CustomStringConvertible {
     public var description: String {
-        var buffer: [Int8] = [Int8](count: 46, repeatedValue: 0)
+        var buffer = [Int8](count: 46, repeatedValue: 0)
         ipaddrstr(address, &buffer)
         return String.fromCString(buffer)!
     }

@@ -4,7 +4,7 @@ import Flux
 class HTTPTests: XCTestCase {
     func testRouter() {
         do {
-            let router = Router(middleware: debugLogger) { route in
+            let router = Router { route in
                 route.get("/") { request in
                     return Response(status: .OK, body: "hello")
                 }

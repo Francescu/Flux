@@ -27,17 +27,22 @@
 #else
     import Darwin.C
 #endif
-import CLibvenice
 
+public enum IPError: ErrorType {
+    case InvalidPort(description: String)
 
-public struct IPError : ErrorType, CustomStringConvertible {
-    public let description: String
-
-    init(description: String, bytesProcessed: Int? = nil) {
-        self.description = description
+    static var lastError: TCPError {
+        // TODO: Switch on errno
+        return .Unknown(description: lastErrorDescription)
     }
 
-    static var lastSystemErrorDescription: String {
+    static var lastErrorDescription: String {
         return String.fromCString(strerror(errno))!
+    }
+
+    static func assertNoError() throws {
+        if errno != 0 {
+            throw TCPError.lastError
+        }
     }
 }
