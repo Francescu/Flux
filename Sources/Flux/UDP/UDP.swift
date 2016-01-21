@@ -79,7 +79,7 @@ public final class UDPSocket {
         try TCPError.assertNoReceiveErrorWithData(data, bytesProcessed: bytesProcessed)
 
         let processedData = processedDataFromSource(data, bytesProcessed: bytesProcessed)
-        let ip = IP(address: address)
+        let ip = try IP(address: address)
         return (processedData, ip)
     }
 

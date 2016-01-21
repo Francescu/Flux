@@ -24,10 +24,10 @@
 
 public struct TCPStreamClient: StreamClientType {
     public let host: String
-    public let port: Int
+    public let port: UInt16
     private let ip: IP
 
-    public init(host: String, port: Int) throws {
+    public init(host: String, port: UInt16) throws {
         self.host = host
         self.port = port
         self.ip = try IP(address: host, port: port)

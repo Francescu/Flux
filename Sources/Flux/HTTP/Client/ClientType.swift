@@ -24,7 +24,7 @@
 
 public protocol StreamClientType {
     var host: String { get }
-    var port: Int { get }
+    var port: UInt16 { get }
     func connect() throws -> StreamType
 }
 
