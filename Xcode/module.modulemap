@@ -4,8 +4,14 @@ module CURIParser [system] {
     export *
 }
 
+//module CLibvenice [system] {
+//    header "/usr/local/include/libvenice/libvenice.h"
+//    link "venice"
+//    export *
+//}
+
 module CLibvenice [system] {
-    header "/usr/local/include/libvenice/libvenice.h"
+    header "../Sources/Flux/libvenice/libvenice.h"
     link "venice"
     export *
 }
