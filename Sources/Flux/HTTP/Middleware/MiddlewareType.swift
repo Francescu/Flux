@@ -32,6 +32,12 @@ extension MiddlewareType {
             return try self.respond(request, chain: responder)
         }
     }
+
+    public func intercept(chain: ChainType) -> ChainType {
+        return Responder { request in
+            return try self.respond(request, chain: chain)
+        }
+    }
 }
 
 extension CollectionType where Self.Generator.Element == MiddlewareType {
@@ -45,7 +51,21 @@ extension CollectionType where Self.Generator.Element == MiddlewareType {
         return responder
     }
 
+    public func intercept(responder: ChainType) -> ChainType {
+        var responder = responder
+
+        for middleware in self.reverse() {
+            responder = middleware.intercept(responder)
+        }
+
+        return responder
+    }
+
     public func intercept(respond: Respond) -> ResponderType {
+        return intercept(Responder(respond: respond))
+    }
+
+    public func intercept(respond: Respond) -> ChainType {
         return intercept(Responder(respond: respond))
     }
 }

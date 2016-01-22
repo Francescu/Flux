@@ -37,8 +37,6 @@
 #define MILL_FILE_BUFLEN (4096)
 #endif
 
-int eof(mfile f);
-
 struct mill_file {
     int fd;
     size_t ifirst;
@@ -192,7 +190,7 @@ size_t fileread(mfile f, void *buf, size_t len, int64_t deadline) {
             }
             pos += sz;
             remaining -= sz;
-            if (eof(f)) {
+            if (sz != 0 && fileeof(f)) {
                 return len - remaining;
             }
         }
@@ -222,7 +220,7 @@ size_t fileread(mfile f, void *buf, size_t len, int64_t deadline) {
                 errno = 0;
                 return len;
             }
-            if (eof(f)) {
+            if (sz != 0 && fileeof(f)) {
                 return len - remaining;
             }
         }
@@ -250,6 +248,7 @@ mfile fileattach(int fd) {
         errno = ENOMEM;
         return NULL;
     }
+    mill_filetune(fd);
     f->fd = fd;
     f->ifirst = 0;
     f->ilen = 0;
@@ -275,9 +274,15 @@ off_t fileseek(mfile f, off_t offset) {
     return lseek(f->fd, offset, SEEK_SET);
 }
 
-int eof(mfile f) {
+int fileeof(mfile f) {
     off_t current = lseek(f->fd, 0, SEEK_CUR);
+    if (current == -1)
+        return -1;
     off_t end = lseek(f->fd, 0, SEEK_END);
-    lseek(f->fd, current, SEEK_SET);
+    if (end == -1)
+        return -1;
+    off_t res = lseek(f->fd, current, SEEK_SET);
+    if (res == -1)
+        return -1;
     return (current == end);
 }

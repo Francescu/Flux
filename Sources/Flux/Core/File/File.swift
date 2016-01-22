@@ -52,14 +52,22 @@ public final class File {
     private var file: mfile
     public private(set) var closed = false
 
-    public var position: Int {
-        get {
-            return Int(filetell(file))
-        }
+    public func tell() throws -> Int {
+        let position = Int(filetell(file))
+        try FileError.assertNoError()
+        return position
+    }
 
-        set {
-            fileseek(file, Int64(newValue))
-        }
+    public func seek(position: Int) throws -> Int {
+        let position = Int(fileseek(file, Int64(position)))
+        try FileError.assertNoError()
+        return position
+    }
+
+    public func eof() throws -> Bool {
+        let isEof = fileeof(file)
+        try FileError.assertNoError()
+        return isEof != 0
     }
 
     public init(file: mfile) throws {
@@ -105,17 +113,15 @@ public final class File {
     }
 
     public func read(deadline: Deadline = noDeadline) throws -> Data {
-        position = 0
+        try seek(0)
         var data = Data()
 
         while true {
-            let chunk = try read(length: 256)
+            data += try read(length: 256)
 
-            if chunk.isEmpty {
+            if try eof() {
                 break
             }
-
-            data += chunk
         }
 
         return data

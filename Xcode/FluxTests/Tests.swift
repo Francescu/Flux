@@ -4,8 +4,13 @@ import Flux
 class HTTPTests: XCTestCase {
     func testRouter() {
         do {
+
+            func isFooBar(request: Request) -> Bool {
+                return request.query["foo"] == "bar"
+            }
+
             let router = Router { route in
-                route.get("/") { request in
+                route.get("/", middleware: branch(isFooBar, yes: [logger])) { request in
                     return Response(status: .OK, body: "hello")
                 }
             }
