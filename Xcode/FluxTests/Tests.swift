@@ -34,7 +34,7 @@ class HTTPTests: XCTestCase {
         do {
             let listenIP = try IP(port: 40000)
             let socket = try UDPSocket(ip: listenIP)
-            let (data, ip) = try socket.receive()
+            let (data, ip) = try socket.receive(length: 256)
             print(try? String(data: data))
             print(ip)
         } catch {

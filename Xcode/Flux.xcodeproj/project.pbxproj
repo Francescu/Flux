@@ -117,8 +117,7 @@
 		B0DCBFDB1C514C9000B2AFA3 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B0DCBF7A1C514C8F00B2AFA3 /* LICENSE */; };
 		B0DCBFDC1C514C9000B2AFA3 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBF7B1C514C8F00B2AFA3 /* list.c */; };
 		B0DCBFDD1C514C9000B2AFA3 /* list.h in Headers */ = {isa = PBXBuildFile; fileRef = B0DCBF7C1C514C8F00B2AFA3 /* list.h */; };
-		B0DCBFDE1C514C9000B2AFA3 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBF7D1C514C8F00B2AFA3 /* log.c */; };
-		B0DCBFDF1C514C9000B2AFA3 /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = B0DCBF7E1C514C8F00B2AFA3 /* log.h */; };
+		B0DCBFDE1C514C9000B2AFA3 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBF7D1C514C8F00B2AFA3 /* file.c */; };
 		B0DCBFE11C514C9000B2AFA3 /* poll.inc in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBF801C514C8F00B2AFA3 /* poll.inc */; };
 		B0DCBFE21C514C9000B2AFA3 /* poller.c in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBF811C514C8F00B2AFA3 /* poller.c */; };
 		B0DCBFE31C514C9000B2AFA3 /* poller.h in Headers */ = {isa = PBXBuildFile; fileRef = B0DCBF821C514C8F00B2AFA3 /* poller.h */; };
@@ -132,6 +131,7 @@
 		B0DCBFEC1C514C9000B2AFA3 /* udp.c in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBF8B1C514C8F00B2AFA3 /* udp.c */; };
 		B0DCBFED1C514C9000B2AFA3 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = B0DCBF8C1C514C9000B2AFA3 /* unix.c */; };
 		B0DCBFEE1C514C9000B2AFA3 /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B0DCBF8D1C514C9000B2AFA3 /* utils.h */; };
+		B0F48C831C51EE5700FDACFE /* FileError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F48C821C51EE5700FDACFE /* FileError.swift */; };
 		B71ADF771C4FA49C0065A276 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF6F1C4FA49C0065A276 /* Connection.swift */; };
 		B71ADF781C4FA49C0065A276 /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF701C4FA49C0065A276 /* Field.swift */; };
 		B71ADF791C4FA49C0065A276 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF711C4FA49C0065A276 /* Result.swift */; };
@@ -270,8 +270,7 @@
 		B0DCBF7A1C514C8F00B2AFA3 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		B0DCBF7B1C514C8F00B2AFA3 /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
 		B0DCBF7C1C514C8F00B2AFA3 /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
-		B0DCBF7D1C514C8F00B2AFA3 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = log.c; sourceTree = "<group>"; };
-		B0DCBF7E1C514C8F00B2AFA3 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		B0DCBF7D1C514C8F00B2AFA3 /* file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = file.c; sourceTree = "<group>"; };
 		B0DCBF801C514C8F00B2AFA3 /* poll.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = poll.inc; sourceTree = "<group>"; };
 		B0DCBF811C514C8F00B2AFA3 /* poller.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = poller.c; sourceTree = "<group>"; };
 		B0DCBF821C514C8F00B2AFA3 /* poller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poller.h; sourceTree = "<group>"; };
@@ -285,6 +284,7 @@
 		B0DCBF8B1C514C8F00B2AFA3 /* udp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = udp.c; sourceTree = "<group>"; };
 		B0DCBF8C1C514C9000B2AFA3 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unix.c; sourceTree = "<group>"; };
 		B0DCBF8D1C514C9000B2AFA3 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		B0F48C821C51EE5700FDACFE /* FileError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileError.swift; sourceTree = "<group>"; };
 		B71ADF6F1C4FA49C0065A276 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		B71ADF701C4FA49C0065A276 /* Field.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
 		B71ADF711C4FA49C0065A276 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -384,6 +384,7 @@
 			isa = PBXGroup;
 			children = (
 				B0B14C691C4AD455006ABA9E /* File.swift */,
+				B0F48C821C51EE5700FDACFE /* FileError.swift */,
 			);
 			name = File;
 			path = Flux/Core/File;
@@ -842,8 +843,7 @@
 				B0DCBF7A1C514C8F00B2AFA3 /* LICENSE */,
 				B0DCBF7B1C514C8F00B2AFA3 /* list.c */,
 				B0DCBF7C1C514C8F00B2AFA3 /* list.h */,
-				B0DCBF7D1C514C8F00B2AFA3 /* log.c */,
-				B0DCBF7E1C514C8F00B2AFA3 /* log.h */,
+				B0DCBF7D1C514C8F00B2AFA3 /* file.c */,
 				B0DCBF801C514C8F00B2AFA3 /* poll.inc */,
 				B0DCBF811C514C8F00B2AFA3 /* poller.c */,
 				B0DCBF821C514C8F00B2AFA3 /* poller.h */,
@@ -938,7 +938,6 @@
 				B0DCBFEE1C514C9000B2AFA3 /* utils.h in Headers */,
 				B0DCBFDA1C514C9000B2AFA3 /* libvenice.h in Headers */,
 				B0DCBFE81C514C9000B2AFA3 /* stack.h in Headers */,
-				B0DCBFDF1C514C9000B2AFA3 /* log.h in Headers */,
 				B0DCBFE61C514C9000B2AFA3 /* slist.h in Headers */,
 				B0DCBFD81C514C9000B2AFA3 /* ip.h in Headers */,
 				B0DCBFCF1C514C9000B2AFA3 /* chan.h in Headers */,
@@ -1072,7 +1071,7 @@
 				B0B14CF11C4AD455006ABA9E /* Select.swift in Sources */,
 				B0B14D301C4BBAA5006ABA9E /* SSLContext.swift in Sources */,
 				B0B14CDC1C4AD455006ABA9E /* Router.swift in Sources */,
-				B0DCBFDE1C514C9000B2AFA3 /* log.c in Sources */,
+				B0DCBFDE1C514C9000B2AFA3 /* file.c in Sources */,
 				B0B14CD31C4AD455006ABA9E /* RequestParser.swift in Sources */,
 				B0DCBFE71C514C9000B2AFA3 /* stack.c in Sources */,
 				B0B14CE81C4AD455006ABA9E /* FallibleReceivingChannel.swift in Sources */,
@@ -1124,6 +1123,7 @@
 				B0B14CC21C4AD455006ABA9E /* JSONSerializer.swift in Sources */,
 				B0B14CF81C4AD455006ABA9E /* Timer.swift in Sources */,
 				B0B14CD11C4AD455006ABA9E /* Method+Parser.swift in Sources */,
+				B0F48C831C51EE5700FDACFE /* FileError.swift in Sources */,
 				B0B14CBF1C4AD455006ABA9E /* Int.swift in Sources */,
 				B0B14CEC1C4AD455006ABA9E /* IPError.swift in Sources */,
 				B71ADF7B1C4FA49C0065A276 /* QueryParameter.swift in Sources */,

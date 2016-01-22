@@ -22,66 +22,149 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(Linux)
-	import Glibc
-#else
-	import Darwin.C
-#endif
+import CLibvenice
 
-public class File {
-	
-	public enum Error: ErrorType {
-		case OpenError(String)
-		case ReadError(String)
-		case WriteError(String)
+public final class File {
+	public enum Mode {
+		case Read
+        case CreateWrite
+		case TruncateWrite
+		case AppendWrite
+		case ReadWrite
+        case CreateReadWrite
+		case TruncateReadWrite
+		case AppendReadWrite
+
+        var value: Int32 {
+            switch self {
+            case .Read: return O_RDONLY
+            case .CreateWrite: return (O_WRONLY | O_CREAT | O_EXCL)
+            case .TruncateWrite: return (O_WRONLY | O_CREAT | O_TRUNC)
+            case .AppendWrite: return (O_WRONLY | O_CREAT | O_APPEND)
+            case .ReadWrite: return (O_RDWR)
+            case .CreateReadWrite: return (O_RDWR | O_CREAT | O_EXCL)
+            case .TruncateReadWrite: return (O_RDWR | O_CREAT | O_TRUNC)
+            case .AppendReadWrite: return (O_RDWR | O_CREAT | O_APPEND)
+            }
+        }
 	}
 	
-	public enum Mode: String {
-		case Read = "r"				// Open file for reading
-		case Write = "w"			// Truncate to zero length or create file for writing
-		case Append = "a"			// Append; open or create file for writing at end-of-file
-		case ReadUpdate = "r+"		// Open file for update (reading and writing)
-		case WriteUpdate = "w+"		// Truncate to zero length or create file for update
-		case AppendUpdate = "a+"	// Append; open or create file for update, writing at end-of-file
-	}
+    private var file: mfile
+    public private(set) var closed = false
+
+    public var position: Int {
+        get {
+            return Int(filetell(file))
+        }
+
+        set {
+            fileseek(file, Int64(newValue))
+        }
+    }
+
+    public init(file: mfile) throws {
+        self.file = file
+        try FileError.assertNoError()
+    }
 	
-	private let fp: UnsafeMutablePointer<FILE>
-	
-	public init(path: String, mode: Mode = .ReadUpdate) throws {
-		fp = fopen(path, mode.rawValue)
-		guard fp != nil else { throw Error.OpenError(String.fromCString(strerror(errno)) ?? "") }
+	public convenience init(path: String, mode: Mode = .Read) throws {
+        try self.init(file:  fileopen(path, mode.value, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH))
 	}
+
+    public convenience init(fileDescriptor: FileDescriptor) throws {
+        try self.init(file: fileattach(fileDescriptor))
+    }
 	
 	deinit {
-		close()
+        if !closed && file != nil {
+            fileclose(file)
+        }
 	}
 	
-	public func write(data: Data) throws {
-        
-		let count = fwrite(Array(data), 1, data.count, fp)
-		guard count == data.count else { throw Error.WriteError(String.fromCString(strerror(ferror(fp))) ?? "") }
+	public func write(data: Data, deadline: Deadline = noDeadline) throws {
+        try assertNotClosed()
+
+        data.withUnsafeBufferPointer {
+            filewrite(file, $0.baseAddress, $0.count, deadline)
+        }
+
+        try FileError.assertNoError()
 	}
-	
-	public func read(length length: Int = Int.max) throws -> Data {
-		var bytes: Data = []
-		var remaining = length
-		let buffer = UnsafeMutablePointer<UInt8>.alloc(1024)
-		defer { buffer.dealloc(1024) }
-		repeat {
-			let count = fread(buffer, 1, min(remaining, 1024), fp)
-			guard ferror(fp) == 0 else { throw Error.ReadError(String.fromCString(strerror(ferror(fp))) ?? "") }
-			guard count > 0 else { continue }
-			bytes += Array(UnsafeBufferPointer(start: buffer, count: count).generate()).prefix(count)
-			remaining -= count
-		} while remaining > 0 && feof(fp) == 0
-		return bytes
-	}
-	
-	public func close() {
-		if fp != nil {
-			fclose(fp)
-		}
-	}
+
+    public func read(length length: Int, deadline: Deadline = noDeadline) throws -> Data {
+        try assertNotClosed()
+
+        var data = Data.bufferWithSize(length)
+
+        let bytesProcessed = data.withUnsafeMutableBufferPointer {
+            fileread(file, $0.baseAddress, $0.count, deadline)
+        }
+
+        try FileError.assertNoReceiveErrorWithData(data, bytesProcessed: bytesProcessed)
+        return processedDataFromSource(data, bytesProcessed: bytesProcessed)
+    }
+
+    public func read(deadline: Deadline = noDeadline) throws -> Data {
+        position = 0
+        var data = Data()
+
+        while true {
+            let chunk = try read(length: 256)
+
+            if chunk.isEmpty {
+                break
+            }
+
+            data += chunk
+        }
+
+        return data
+    }
+
+    public func flush(deadline: Deadline = noDeadline) throws {
+        try assertNotClosed()
+
+        fileflush(file, deadline)
+
+        try FileError.assertNoError()
+    }
+
+    public func attach(fileDescriptor: FileDescriptor) throws {
+        if !closed {
+            try close()
+        }
+
+        file = fileattach(fileDescriptor)
+        try FileError.assertNoError()
+        closed = false
+    }
+
+    public func detach() throws -> FileDescriptor {
+        try assertNotClosed()
+        closed = true
+        return filedetach(file)
+    }
+
+    public func close() throws {
+        try assertNotClosed()
+        closed = true
+        fileclose(file)
+    }
+
+    func assertNotClosed() throws {
+        if closed {
+            throw FileError.closedFileError
+        }
+    }
+}
+
+extension File {
+    public func write(convertible: DataConvertible, deadline: Deadline = noDeadline) throws {
+        try write(convertible.data, deadline: deadline)
+    }
+}
+
+extension File {
     
     public class func contentsOfDirectoryAtPath(path: String) throws -> [String] {
         var contents: [String] = []
@@ -89,7 +172,7 @@ public class File {
         let dir = opendir(path)
         
         if dir == nil {
-            throw Error.OpenError("Could not open directory at \(path)")
+            throw FileError.Unknown(description: "Could not open directory at \(path)")
         }
         
         defer {

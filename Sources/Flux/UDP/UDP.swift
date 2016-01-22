@@ -51,7 +51,7 @@ public final class UDPSocket {
     }
 
     deinit {
-        if !closed {
+        if !closed && socket != nil {
             udpclose(socket)
         }
     }
@@ -66,11 +66,11 @@ public final class UDPSocket {
         try UDPError.assertNoError()
     }
 
-    public func receive(bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> (Data, IP) {
+    public func receive(length length: Int, deadline: Deadline = noDeadline) throws -> (Data, IP) {
         try assertNotClosed()
 
         var address = ipaddr()
-        var data = Data.bufferWithSize(bufferSize)
+        var data = Data.bufferWithSize(length)
 
         let bytesProcessed = data.withUnsafeMutableBufferPointer {
             udprecv(socket, &address, $0.baseAddress, $0.count, deadline)

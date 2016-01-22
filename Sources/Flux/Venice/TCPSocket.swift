@@ -42,7 +42,7 @@ public class TCPSocket {
     }
 
     deinit {
-        if !closed {
+        if !closed && socket != nil {
             tcpclose(socket)
         }
     }

@@ -38,6 +38,10 @@ public final class Channel<T>: SequenceType, Sendable, Receivable {
     private var buffer: [T] = []
     public let bufferSize: Int
 
+    public var isBuffered: Bool {
+        return bufferSize > 0
+    }
+
     public convenience init() {
         self.init(bufferSize: 0)
     }

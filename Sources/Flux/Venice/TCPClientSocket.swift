@@ -55,10 +55,10 @@ public final class TCPClientSocket: TCPSocket {
         try TCPError.assertNoError()
     }
 
-    public func receive(bufferSize bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> Data {
+    public func receive(length length: Int, deadline: Deadline = noDeadline) throws -> Data {
         try assertNotClosed()
 
-        var data = Data.bufferWithSize(bufferSize)
+        var data = Data.bufferWithSize(length)
         let bytesProcessed = data.withUnsafeMutableBufferPointer {
             tcprecv(socket, $0.baseAddress, $0.count, deadline)
         }
@@ -67,7 +67,7 @@ public final class TCPClientSocket: TCPSocket {
         return processedDataFromSource(data, bytesProcessed: bytesProcessed)
     }
 
-    public func receiveWithLowWaterMark(lowWaterMark: Int = 1, highWaterMark: Int = 256, deadline: Deadline = noDeadline) throws -> Data {
+    public func receive(lowWaterMark lowWaterMark: Int, highWaterMark: Int, deadline: Deadline = noDeadline) throws -> Data {
         try assertNotClosed()
 
         var data = Data.bufferWithSize(highWaterMark)
@@ -79,10 +79,10 @@ public final class TCPClientSocket: TCPSocket {
         return processedDataFromSource(data, bytesProcessed: bytesProcessed)
     }
 
-    public func receive(bufferSize bufferSize: Int = 256, untilDelimiter delimiter: String, deadline: Deadline = noDeadline) throws -> Data {
+    public func receive(length length: Int, untilDelimiter delimiter: String, deadline: Deadline = noDeadline) throws -> Data {
         try assertNotClosed()
 
-        var data = Data.bufferWithSize(bufferSize)
+        var data = Data.bufferWithSize(length)
         let bytesProcessed = data.withUnsafeMutableBufferPointer {
             tcprecvuntil(socket, $0.baseAddress, $0.count, delimiter, delimiter.utf8.count, deadline)
         }
@@ -101,13 +101,13 @@ extension TCPClientSocket {
         try send(convertible.data, deadline: deadline)
     }
 
-    public func receiveString(bufferSize bufferSize: Int = 256, deadline: Deadline = noDeadline) throws -> String {
-        let result = try receive(bufferSize: bufferSize, deadline: deadline)
+    public func receiveString(length length: Int, deadline: Deadline = noDeadline) throws -> String {
+        let result = try receive(length: length, deadline: deadline)
         return try String(data: result)
     }
 
-    public func receiveString(bufferSize bufferSize: Int = 256, untilDelimiter delimiter: String, deadline: Deadline = noDeadline) throws -> String {
-        let result = try receive(bufferSize: bufferSize, untilDelimiter: delimiter, deadline: deadline)
+    public func receiveString(length length: Int, untilDelimiter delimiter: String, deadline: Deadline = noDeadline) throws -> String {
+        let result = try receive(length: length, untilDelimiter: delimiter, deadline: deadline)
         return try String(data: result)
     }
 }

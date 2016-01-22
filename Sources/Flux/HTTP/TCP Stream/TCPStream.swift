@@ -33,7 +33,7 @@ final class TCPStream: StreamType {
     func receive(completion: (Void throws -> Data) -> Void) {
         while !socket.closed {
             do {
-                let data = try socket.receiveWithLowWaterMark(1, highWaterMark: 256, deadline: now + 1 * second)
+                let data = try socket.receive(lowWaterMark: 1, highWaterMark: 256, deadline: now + 1 * second)
                 completion {
                     return data
                 }
