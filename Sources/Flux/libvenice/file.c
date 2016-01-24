@@ -47,7 +47,7 @@ struct mill_file {
 };
 
 static void mill_filetune(int fd) {
-    /* Make the file non-blocking. */
+    /* Make the file descriptor non-blocking. */
     int opt = fcntl(fd, F_GETFL, 0);
     if (opt == -1)
         opt = 0;

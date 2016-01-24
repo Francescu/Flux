@@ -6,11 +6,13 @@ import Flux
     import Darwin.C
 #endif
 
-do {
-    let file = try File(path: "/Users/paulofaria/hello.txt", mode: .Read)
-//    let file = try File(fileDescriptor: STDIN_FILENO)
-    let data = try file.read()
-    print(try String(data: data))
-} catch {
-    print(error)
+//log.levels = [.Warning]
+log.stream = try File(path: "/Users/paulofaria/hello.txt", mode: .AppendWrite)
+
+let router = Router { route in
+    route.get("/", middleware: logger) { request in
+        return Response(status: .OK, body: "hello")
+    }
 }
+
+Server(port: 8080, responder: router).start()

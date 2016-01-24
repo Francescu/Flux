@@ -24,6 +24,10 @@
 
 import CLibvenice
 
+public var standardInputStream = try! File(fileDescriptor: dup(STDIN_FILENO))
+public var standardOutputStream = try! File(fileDescriptor: dup(STDOUT_FILENO))
+public var standardErrorStream = try! File(fileDescriptor: dup(STDERR_FILENO))
+
 public final class File {
 	public enum Mode {
 		case Read
@@ -89,11 +93,17 @@ public final class File {
         }
 	}
 	
-	public func write(data: Data, deadline: Deadline = noDeadline) throws {
+    public func write(data: Data, flush shouldFlush: Bool = true, deadline: Deadline = noDeadline) throws {
         try assertNotClosed()
 
         data.withUnsafeBufferPointer {
             filewrite(file, $0.baseAddress, $0.count, deadline)
+        }
+
+        try FileError.assertNoError()
+        
+        if shouldFlush {
+            try flush(deadline)
         }
 
         try FileError.assertNoError()
@@ -165,8 +175,8 @@ public final class File {
 }
 
 extension File {
-    public func write(convertible: DataConvertible, deadline: Deadline = noDeadline) throws {
-        try write(convertible.data, deadline: deadline)
+    public func write(convertible: DataConvertible, flush: Bool = true, deadline: Deadline = noDeadline) throws {
+        try write(convertible.data, flush: flush, deadline: deadline)
     }
 }
 

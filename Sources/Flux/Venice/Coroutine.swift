@@ -91,6 +91,10 @@ public var CPUCoreCount: Int {
     return Int(mill_number_of_cores())
 }
 
+public func dump() {
+    goredump()
+}
+
 infix operator <- {}
 prefix operator <- {}
 prefix operator !<- {}

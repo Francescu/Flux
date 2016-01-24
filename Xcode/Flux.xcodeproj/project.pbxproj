@@ -13,6 +13,8 @@
 		B0158A841C4C0456003700D3 /* SSLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0158A831C4C0456003700D3 /* SSLError.swift */; };
 		B015D0AA1C52DF530017727B /* BranchMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = B015D0A91C52DF530017727B /* BranchMiddleware.swift */; };
 		B015D0AB1C52EA9D0017727B /* URLEncodedFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C7E1C4AD455006ABA9E /* URLEncodedFormParser.swift */; };
+		B015D0AE1C5341720017727B /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = B015D0AD1C5341720017727B /* Log.swift */; };
+		B015D0B11C544C590017727B /* Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = B015D0B01C544C590017727B /* Once.swift */; };
 		B068CBB51C4F447000EF0B3E /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B068CBB41C4F447000EF0B3E /* MessageType.swift */; };
 		B0A918A71C4F6510002A2A98 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A918A61C4F6510002A2A98 /* Dictionary.swift */; };
 		B0B14CB91C4AD455006ABA9E /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C601C4AD455006ABA9E /* Base64.swift */; };
@@ -184,6 +186,8 @@
 		37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrieMatcherTests.swift; path = FluxTests/TrieMatcherTests.swift; sourceTree = SOURCE_ROOT; };
 		B0158A831C4C0456003700D3 /* SSLError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLError.swift; sourceTree = "<group>"; };
 		B015D0A91C52DF530017727B /* BranchMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BranchMiddleware.swift; path = "Flux/Branch Middleware/BranchMiddleware.swift"; sourceTree = "<group>"; };
+		B015D0AD1C5341720017727B /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Flux/Log/Log.swift; sourceTree = "<group>"; };
+		B015D0B01C544C590017727B /* Once.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Once.swift; sourceTree = "<group>"; };
 		B068CBB41C4F447000EF0B3E /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageType.swift; path = Message/MessageType.swift; sourceTree = "<group>"; };
 		B0A918A61C4F6510002A2A98 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Dictionary.swift; path = Dictionary/Dictionary.swift; sourceTree = "<group>"; };
 		B0B14C5D1C4AD313006ABA9E /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
@@ -358,6 +362,22 @@
 				B015D0A91C52DF530017727B /* BranchMiddleware.swift */,
 			);
 			name = "Branch Middleware";
+			sourceTree = "<group>";
+		};
+		B015D0AC1C53409C0017727B /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				B015D0AD1C5341720017727B /* Log.swift */,
+			);
+			name = Log;
+			sourceTree = "<group>";
+		};
+		B015D0AF1C544C4A0017727B /* Once */ = {
+			isa = PBXGroup;
+			children = (
+				B015D0B01C544C590017727B /* Once.swift */,
+			);
+			name = Once;
 			sourceTree = "<group>";
 		};
 		B068CBB31C4F445300EF0B3E /* Message */ = {
@@ -624,6 +644,7 @@
 		B0B14CA31C4AD455006ABA9E /* Venice */ = {
 			isa = PBXGroup;
 			children = (
+				B015D0AF1C544C4A0017727B /* Once */,
 				B0B14CF91C4AD46A006ABA9E /* Channel */,
 				B0B14CFA1C4AD486006ABA9E /* Coroutine */,
 				B0B14CFB1C4AD494006ABA9E /* Fallible Channel */,
@@ -848,6 +869,7 @@
 		B0C08E481C2C3A410088B16D /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				B015D0AC1C53409C0017727B /* Log */,
 				B71ADF6C1C4FA49C0065A276 /* DB */,
 				B0B14D1F1C4BBAA5006ABA9E /* OpenSSL */,
 				B0B14CA31C4AD455006ABA9E /* Venice */,
@@ -1216,6 +1238,7 @@
 				B0DCBFD21C514C9000B2AFA3 /* debug.c in Sources */,
 				B0B14CD81C4AD455006ABA9E /* Response.swift in Sources */,
 				B0158A841C4C0456003700D3 /* SSLError.swift in Sources */,
+				B015D0B11C544C590017727B /* Once.swift in Sources */,
 				B0B14CE01C4AD455006ABA9E /* Server.swift in Sources */,
 				B0B14CDD1C4AD455006ABA9E /* RouterBuilder.swift in Sources */,
 				B015D0AA1C52DF530017727B /* BranchMiddleware.swift in Sources */,
@@ -1235,6 +1258,7 @@
 				B0B14CF61C4AD455006ABA9E /* TCPServerSocket.swift in Sources */,
 				B0B14D151C4AD72F006ABA9E /* Response+Content.swift in Sources */,
 				B0B14CF71C4AD455006ABA9E /* Ticker.swift in Sources */,
+				B015D0AE1C5341720017727B /* Log.swift in Sources */,
 				B0B14CC61C4AD455006ABA9E /* Stream.swift in Sources */,
 				B0B14CF51C4AD455006ABA9E /* TCPError.swift in Sources */,
 				B0B14CD01C4AD455006ABA9E /* MiddlewareType.swift in Sources */,

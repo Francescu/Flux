@@ -22,12 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
-
 public let logger = LoggerMiddleware()
 
 public struct LoggerMiddleware: MiddlewareType {
@@ -35,18 +29,15 @@ public struct LoggerMiddleware: MiddlewareType {
 
     public func respond(request: Request, chain: ChainType) throws -> Response {
         let response = try chain.proceed(request)
-        log("================================================================================\n")
-        log("Request:\n")
-        log("\(request)\n")
-        log("--------------------------------------------------------------------------------\n")
-        log("Response:\n")
-        log("\(response)\n")
-        log("================================================================================\n\n")
+        var message = "================================================================================\n"
+        message += "Request:\n"
+        message += "\(request)\n"
+        message += "--------------------------------------------------------------------------------\n"
+        message += "Response:\n"
+        message += "\(response)\n"
+        message += "================================================================================\n\n"
+        try log.info(message)
         return response
-    }
-
-    private func log(string: String) {
-        write(STDOUT_FILENO, string, string.utf8.count)
     }
 }
 
@@ -57,17 +48,14 @@ public struct DebugLoggerMiddleware: MiddlewareType {
 
     public func respond(request: Request, chain: ChainType) throws -> Response {
         let response = try chain.proceed(request)
-        log("================================================================================\n")
-        log("Request:\n")
-        log("\(request.debugDescription)\n")
-        log("--------------------------------------------------------------------------------\n")
-        log("Response:\n")
-        log("\(response.debugDescription)\n")
-        log("================================================================================\n\n")
+        var message = "================================================================================\n"
+        message += "Request:\n"
+        message += "\(request.debugDescription)\n"
+        message += "--------------------------------------------------------------------------------\n"
+        message += "Response:\n"
+        message += "\(response.debugDescription)\n"
+        message += "================================================================================\n\n"
+        try log.info(message)
         return response
-    }
-
-    private func log(string: String) {
-        write(STDOUT_FILENO, string, string.utf8.count)
     }
 }
