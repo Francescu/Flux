@@ -49,7 +49,7 @@ public class TCPSocket {
 
     func attach(fileDescriptor: FileDescriptor, isServer: Bool) throws {
         if !closed {
-            try close()
+            close()
         }
 
         socket = tcpattach(fileDescriptor, isServer ? 1 : 0)
@@ -63,10 +63,14 @@ public class TCPSocket {
         return tcpdetach(socket)
     }
 
-    public func close() throws {
-        try assertNotClosed()
+    public func close() -> Bool {
+        if closed {
+            return false
+        }
+        
         closed = true
         tcpclose(socket)
+        return true
     }
     
     func assertNotClosed() throws {

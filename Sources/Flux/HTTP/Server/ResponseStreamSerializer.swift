@@ -23,15 +23,15 @@
 // SOFTWARE.
 
 struct ResponseStreamSerializer: ResponseStreamSerializerType {
-    func serialize(response: Response, stream: StreamType) throws {
-        try stream.send("HTTP/\(response.majorVersion).\(response.minorVersion) \(response.statusCode) \(response.reasonPhrase)\r\n".data)
+    func serialize(response: Response) throws -> Data {
+        var data = Data("HTTP/\(response.majorVersion).\(response.minorVersion) \(response.statusCode) \(response.reasonPhrase)\r\n")
 
         for (name, value) in response.headers {
-            try stream.send("\(name): \(value)\r\n".data)
+            data += "\(name): \(value)\r\n"
         }
 
-        try stream.send("\r\n".data)
-        try stream.send(response.body)
-        try stream.flush()
+        data += "\r\n"
+        data += response.body
+        return data
     }
 }

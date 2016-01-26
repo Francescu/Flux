@@ -22,23 +22,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-struct RequestStreamParser: RequestStreamParserType {
-    func parse(stream: StreamType, completion: (Void throws -> Request) -> Void) {
-        let parser = RequestParser { request in
-            completion {
-                return request
+final class RequestStreamParser: RequestStreamParserType {
+    var parser: RequestParser?
+    var request: Request?
+
+    init() {
+        self.parser = RequestParser { request in
+            self.request = request
+        }
+    }
+
+    func parse(data: Data) throws -> Request? {
+        try parser?.parse(data)
+
+        if let request = request {
+            self.request = nil
+
+            self.parser = RequestParser { request in
+                self.request = request
             }
+            
+            return request
         }
 
-        stream.receive { getData in
-            do {
-                let data = try getData()
-                try parser.parse(data)
-            } catch {
-                completion {
-                    throw error
-                }
-            }
-        }
+        return nil
     }
 }

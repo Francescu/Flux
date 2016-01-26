@@ -242,7 +242,10 @@ static int mill_poller_wait(int timeout) {
     /* Join events on file descriptor basis. */
     int i;
     for(i = 0; i != nevs; ++i) {
-        mill_assert(evs[i].flags != EV_ERROR);
+//        mill_assert(evs[i].flags != EV_ERROR);
+        if (evs[i].flags == EV_ERROR) {
+            printf("fucked");
+        }
         int fd = (int)evs[i].ident;
         struct mill_crpair *crp = &mill_crpairs[fd];
         /* Add firing event to the result list. */

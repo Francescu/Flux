@@ -23,8 +23,9 @@
 // SOFTWARE.
 
 public protocol StreamType {
-    func receive(completion: (Void throws -> Data) -> Void)
+    var closed: Bool { get }
+    func receive() throws -> Data
     func send(data: Data) throws
     func flush() throws
-    func close()
+    func close() -> Bool
 }

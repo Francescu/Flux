@@ -59,10 +59,6 @@ public class SSLIO {
         if result == -2 {
             throw SSLIOError.UnsupportedMethod(description: lastSSLErrorDescription)
         }
-
-        if result < 1 {
-            print("coiso")
-        }
 	}
 
 	public func read() throws -> Data {
@@ -77,7 +73,6 @@ public class SSLIO {
 		if result > 0 {
             return Data(bytes: Array(buffer.prefix(Int(result))))
 		} else {
-			print("coiso")
             return Data()
 		}
 	}

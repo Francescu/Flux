@@ -23,23 +23,44 @@
 // SOFTWARE.
 
 public final class EventListener<T> {
-	public typealias Listener = T -> ()
+	public typealias Listen = (Void throws -> T) -> Void
 	
-	private let listener: Listener
+	private let listen: Listen
 	private var calls: Int
     var active = true
 	
-	internal init(calls: Int, listener: Listener) {
+	internal init(calls: Int, listen: Listen) {
 		self.calls = calls
-		self.listener = listener
+		self.listen = listen
 	}
 	
-	public func call(event: T) -> Bool {
+    func call(event: T) -> Bool {
 		calls -= 1
-		if calls == 0 { active = false }
-		listener(event)
+
+		if calls == 0 {
+            active = false
+        }
+
+        listen {
+            return event
+        }
+
 		return active
 	}
+
+    func call(error: ErrorType) -> Bool {
+        calls -= 1
+
+        if calls == 0 {
+            active = false
+        }
+
+        listen {
+            throw error
+        }
+        
+        return active
+    }
 	
 	public func stop() {
 		active = false

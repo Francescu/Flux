@@ -22,11 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
 
 public let log = Log()
 
@@ -55,6 +50,11 @@ public final class Log {
     public init(stream: File = standardErrorStream, levels: Level = [.Trace, .Debug, .Info, .Warning, .Error, .Fatal]) {
         self.stream = stream
         self.levels = levels
+    }
+
+    deinit {
+        messageChannel.close()
+        errorChannel.close()
     }
 
     public func log(level: Level, item: Any, terminator: String = "\n", flush: Bool = true) throws {

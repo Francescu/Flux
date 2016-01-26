@@ -1,4 +1,4 @@
-// SSL.swift
+// Error.swift
 //
 // The MIT License (MIT)
 //
@@ -15,22 +15,13 @@
 // copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDINbG BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public protocol SSLType {}
-
-public protocol SSLContextType {}
-
-public protocol SSLClientContextType: SSLContextType {
-    var streamType: SSLClientStreamType.Type { get }
+public struct Error: ErrorType, CustomStringConvertible {
+    public let description: String
 }
-
-public protocol SSLClientStreamType: StreamType {
-    init(context: SSLClientContextType, rawStream: StreamType) throws
-}
-

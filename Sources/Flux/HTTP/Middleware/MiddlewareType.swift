@@ -38,19 +38,30 @@ extension MiddlewareType {
             return try self.respond(request, chain: chain)
         }
     }
+
+    public func intercept(middleware: MiddlewareType) -> MiddlewareType {
+        return Middleware { request, chain in
+            let responder = Responder { request in
+                return try middleware.respond(request, chain: chain)
+            }
+            return try self.respond(request, chain: responder)
+        }
+    }
+}
+
+public struct Middleware: MiddlewareType {
+    let respond: (request: Request, chain: ChainType) throws -> Response
+
+    public init(respond: (request: Request, chain: ChainType) throws -> Response) {
+        self.respond = respond
+    }
+
+    public func respond(request: Request, chain: ChainType) throws -> Response {
+        return try respond(request: request, chain: chain)
+    }
 }
 
 extension CollectionType where Self.Generator.Element == MiddlewareType {
-    public func intercept(responder: ResponderType) -> ResponderType {
-        var responder = responder
-
-        for middleware in self.reverse() {
-            responder = middleware.intercept(responder)
-        }
-        
-        return responder
-    }
-
     public func intercept(responder: ChainType) -> ChainType {
         var responder = responder
 
@@ -61,13 +72,37 @@ extension CollectionType where Self.Generator.Element == MiddlewareType {
         return responder
     }
 
+    public func intercept(responder: ResponderType) -> ResponderType {
+        var responder = responder
+
+        for middleware in self.reverse() {
+            responder = middleware.intercept(responder)
+        }
+        
+        return responder
+    }
+
     public func intercept(respond: Respond) -> ResponderType {
         return intercept(Responder(respond: respond))
     }
 
-    public func intercept(respond: Respond) -> ChainType {
-        return intercept(Responder(respond: respond))
+    public func intercept(middleware: MiddlewareType) -> MiddlewareType {
+        var middleware = middleware
+
+        for item in self {
+            middleware = middleware.intercept(item)
+        }
+
+        return middleware
     }
+}
+
+public func chain(first: MiddlewareType, _ middleware: MiddlewareType...) -> MiddlewareType {
+    var chain: [MiddlewareType] = []
+    chain.append(first)
+    chain.appendContentsOf(middleware)
+    let last = chain.removeLast()
+    return chain.intercept(last)
 }
 
 public func chain(middleware middleware: MiddlewareType..., responder: ResponderType) -> ResponderType {
@@ -75,5 +110,5 @@ public func chain(middleware middleware: MiddlewareType..., responder: Responder
 }
 
 public func chain(middleware middleware: MiddlewareType..., respond: Respond) -> ResponderType {
-    return middleware.intercept(Responder(respond: respond))
+    return middleware.intercept(respond)
 }

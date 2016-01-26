@@ -24,9 +24,9 @@
 
 import CLibvenice
 
-public var standardInputStream = try! File(fileDescriptor: dup(STDIN_FILENO))
-public var standardOutputStream = try! File(fileDescriptor: dup(STDOUT_FILENO))
-public var standardErrorStream = try! File(fileDescriptor: dup(STDERR_FILENO))
+public var standardInputStream = try! File(fileDescriptor: STDIN_FILENO)
+public var standardOutputStream = try! File(fileDescriptor: STDOUT_FILENO)
+public var standardErrorStream = try! File(fileDescriptor: STDERR_FILENO)
 
 public final class File {
 	public enum Mode {
@@ -74,7 +74,7 @@ public final class File {
         return isEof != 0
     }
 
-    public init(file: mfile) throws {
+    init(file: mfile) throws {
         self.file = file
         try FileError.assertNoError()
     }

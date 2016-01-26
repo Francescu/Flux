@@ -29,7 +29,7 @@ public enum SSLContextError: ErrorType {
     case Certificate(description: String)
 }
 
-public class SSLContext: SSLContextType {
+public class SSLContext {
 	internal var context: UnsafeMutablePointer<SSL_CTX>
 
 	public init(method: SSLMethod = .SSLv23, type: SSLMethodType = .Unspecified) throws {

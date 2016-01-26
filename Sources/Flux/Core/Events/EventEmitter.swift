@@ -25,8 +25,8 @@
 public final class EventEmitter<T> {
 	private var listeners: [EventListener<T>] = []
 	
-	public func listen(times times: Int = -1, listener: EventListener<T>.Listener) -> EventListener<T> {
-		let listener = EventListener<T>(calls: times, listener: listener)
+	public func listen(times times: Int = -1, listen: EventListener<T>.Listen) -> EventListener<T> {
+		let listener = EventListener<T>(calls: times, listen: listen)
 		listeners.append(listener)
 		return listener
 	}
@@ -35,4 +35,13 @@ public final class EventEmitter<T> {
 		listeners = listeners.filter({ $0.active })
 		listeners.forEach({ $0.call(event) })
 	}
+
+    public func send(error: ErrorType) {
+        listeners = listeners.filter({ $0.active })
+        listeners.forEach({ $0.call(error) })
+    }
+
+    public func clear() {
+        listeners.removeAll()
+    }
 }

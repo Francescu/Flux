@@ -23,15 +23,15 @@
 // SOFTWARE.
 
 public protocol StreamServerType {
-    func accept(completion: (Void throws -> StreamType) -> Void)
+    func accept() throws -> StreamType
 }
 
 public protocol RequestStreamParserType {
-    func parse(stream: StreamType, completion: (Void throws -> Request) -> Void)
+    func parse(data: Data) throws -> Request?
 }
 
 public protocol ResponseStreamSerializerType {
-    func serialize(response: Response, stream: StreamType) throws
+    func serialize(response: Response) throws -> Data
 }
 
 public protocol ServerType {
@@ -42,39 +42,46 @@ public protocol ServerType {
 }
 
 extension ServerType {
-    public func start(failure: ErrorType -> Void = Self.logError) {
-        server.accept { getStream in
-            do {
-                let stream = try getStream()
-                self.processStream(stream, failure: failure)
-            } catch {
-                failure(error)
-            }
-        }
-    }
+    public func start() throws {
+        while true {
+            let stream = try server.accept()
 
-    private func processStream(stream: StreamType, failure: ErrorType -> Void) {
-        parser.parse(stream) { getRequest in
-            do {
-                let request = try getRequest()
-                let response = try self.responder.respond(request)
-                try self.serializer.serialize(response, stream: stream)
+            while !stream.closed {
+                let data = try stream.receive()
+                if let request = try parser.parse(data) {
+                    let response = try responder.respond(request)
+                    let data = try serializer.serialize(response)
+                    try stream.send(data)
+                    try stream.flush()
 
-                if !request.isKeepAlive {
-                    stream.close()
+                    if let upgrade = response.upgrade {
+                        upgrade(stream)
+                        stream.close()
+                    }
+
+                    if !request.isKeepAlive {
+                        stream.close()
+                    }
                 }
-            } catch {
-                stream.close()
-                failure(error)
             }
         }
     }
 
     public func startInBackground(failure: ErrorType -> Void = Self.logError) {
-        co(self.start(failure))
+        co {
+            do {
+                try self.start()
+            } catch {
+                failure(error)
+            }
+        }
     }
 
-    private static func logError(error: ErrorType) -> Void {
-        print("Error:", error)
+    private static func logError(e: ErrorType) -> Void {
+        do {
+            try log.error("Error: \(e)")
+        } catch {
+            print(e)
+        }
     }
 }

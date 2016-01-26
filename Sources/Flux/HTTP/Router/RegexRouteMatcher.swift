@@ -1,4 +1,4 @@
-// RouteMatcher.swift
+// RegexRouteMatcher.swift
 //
 // The MIT License (MIT)
 //
@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public struct RouteMatcher: RouteMatcherType {
+public struct RegexRouteMatcher: RouteMatcherType {
     public let routes: [Route]
     public let regexRoutes: [(Route, RegexRoute)]
 

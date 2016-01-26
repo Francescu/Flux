@@ -35,7 +35,7 @@ public struct Client: ClientType {
 }
 
 extension Client {
-    public init(host: String, port: UInt16, serializer: RequestStreamSerializerType = RequestStreamSerializer(), parser: ResponseStreamParserType = ResponseStreamParser()) throws {
+    public init(host: String, port: Int, serializer: RequestStreamSerializerType = RequestStreamSerializer(), parser: ResponseStreamParserType = ResponseStreamParser()) throws {
         self.init(
             client: try TCPStreamClient(host: host, port: port),
             serializer: serializer,

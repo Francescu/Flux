@@ -32,7 +32,7 @@ import COpenSSL
 
 public let DEFAULT_BUFFER_SIZE = 4096
 
-public final class OpenSSL: SSLType {
+public final class OpenSSL {
 	private static var _initialize: Void = {
 	    SSL_library_init()
 	    SSL_load_error_strings()

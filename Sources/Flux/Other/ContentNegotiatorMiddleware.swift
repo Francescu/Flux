@@ -255,8 +255,6 @@ public final class ClientContentNegotiatorMiddleware: MiddlewareType {
 
         var response = try chain.proceed(request)
 
-        print(response.debugDescription)
-
         if let contentType = response.contentType {
             let (_, content) = try mediaTypeParsers.parseData(response.body, mediaType: contentType)
             response.content = content

@@ -23,41 +23,15 @@
 // SOFTWARE.
 
 struct TCPStreamServer: StreamServerType {
-    let port: Int
-//    let processCount: Int
+    let serverSocket: TCPServerSocket
 
-    func accept(completion: (Void throws -> StreamType) -> Void) {
-        do {
-            let ip = try IP(port: 8080)
-            let serverSocket = try TCPServerSocket(ip: ip, backlog: 128)
-
-//            forkProcesses()
-
-            while true {
-                let socket = try serverSocket.accept()
-                co {
-                    completion {
-                        return TCPStream(socket: socket)
-                    }
-                }
-            }
-        } catch {
-            completion {
-                throw error
-            }
-        }
+    init(port: Int) throws {
+        let ip = try IP(port: port)
+        serverSocket = try TCPServerSocket(ip: ip, backlog: 128)
     }
 
-//    private func forkProcesses() {
-//        for i in 0 ..< processCount - 1 {
-//            let pid = fork()
-//
-//            if pid < 0 {
-//                // TODO: throw error
-//                print("TCPServer: Only \(i + 1) of \(processCount) processes were created successfully.")
-//            }
-//
-//            if pid > 0 { break }
-//        }
-//    }
+    func accept() throws -> StreamType {
+        let socket = try serverSocket.accept()
+        return TCPStream(socket: socket)
+    }
 }

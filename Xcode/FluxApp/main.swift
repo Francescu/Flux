@@ -1,18 +1,12 @@
 import Flux
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
+let middleware = chain(logger, contentNegotiator)
 
-//log.levels = [.Warning]
-log.stream = try File(path: "/Users/paulofaria/hello.txt", mode: .AppendWrite)
-
-let router = Router { route in
-    route.get("/", middleware: logger) { request in
+let router = Router(matcher: RegexRouteMatcher.self) { route in
+    route.get("/") { request in
         return Response(status: .OK, body: "hello")
     }
 }
 
-Server(port: 8080, responder: router).start()
+try Server(port: 8080, responder: router).startInBackground()
+try Server(port: 8081, responder: router).start()

@@ -23,16 +23,18 @@
 // SOFTWARE.
 
 public struct Response: MessageType {
+    public typealias Upgrade = StreamType -> Void
+
     public var status: Status
     public var majorVersion: Int
     public var minorVersion: Int
     public var headers: [String: String]
     public var body: Data
-    public var upgrade: (StreamType -> Void)?
+    public var upgrade: Upgrade?
 
     public var storage: [String: Any] = [:]
 
-    init(status: Status, majorVersion: Int, minorVersion: Int, headers: [String: String], body: Data, upgrade: (StreamType -> Void)?) {
+    init(status: Status, majorVersion: Int, minorVersion: Int, headers: [String: String], body: Data, upgrade: Upgrade?) {
         self.status = status
         self.majorVersion = majorVersion
         self.minorVersion = minorVersion
@@ -43,7 +45,7 @@ public struct Response: MessageType {
 }
 
 extension Response {
-    public init(status: Status, headers: [String: String] = [:], body: Data = nil, upgrade: (StreamType -> Void)? = nil) {
+    public init(status: Status, headers: [String: String] = [:], body: Data = nil, upgrade: Upgrade? = nil) {
         var headers = headers
         headers["Content-Length"] = "\(body.count)"
 

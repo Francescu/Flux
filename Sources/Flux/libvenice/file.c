@@ -248,8 +248,9 @@ mfile fileattach(int fd) {
         errno = ENOMEM;
         return NULL;
     }
-    mill_filetune(fd);
-    f->fd = fd;
+    int nfd = dup(fd);
+    mill_filetune(nfd);
+    f->fd = nfd;
     f->ifirst = 0;
     f->ilen = 0;
     f->olen = 0;

@@ -36,17 +36,20 @@ public struct Server: ServerType {
     }
 
     public init(server: StreamServerType, parser: RequestStreamParserType, middleware: [MiddlewareType], serializer: ResponseStreamSerializerType, respond: Respond) {
-        self.server = server
-        self.parser = parser
-        self.responder = middleware.intercept(Responder(respond: respond))
-        self.serializer = serializer
+        self.init(
+            server: server,
+            parser: parser,
+            middleware: middleware,
+            responder: Responder(respond: respond),
+            serializer: serializer
+        )
     }
 }
 
 extension Server {
-    public init(port: Int, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) {
+    public init(port: Int, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) throws {
         self.init(
-            server: TCPStreamServer(port: port),
+            server: try TCPStreamServer(port: port),
             parser: parser,
             middleware: middleware,
             responder: responder,
@@ -54,9 +57,9 @@ extension Server {
         )
     }
 
-    public init(port: Int, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) {
+    public init(port: Int, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) throws {
         self.init(
-            server: TCPStreamServer(port: port),
+            server: try TCPStreamServer(port: port),
             parser: parser,
             middleware: middleware,
             serializer: serializer,
@@ -64,23 +67,23 @@ extension Server {
         )
     }
 
-    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) throws {
-        self.init(
-            server: try TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey),
-            parser: parser,
-            middleware: middleware,
-            responder: responder,
-            serializer: serializer
-        )
-    }
-
-    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) throws {
-        self.init(
-            server: try TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey),
-            parser: parser,
-            middleware: middleware,
-            serializer: serializer,
-            respond: respond
-        )
-    }
+//    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) throws {
+//        self.init(
+//            server: try TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey),
+//            parser: parser,
+//            middleware: middleware,
+//            responder: responder,
+//            serializer: serializer
+//        )
+//    }
+//
+//    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) throws {
+//        self.init(
+//            server: try TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey),
+//            parser: parser,
+//            middleware: middleware,
+//            serializer: serializer,
+//            respond: respond
+//        )
+//    }
 }

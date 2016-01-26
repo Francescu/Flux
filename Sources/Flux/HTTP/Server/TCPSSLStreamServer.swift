@@ -22,39 +22,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-struct TCPSSLStreamServer: StreamServerType {
-    let port: Int
-    let context: SSLServerContext
-
-    init(port: Int, certificate: String, privateKey: String) throws {
-        self.port = port
-        self.context = try SSLServerContext(
-            certificate: certificate,
-            privateKey: privateKey
-        )
-    }
-
-    func accept(completion: (Void throws -> StreamType) -> Void) {
-        do {
-            let ip = try IP(port: 8080)
-            let serverSocket = try TCPServerSocket(ip: ip, backlog: 128)
-
-            while true {
-                let socket = try serverSocket.accept()
-                let stream = TCPStream(socket: socket)
-
-                let SSLStream = try SSLServerStream(context: context, rawStream: stream)
-                
-                co {
-                    completion {
-                        return SSLStream
-                    }
-                }
-            }
-        } catch {
-            completion {
-                throw error
-            }
-        }
-    }
-}
+//struct TCPSSLStreamServer: StreamServerType {
+//    let port: Int
+//    let context: SSLServerContext
+//
+//    init(port: Int, certificate: String, privateKey: String) throws {
+//        self.port = port
+//        self.context = try SSLServerContext(
+//            certificate: certificate,
+//            privateKey: privateKey
+//        )
+//    }
+//
+//    func accept(completion: (Void throws -> StreamType) -> Void) {
+//        do {
+//            let ip = try IP(port: 8080)
+//            let serverSocket = try TCPServerSocket(ip: ip, backlog: 128)
+//
+//            while true {
+//                let socket = try serverSocket.accept()
+//                let stream = TCPStream(socket: socket)
+//
+//                let SSLStream = try SSLServerStream(context: context, rawStream: stream)
+//                
+//                co {
+//                    completion {
+//                        return SSLStream
+//                    }
+//                }
+//            }
+//        } catch {
+//            completion {
+//                throw error
+//            }
+//        }
+//    }
+//}

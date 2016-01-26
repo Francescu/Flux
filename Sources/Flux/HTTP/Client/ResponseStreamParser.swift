@@ -30,15 +30,15 @@ struct ResponseStreamParser: ResponseStreamParserType {
             }
         }
 
-        stream.receive { getData in
-            do {
-                let data = try getData()
-                try parser.parse(data)
-            } catch {
-                completion {
-                    throw error
-                }
-            }
-        }
+//        stream.receive { getData in
+//            do {
+//                let data = try getData()
+//                try parser.parse(data)
+//            } catch {
+//                completion {
+//                    throw error
+//                }
+//            }
+//        }
     }
 }

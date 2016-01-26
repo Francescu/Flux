@@ -48,16 +48,25 @@ public struct IP {
         try IPError.assertNoError()
     }
 
-    public init(port: UInt16, mode: IPMode = .IPV4) throws {
+    public init(port: Int, mode: IPMode = .IPV4) throws {
+        try IP.assertValidPort(port)
         try self.init(address: iplocal(nil, Int32(port), mode.code))
     }
 
-    public init(networkInterface: String, port: UInt16, mode: IPMode = .IPV4) throws {
+    public init(networkInterface: String, port: Int, mode: IPMode = .IPV4) throws {
+        try IP.assertValidPort(port)
         try self.init(address: iplocal(networkInterface, Int32(port), mode.code))
     }
 
-    public init(address: String, port: UInt16, mode: IPMode = .IPV4, deadline: Deadline = noDeadline) throws {
+    public init(address: String, port: Int, mode: IPMode = .IPV4, deadline: Deadline = noDeadline) throws {
+        try IP.assertValidPort(port)
         try self.init(address: ipremote(address, Int32(port), mode.code, deadline))
+    }
+
+    private static func assertValidPort(port: Int) throws {
+        if port < 0 || port > 0xffff {
+            throw IPError.InvalidPort(description: "Port number should be between 0 and 0xffff")
+        }
     }
 }
 

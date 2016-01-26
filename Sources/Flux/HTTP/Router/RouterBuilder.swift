@@ -33,19 +33,9 @@ public final class RouterBuilder {
     init(basePath: String) {
         self.basePath = basePath
     }
+}
 
-    public func fallback(middleware middleware: MiddlewareType..., respond: Respond) {
-        _fallback(middleware, responder: Responder(respond: respond))
-    }
-
-    public func fallback(middleware middleware: MiddlewareType..., responder: ResponderType) {
-        _fallback(middleware, responder: responder)
-    }
-
-    private func _fallback(middleware: [MiddlewareType], responder: ResponderType) {
-        fallback = middleware.intercept(responder)
-    }
-
+extension RouterBuilder {
     public func router(path: String, middleware: MiddlewareType..., router: Router) {
         let prefix = basePath + path
 
@@ -69,90 +59,118 @@ public final class RouterBuilder {
 
         routes.appendContentsOf(newRoutes)
     }
+}
 
+extension RouterBuilder {
+    public func fallback(middleware middleware: MiddlewareType..., respond: Respond) {
+        fallback(middleware, responder: Responder(respond: respond))
+    }
+
+    public func fallback(middleware middleware: MiddlewareType..., responder: ResponderType) {
+        fallback(middleware, responder: responder)
+    }
+
+    private func fallback(middleware: [MiddlewareType], responder: ResponderType) {
+        fallback = middleware.intercept(responder)
+    }
+}
+
+extension RouterBuilder {
     public func any(path: String, middleware: MiddlewareType..., respond: Respond) {
-        _any(path, middleware: middleware, responder: Responder(respond: respond))
+        any(path, middleware: middleware, responder: Responder(respond: respond))
     }
 
     public func any(path: String, middleware: MiddlewareType..., responder: ResponderType) {
-        _any(path, middleware: middleware, responder: responder)
+        any(path, middleware: middleware, responder: responder)
     }
 
-    private func _any(path: String, middleware: [MiddlewareType], responder: ResponderType) {
-        _methods(Method.commonMethods, path: path, middleware: middleware, responder: responder)
+    private func any(path: String, middleware: [MiddlewareType], responder: ResponderType) {
+        methods(Method.commonMethods, path: path, middleware: middleware, responder: responder)
     }
+}
 
+extension RouterBuilder {
     public func get(path: String, middleware: MiddlewareType..., respond: Respond) {
-        _get(path, middleware: middleware, responder: Responder(respond: respond))
+        get(path, middleware: middleware, responder: Responder(respond: respond))
     }
 
     public func get(path: String, middleware: MiddlewareType..., responder: ResponderType) {
-        _get(path, middleware: middleware, responder: responder)
+        get(path, middleware: middleware, responder: responder)
     }
 
-    private func _get(path: String, middleware: [MiddlewareType], responder: ResponderType) {
-        _methods([.GET], path: path, middleware: middleware, responder: responder)
+    private func get(path: String, middleware: [MiddlewareType], responder: ResponderType) {
+        methods([.GET], path: path, middleware: middleware, responder: responder)
     }
+}
 
+extension RouterBuilder {
     public func post(path: String, middleware: MiddlewareType..., respond: Respond) {
-        _post(path, middleware: middleware, responder: Responder(respond: respond))
+        post(path, middleware: middleware, responder: Responder(respond: respond))
     }
 
     public func post(path: String, middleware: MiddlewareType..., responder: ResponderType) {
-        _post(path, middleware: middleware, responder: responder)
+        post(path, middleware: middleware, responder: responder)
     }
 
-    private func _post(path: String, middleware: [MiddlewareType], responder: ResponderType) {
-        _methods([.POST], path: path, middleware: middleware, responder: responder)
+    private func post(path: String, middleware: [MiddlewareType], responder: ResponderType) {
+        methods([.POST], path: path, middleware: middleware, responder: responder)
     }
+}
 
+extension RouterBuilder {
     public func put(path: String, middleware: MiddlewareType..., respond: Respond) {
-        _put(path, middleware: middleware, responder: Responder(respond: respond))
+        put(path, middleware: middleware, responder: Responder(respond: respond))
     }
 
     public func put(path: String, middleware: MiddlewareType..., responder: ResponderType) {
-        _put(path, middleware: middleware, responder: responder)
+        put(path, middleware: middleware, responder: responder)
     }
 
-    private func _put(path: String, middleware: [MiddlewareType], responder: ResponderType) {
-        _methods([.PUT], path: path, middleware: middleware, responder: responder)
+    private func put(path: String, middleware: [MiddlewareType], responder: ResponderType) {
+        methods([.PUT], path: path, middleware: middleware, responder: responder)
     }
+}
 
+extension RouterBuilder {
     public func patch(path: String, middleware: MiddlewareType..., respond: Respond) {
-        _patch(path, middleware: middleware, responder: Responder(respond: respond))
+        patch(path, middleware: middleware, responder: Responder(respond: respond))
     }
 
     public func patch(path: String, middleware: MiddlewareType..., responder: ResponderType) {
-        _patch(path, middleware: middleware, responder: responder)
+        patch(path, middleware: middleware, responder: responder)
     }
 
-    private func _patch(path: String, middleware: [MiddlewareType], responder: ResponderType) {
-        _methods([.PATCH], path: path, middleware: middleware, responder: responder)
+    private func patch(path: String, middleware: [MiddlewareType], responder: ResponderType) {
+        methods([.PATCH], path: path, middleware: middleware, responder: responder)
     }
+}
 
+extension RouterBuilder {
     public func delete(path: String, middleware: MiddlewareType..., respond: Respond) {
-        _delete(path, middleware: middleware, responder: Responder(respond: respond))
+        delete(path, middleware: middleware, responder: Responder(respond: respond))
     }
 
     public func delete(path: String, middleware: MiddlewareType..., responder: ResponderType) {
-        _delete(path, middleware: middleware, responder: responder)
+        delete(path, middleware: middleware, responder: responder)
     }
 
-    private func _delete(path: String, middleware: [MiddlewareType], responder: ResponderType) {
-        _methods([.DELETE], path: path, middleware: middleware, responder: responder)
+    private func delete(path: String, middleware: [MiddlewareType], responder: ResponderType) {
+        methods([.DELETE], path: path, middleware: middleware, responder: responder)
     }
+}
 
+extension RouterBuilder {
     public func methods(m: Set<Method>, path: String, middleware: MiddlewareType..., respond: Respond) {
-        _methods(m, path: path, middleware: middleware, responder: Responder(respond: respond))
+        methods(m, path: path, middleware: middleware, responder: Responder(respond: respond))
     }
 
     public func methods(m: Set<Method>, path: String, middleware: MiddlewareType..., responder: ResponderType) {
-        _methods(m, path: path, middleware: middleware, responder: responder)
+        methods(m, path: path, middleware: middleware, responder: responder)
     }
 
-    private func _methods(methods: Set<Method>, path: String, middleware: [MiddlewareType], responder: ResponderType) {
+    private func methods(m: Set<Method>, path: String, middleware: [MiddlewareType], responder: ResponderType) {
         let route = Route(
-            methods: methods,
+            methods: m,
             path: basePath + path,
             responder: middleware.intercept(responder)
         )
@@ -161,12 +179,12 @@ public final class RouterBuilder {
 }
 
 extension Router {
-    public init(_ basePath: String = "", middleware: MiddlewareType..., build: (route: RouterBuilder) -> Void) {
+    public init(_ basePath: String = "", middleware: MiddlewareType..., matcher: RouteMatcherType.Type = TrieRouteMatcher.self, build: (route: RouterBuilder) -> Void) {
         let builder = RouterBuilder(basePath: basePath)
         build(route: builder)
         self.init(
             middleware: middleware,
-            matcher: TrieRouteMatcher(routes: builder.routes),
+            matcher: matcher.init(routes: builder.routes),
             fallback: builder.fallback
         )
     }

@@ -24,33 +24,21 @@
 
 final class TCPStream: StreamType {
     let socket: TCPClientSocket
-    var done = false
 
     init(socket: TCPClientSocket) {
         self.socket = socket
     }
 
-    func receive(completion: (Void throws -> Data) -> Void) {
-        while !socket.closed {
-            do {
-                let data = try socket.receive(lowWaterMark: 1, highWaterMark: 256, deadline: now + 1 * second)
-                completion {
-                    return data
-                }
-            } catch TCPError.OperationTimedOut(_, let data) {
-                completion {
-                    return data
-                }
-            } catch TCPError.ConnectionResetByPeer(_, let data) {
-                completion {
-                    return data
-                }
-                break
-            } catch {
-                completion {
-                    throw error
-                }
-            }
+    var closed: Bool {
+        return socket.closed
+    }
+
+    func receive() throws -> Data {
+        do {
+            return try self.socket.receive(lowWaterMark: 1, highWaterMark: 256)
+        } catch TCPError.ConnectionResetByPeer(_, let data) {
+            socket.close()
+            return data
         }
     }
 
@@ -62,9 +50,7 @@ final class TCPStream: StreamType {
         try self.socket.flush()
     }
 
-    func close() {
-        do {
-            try socket.close()
-        } catch {}
+    func close() -> Bool {
+        return socket.close()
     }
 }

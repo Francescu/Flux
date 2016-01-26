@@ -10,6 +10,7 @@
 		37513E171C4C80AB00488AD4 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37513E161C4C80AB00488AD4 /* Trie.swift */; };
 		37513E191C4C80E200488AD4 /* TrieRouteMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37513E181C4C80E200488AD4 /* TrieRouteMatcher.swift */; };
 		37B36EE31C4CB5FE00FE0D01 /* TrieMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */; };
+		B001F8F11C5592310013B1E3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F01C5592310013B1E3 /* Error.swift */; };
 		B0158A841C4C0456003700D3 /* SSLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0158A831C4C0456003700D3 /* SSLError.swift */; };
 		B015D0AA1C52DF530017727B /* BranchMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = B015D0A91C52DF530017727B /* BranchMiddleware.swift */; };
 		B015D0AB1C52EA9D0017727B /* URLEncodedFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C7E1C4AD455006ABA9E /* URLEncodedFormParser.swift */; };
@@ -27,7 +28,6 @@
 		B0B14CC11C4AD455006ABA9E /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C6F1C4AD455006ABA9E /* JSONParser.swift */; };
 		B0B14CC21C4AD455006ABA9E /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C701C4AD455006ABA9E /* JSONSerializer.swift */; };
 		B0B14CC31C4AD455006ABA9E /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C721C4AD455006ABA9E /* MediaType.swift */; };
-		B0B14CC51C4AD455006ABA9E /* SSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C761C4AD455006ABA9E /* SSL.swift */; };
 		B0B14CC61C4AD455006ABA9E /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C781C4AD455006ABA9E /* Stream.swift */; };
 		B0B14CC71C4AD455006ABA9E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C7A1C4AD455006ABA9E /* String.swift */; };
 		B0B14CC81C4AD455006ABA9E /* URI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C7C1C4AD455006ABA9E /* URI.swift */; };
@@ -47,7 +47,7 @@
 		B0B14CD71C4AD455006ABA9E /* ResponderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C921C4AD455006ABA9E /* ResponderType.swift */; };
 		B0B14CD81C4AD455006ABA9E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C941C4AD455006ABA9E /* Response.swift */; };
 		B0B14CD91C4AD455006ABA9E /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C951C4AD455006ABA9E /* Status.swift */; };
-		B0B14CDA1C4AD455006ABA9E /* RouteMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C971C4AD455006ABA9E /* RouteMatcher.swift */; };
+		B0B14CDA1C4AD455006ABA9E /* RegexRouteMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C971C4AD455006ABA9E /* RegexRouteMatcher.swift */; };
 		B0B14CDB1C4AD455006ABA9E /* RouteMatcherType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C981C4AD455006ABA9E /* RouteMatcherType.swift */; };
 		B0B14CDC1C4AD455006ABA9E /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C991C4AD455006ABA9E /* Router.swift */; };
 		B0B14CDD1C4AD455006ABA9E /* RouterBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C9A1C4AD455006ABA9E /* RouterBuilder.swift */; };
@@ -184,6 +184,7 @@
 		37513E161C4C80AB00488AD4 /* Trie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
 		37513E181C4C80E200488AD4 /* TrieRouteMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrieRouteMatcher.swift; sourceTree = "<group>"; };
 		37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrieMatcherTests.swift; path = FluxTests/TrieMatcherTests.swift; sourceTree = SOURCE_ROOT; };
+		B001F8F01C5592310013B1E3 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Error/Error.swift; sourceTree = "<group>"; };
 		B0158A831C4C0456003700D3 /* SSLError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLError.swift; sourceTree = "<group>"; };
 		B015D0A91C52DF530017727B /* BranchMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BranchMiddleware.swift; path = "Flux/Branch Middleware/BranchMiddleware.swift"; sourceTree = "<group>"; };
 		B015D0AD1C5341720017727B /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Flux/Log/Log.swift; sourceTree = "<group>"; };
@@ -201,7 +202,6 @@
 		B0B14C6F1C4AD455006ABA9E /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		B0B14C701C4AD455006ABA9E /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
 		B0B14C721C4AD455006ABA9E /* MediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
-		B0B14C761C4AD455006ABA9E /* SSL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSL.swift; sourceTree = "<group>"; };
 		B0B14C781C4AD455006ABA9E /* Stream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
 		B0B14C7A1C4AD455006ABA9E /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		B0B14C7C1C4AD455006ABA9E /* URI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URI.swift; sourceTree = "<group>"; };
@@ -222,7 +222,7 @@
 		B0B14C921C4AD455006ABA9E /* ResponderType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponderType.swift; sourceTree = "<group>"; };
 		B0B14C941C4AD455006ABA9E /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		B0B14C951C4AD455006ABA9E /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
-		B0B14C971C4AD455006ABA9E /* RouteMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteMatcher.swift; sourceTree = "<group>"; };
+		B0B14C971C4AD455006ABA9E /* RegexRouteMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegexRouteMatcher.swift; sourceTree = "<group>"; };
 		B0B14C981C4AD455006ABA9E /* RouteMatcherType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteMatcherType.swift; sourceTree = "<group>"; };
 		B0B14C991C4AD455006ABA9E /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		B0B14C9A1C4AD455006ABA9E /* RouterBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouterBuilder.swift; sourceTree = "<group>"; };
@@ -356,6 +356,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B001F8F21C55925F0013B1E3 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				B001F8F01C5592310013B1E3 /* Error.swift */,
+			);
+			name = Error;
+			sourceTree = "<group>";
+		};
 		B015D0A81C52DF1C0017727B /* Branch Middleware */ = {
 			isa = PBXGroup;
 			children = (
@@ -407,10 +415,10 @@
 				B0B14C5F1C4AD455006ABA9E /* Base64 */,
 				B0B14C651C4AD455006ABA9E /* Events */,
 				B0B14C711C4AD455006ABA9E /* MediaType */,
-				B0B14C751C4AD455006ABA9E /* SSL */,
 				B0B14C771C4AD455006ABA9E /* Stream */,
 				B0B14C7B1C4AD455006ABA9E /* URI */,
 				B7D04A7A1C4E94FA006C4F2F /* POSIX */,
+				B001F8F21C55925F0013B1E3 /* Error */,
 			);
 			name = Core;
 			path = Flux/Core;
@@ -487,14 +495,6 @@
 				B0B14C721C4AD455006ABA9E /* MediaType.swift */,
 			);
 			path = MediaType;
-			sourceTree = "<group>";
-		};
-		B0B14C751C4AD455006ABA9E /* SSL */ = {
-			isa = PBXGroup;
-			children = (
-				B0B14C761C4AD455006ABA9E /* SSL.swift */,
-			);
-			path = SSL;
 			sourceTree = "<group>";
 		};
 		B0B14C771C4AD455006ABA9E /* Stream */ = {
@@ -609,10 +609,10 @@
 		B0B14C961C4AD455006ABA9E /* Router */ = {
 			isa = PBXGroup;
 			children = (
-				B0B14C971C4AD455006ABA9E /* RouteMatcher.swift */,
 				B0B14C981C4AD455006ABA9E /* RouteMatcherType.swift */,
 				B0B14C991C4AD455006ABA9E /* Router.swift */,
 				B0B14C9A1C4AD455006ABA9E /* RouterBuilder.swift */,
+				B0B14C971C4AD455006ABA9E /* RegexRouteMatcher.swift */,
 				37513E161C4C80AB00488AD4 /* Trie.swift */,
 				37513E181C4C80E200488AD4 /* TrieRouteMatcher.swift */,
 			);
@@ -1171,6 +1171,7 @@
 				B0DCBFE71C514C9000B2AFA3 /* stack.c in Sources */,
 				B0B14CE81C4AD455006ABA9E /* FallibleReceivingChannel.swift in Sources */,
 				B7D04A821C4E96F6006C4F2F /* DateComponents.swift in Sources */,
+				B001F8F11C5592310013B1E3 /* Error.swift in Sources */,
 				B0B14D2F1C4BBAA5006ABA9E /* SSLClientStream.swift in Sources */,
 				B0DCBFE91C514C9000B2AFA3 /* tcp.c in Sources */,
 				37513E191C4C80E200488AD4 /* TrieRouteMatcher.swift in Sources */,
@@ -1209,12 +1210,11 @@
 				B0B14CE91C4AD455006ABA9E /* FallibleSendable.swift in Sources */,
 				B0B14CCC1C4AD455006ABA9E /* ClientType.swift in Sources */,
 				B0B14D161C4AD72F006ABA9E /* Response+File.swift in Sources */,
-				B0B14CC51C4AD455006ABA9E /* SSL.swift in Sources */,
 				B0B14CCE1C4AD455006ABA9E /* ResponseStreamParser.swift in Sources */,
 				B0B14CE61C4AD455006ABA9E /* FallibleChannel.swift in Sources */,
 				B0B14CD71C4AD455006ABA9E /* ResponderType.swift in Sources */,
 				B0B14D341C4BBAA5006ABA9E /* SSLMethod.swift in Sources */,
-				B0B14CDA1C4AD455006ABA9E /* RouteMatcher.swift in Sources */,
+				B0B14CDA1C4AD455006ABA9E /* RegexRouteMatcher.swift in Sources */,
 				B0B14CC21C4AD455006ABA9E /* JSONSerializer.swift in Sources */,
 				B0B14CF81C4AD455006ABA9E /* Timer.swift in Sources */,
 				B0B14CD11C4AD455006ABA9E /* Method+Parser.swift in Sources */,
@@ -1485,6 +1485,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zewo.FluxApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};

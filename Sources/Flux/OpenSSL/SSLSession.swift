@@ -42,10 +42,6 @@ public class SSLSession {
 		OpenSSL.initialize()
 
         ssl = SSL_new(context.context)
-
-        if ssl == nil {
-            print("fuck")
-        }
 	}
 
 	deinit {
@@ -54,8 +50,6 @@ public class SSLSession {
 
 	public var state: State {
 		let stateNumber = SSL_state(ssl)
-        let desc = String.fromCString(SSL_state_string(ssl))!
-        print(desc)
         let state = State(rawValue: stateNumber)
 		return state ?? .Error
 	}
@@ -83,15 +77,7 @@ public class SSLSession {
     }
 
 	public func doHandshake() {
-		let result = SSL_do_handshake(ssl)
-        print(result)
-
-        print(SSL_is_init_finished(ssl))
-        
-        if result < 0 {
-            let code = SSL_get_error(ssl, result)
-            print(code)
-        }
+        SSL_do_handshake(ssl)
 	}
 
 	public func write(data: [UInt8]) {
