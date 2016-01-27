@@ -15,7 +15,7 @@ class HTTPTests: XCTestCase {
                 }
             }
 
-            Server(port: 8080, responder: router).start()
+            try Server(port: 8080, responder: router).start()
         } catch {
             print(error)
         }
@@ -29,7 +29,7 @@ class HTTPTests: XCTestCase {
             }
         }
         
-        try Server(port: 8080, certificate: "/Users/paulofaria/csr.pem", privateKey: "/Users/paulofaria/key.pem", responder: router).start()
+//        try Server(port: 8080, certificate: "/Users/paulofaria/csr.pem", privateKey: "/Users/paulofaria/key.pem", responder: router).start()
         } catch {
             print(error)
         }

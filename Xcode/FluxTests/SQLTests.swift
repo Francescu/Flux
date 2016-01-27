@@ -26,29 +26,7 @@ class SQLTests: XCTestCase {
     }
 
     func testPerformanceExample() {
-        
-        struct Test: CustomStringConvertible {
-            let one = 1
-            let two = "TWO"
-            
-            var description: String {
-                return "one: \(one), two: \(two)"
-            }
-            
-        }
-        
-        var i = Test()
-        
-        let coder = Coder(value: i)
-        
-        print(coder.data)
-        print(coder.value)
-        
-        
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
+  
     }
 
 }

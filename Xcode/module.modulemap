@@ -22,6 +22,18 @@ module CHTTPParser [system] {
     export *
 }
 
+module CMySQL [system] {
+    header "/usr/local/include/mysql/mysql.h"
+    link "mysqlclient"
+    export *
+}
+
+
+module CLibpq [system] {
+    header "/usr/local/include/libpq-fe.h"
+    link "pq"
+    export *
+}
 
 module COpenSSL [system] {
     header "/usr/local/include/openssl/evp.h"

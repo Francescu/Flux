@@ -1,4 +1,4 @@
-//  Row.swift
+// Field.swift
 //
 // The MIT License (MIT)
 //
@@ -22,46 +22,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
-public protocol Row: CustomStringConvertible {
+public struct PostgreSQLField: Field {
+    public var name: String
     
-    init(dataByFieldName: [String: Data?])
-    
-    var dataByFieldName: [String: Data?] { get }
-}
-
-public extension Row {
-    
-    public func valueWithFieldName<T: DataConvertible>(fieldName: String) throws -> T? {
-        guard let value = dataByFieldName[fieldName] else {
-            fatalError()
-        }
-        
-        guard let nonNilValue = value else {
-            return nil
-        }
-        
-        return try T(data: nonNilValue)
-    }
-    
-    public var description: String {
-        var string: String = ""
-        
-        let tab = "\t\t"
-        
-        string += dataByFieldName.keys.joinWithSeparator(tab)
-        string += "\n---------\n"
-        string += dataByFieldName.values.map {
-            value in
-            
-            guard let value = value else {
-                return "NULL"
-            }
-            
-            return value.description
-            
-            }.joinWithSeparator(tab)
-        
-        return string
+    init(name: String) {
+        self.name = name
     }
 }

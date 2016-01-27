@@ -22,6 +22,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 public typealias Byte = UInt8
 
 public protocol DataConvertible {
@@ -57,6 +63,16 @@ extension Double: UnsafeDataConvertible {}
 extension Data {
     public init() {
         self.bytes = []
+    }
+    
+    init<T>(pointer: UnsafePointer<T>, length: Int){
+        assert(sizeof(pointer.memory.dynamicType) == sizeof(Byte.self), "Cannot create array of bytes from pointer to \(pointer.memory.dynamicType) because the type is larger than a single byte.")
+        
+        var buffer: [UInt8] = [UInt8](count: length, repeatedValue: 0)
+        
+        memcpy(&buffer, pointer, length)
+        
+        self.bytes = buffer
     }
 
     public init(_ convertible: DataConvertible) {
