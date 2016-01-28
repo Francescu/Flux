@@ -48,10 +48,9 @@ public class ConnectionInfo {
 
 
 public protocol Connection {
-    
-    typealias ConnectionInfoType: ConnectionInfo, ConnectionStringConvertible
-    typealias ResultType: Result
-    typealias StatusType
+    associatedtype ConnectionInfoType: ConnectionInfo, ConnectionStringConvertible
+    associatedtype ResultType: Result
+    associatedtype StatusType
     
     var connectionInfo: ConnectionInfoType { get }
     

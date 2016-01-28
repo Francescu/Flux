@@ -179,7 +179,7 @@ extension RouterBuilder {
 }
 
 extension Router {
-    public init(_ basePath: String = "", middleware: MiddlewareType..., matcher: RouteMatcherType.Type = TrieRouteMatcher.self, build: (route: RouterBuilder) -> Void) {
+    public init(_ basePath: String = "", middleware: MiddlewareType..., matcher: RouteMatcherType.Type = RegexRouteMatcher.self, build: (route: RouterBuilder) -> Void) {
         let builder = RouterBuilder(basePath: basePath)
         build(route: builder)
         self.init(

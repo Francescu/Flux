@@ -30,12 +30,12 @@
 
 import COpenSSL
 
-private extension UInt8 {
-	var hexString: String {
-		let str = String(self, radix: 16)
-		return (self < 16 ? "0"+str : str)
-	}
-}
+//private extension UInt8 {
+//	var hexString: String {
+//		let str = String(self, radix: 16)
+//		return (self < 16 ? "0"+str : str)
+//	}
+//}
 
 private extension X509 {
 

@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 public protocol FallibleSendable {
-    typealias T
+    associatedtype T
     func send(value: T)
     func sendError(error: ErrorType)
     func sendResult(result: ChannelResult<T>)

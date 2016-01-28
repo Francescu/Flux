@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 public final class EventListener<T> {
-	public typealias Listen = (Void throws -> T) -> Void
+	public typealias Listen = T -> Void
 	
 	private let listen: Listen
 	private var calls: Int
@@ -41,27 +41,11 @@ public final class EventListener<T> {
             active = false
         }
 
-        listen {
-            return event
-        }
+        listen(event)
 
 		return active
 	}
-
-    func call(error: ErrorType) -> Bool {
-        calls -= 1
-
-        if calls == 0 {
-            active = false
-        }
-
-        listen {
-            throw error
-        }
-        
-        return active
-    }
-	
+    
 	public func stop() {
 		active = false
 	}

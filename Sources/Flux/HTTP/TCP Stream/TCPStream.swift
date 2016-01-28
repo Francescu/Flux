@@ -22,35 +22,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-final class TCPStream: StreamType {
-    let socket: TCPClientSocket
+public final class TCPStream: StreamType {
+    private let socket: TCPClientSocket
 
-    init(socket: TCPClientSocket) {
+    public init(socket: TCPClientSocket) {
         self.socket = socket
     }
 
-    var closed: Bool {
+    public var closed: Bool {
         return socket.closed
     }
 
-    func receive() throws -> Data {
+    public func receive() throws -> Data {
         do {
-            return try self.socket.receive(lowWaterMark: 1, highWaterMark: 256)
+            return try socket.receive(lowWaterMark: 1, highWaterMark: 4096)
         } catch TCPError.ConnectionResetByPeer(_, let data) {
-            socket.close()
-            return data
+            throw StreamError.ClosedStream(data: data)
         }
     }
 
-    func send(data: Data) throws {
-        try self.socket.send(data)
+    public func send(data: Data) throws {
+        try assertNotClosed()
+        try socket.send(data)
     }
 
-    func flush() throws {
-        try self.socket.flush()
+    public func flush() throws {
+        try assertNotClosed()
+        try socket.flush()
     }
 
-    func close() -> Bool {
+    public func close() -> Bool {
         return socket.close()
     }
+
+    private func assertNotClosed() throws {
+        if closed {
+            throw StreamError.ClosedStream(data: nil)
+        }
+    }
+
 }

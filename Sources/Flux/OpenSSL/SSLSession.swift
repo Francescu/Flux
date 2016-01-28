@@ -24,6 +24,12 @@
 
 import COpenSSL
 
+public enum SSLSessionError: ErrorType {
+    case Session(description: String)
+    case WantRead(description: String)
+    case WantWrite(description: String)
+}
+
 public class SSLSession {
 	public enum State: Int32 {
 		case Connect		= 0x1000
@@ -34,24 +40,37 @@ public class SSLSession {
 		case OK				= 0x03
 		case Renegotiate	= 0x3004
 		case Error			= 0x05
+        case Unknown        = -1
 	}
 
     var ssl: UnsafeMutablePointer<SSL>
 
-	public init(context: SSLContext) {
+	public init(context: SSLContext) throws {
 		OpenSSL.initialize()
 
         ssl = SSL_new(context.context)
+
+        if ssl == nil {
+            throw SSLSessionError.Session(description: lastSSLErrorDescription)
+        }
 	}
 
 	deinit {
 		shutdown()
 	}
 
+    public func setAcceptState() {
+        SSL_set_accept_state(ssl)
+    }
+
+    public var stateDescription: String {
+        return String.fromCString(SSL_state_string_long(ssl))!
+    }
+
 	public var state: State {
 		let stateNumber = SSL_state(ssl)
         let state = State(rawValue: stateNumber)
-		return state ?? .Error
+		return state ?? .Unknown
 	}
 
 	public var peerCertificate: SSLCertificate? {
@@ -72,29 +91,50 @@ public class SSLSession {
         SSL_set_bio(ssl, readIO.bio, writeIO.bio)
 	}
 
-    public func SSL_is_init_finished(ssl: UnsafeMutablePointer<SSL>) -> Bool {
-        return (SSL_state(ssl) == SSL_ST_OK)
+    var initializationFinished: Bool {
+        return SSL_state(ssl) == SSL_ST_OK
     }
 
-	public func doHandshake() {
-        SSL_do_handshake(ssl)
+	public func handshake() throws {
+        let result = SSL_do_handshake(ssl)
+
+        if result <= 0 {
+            switch SSL_get_error(ssl, result) {
+            case SSL_ERROR_WANT_READ:
+                throw SSLSessionError.WantRead(description: lastSSLErrorDescription)
+            case SSL_ERROR_WANT_WRITE:
+                throw SSLSessionError.WantWrite(description: lastSSLErrorDescription)
+            default:
+                throw SSLSessionError.Session(description: lastSSLErrorDescription)
+            }
+        }
 	}
 
-	public func write(data: [UInt8]) {
-		var data = data
-		SSL_write(ssl, &data, Int32(data.count))
+	public func write(data: Data) {
+        data.withUnsafeBufferPointer {
+            SSL_write(ssl, $0.baseAddress, Int32($0.count))
+        }
 	}
 
-	public func read() -> [UInt8] {
-		var buffer: [UInt8] = Array(count: DEFAULT_BUFFER_SIZE, repeatedValue: 0)
+	public func read() throws -> Data {
+		var data = Data.bufferWithSize(DEFAULT_BUFFER_SIZE)
 
-		let readSize = SSL_read(ssl, &buffer, Int32(buffer.count))
+        let result = data.withUnsafeMutableBufferPointer {
+            SSL_read(ssl, $0.baseAddress, Int32($0.count))
+        }
 
-        if readSize > 0 {
-			return Array(buffer.prefix(Int(readSize)))
-		} else {
-			return []
-		}
+        if result <= 0 {
+            switch SSL_get_error(ssl, result) {
+            case SSL_ERROR_WANT_READ:
+                throw SSLSessionError.WantRead(description: lastSSLErrorDescription)
+            case SSL_ERROR_WANT_WRITE:
+                throw SSLSessionError.WantWrite(description: lastSSLErrorDescription)
+            default:
+                throw SSLSessionError.Session(description: lastSSLErrorDescription)
+            }
+        }
+
+        return data.prefix(Int(result))
 	}
 
 	public func shutdown() {

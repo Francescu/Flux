@@ -28,7 +28,10 @@ public final class SSLServerContext: SSLContext {
 	public init(certificate: String, privateKey: String, certificateChain: String? = nil) throws {
 		try super.init(method: .SSLv23, type: .Server)
         SSL_CTX_set_verify(context, SSL_VERIFY_NONE, nil)
-        SSL_CTX_set_ecdh_auto(context, 1)
+
+        if SSL_CTX_ctrl(context, SSL_CTRL_SET_ECDH_AUTO, 1, nil) != 1 {
+            throw SSLContextError.Certificate(description: lastSSLErrorDescription)
+        }
 
         if let certificateChain = certificateChain {
             if SSL_CTX_use_certificate_chain_file(context, certificateChain) != 1 {

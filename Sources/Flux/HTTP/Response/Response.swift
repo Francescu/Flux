@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 public struct Response: MessageType {
-    public typealias Upgrade = StreamType -> Void
+    public typealias Upgrade = StreamType throws -> Void
 
     public var status: Status
     public var majorVersion: Int

@@ -90,6 +90,10 @@ extension Request {
         return connection == "upgrade"
     }
 
+    public var upgrade: String? {
+        return getHeader("Upgrade")?.lowercaseString
+    }
+
     public var accept: [MediaType] {
         get {
             var acceptedMediaTypes: [MediaType] = []

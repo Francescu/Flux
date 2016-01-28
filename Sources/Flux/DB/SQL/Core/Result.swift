@@ -27,12 +27,12 @@ public protocol ResultStatus {
 }
 
 public protocol ResultGenerator: GeneratorType {
-    typealias Element: Row
+    associatedtype Element: Row
 }
 
 public protocol Result: CollectionType {
-    typealias FieldType: Field
-    typealias Generator: ResultGenerator
+    associatedtype FieldType: Field
+    associatedtype Generator: ResultGenerator
     
     func clear()
     

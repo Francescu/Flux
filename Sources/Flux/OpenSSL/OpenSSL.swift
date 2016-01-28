@@ -41,16 +41,6 @@ public final class OpenSSL {
 	}()
 
 	public static func initialize() {
-	    let _ = self._initialize
+	    _ = _initialize
 	}
-}
-
-public func SSL_CTX_set_options(ctx: UnsafeMutablePointer<SSL_CTX>, _ op: Int) -> Int {
-	return SSL_CTX_ctrl(ctx, SSL_CTRL_OPTIONS, op, nil)
-}
-
-private let SSL_CTRL_SET_ECDH_AUTO: Int32 = 94
-
-public func SSL_CTX_set_ecdh_auto(ctx: UnsafeMutablePointer<SSL_CTX>, _ onoff: Int) -> Int {
-	return SSL_CTX_ctrl(ctx, SSL_CTRL_SET_ECDH_AUTO, onoff, nil)
 }

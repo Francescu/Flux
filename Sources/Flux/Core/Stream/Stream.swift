@@ -22,6 +22,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+public enum StreamError: ErrorType {
+    case ClosedStream(data: Data)
+}
+
 public protocol StreamType {
     var closed: Bool { get }
     func receive() throws -> Data

@@ -135,27 +135,27 @@ extension Data: StringLiteralConvertible {
     }
 }
 
-extension Data: StringInterpolationConvertible {
-    public init(stringInterpolation data: Data...) {
-        self.init(data.joinWithSeparator([]))
-    }
-
-    public init<T>(stringInterpolationSegment expr: T) {
-        self.init("\(expr)")
-    }
-
-    public init(stringInterpolationSegment convertible: DataConvertible) {
-        self.init(convertible.data)
-    }
-
-    public init<S: SequenceType where S.Generator.Element == Byte>(stringInterpolationSegment bytes: S) {
-        self.init(bytes)
-    }
-
-    public init<C: CollectionType where C.Generator.Element == Byte>(stringInterpolationSegment bytes: C) {
-        self.init(bytes)
-    }
-}
+//extension Data: StringInterpolationConvertible {
+//    public init(stringInterpolation data: Data...) {
+//        self.init(data.joinWithSeparator([]))
+//    }
+//
+//    public init<T>(stringInterpolationSegment expr: T) {
+//        self.init("\(expr)")
+//    }
+//
+//    public init(stringInterpolationSegment convertible: DataConvertible) {
+//        self.init(convertible.data)
+//    }
+//
+//    public init<S: SequenceType where S.Generator.Element == Byte>(stringInterpolationSegment bytes: S) {
+//        self.init(bytes)
+//    }
+//
+//    public init<C: CollectionType where C.Generator.Element == Byte>(stringInterpolationSegment bytes: C) {
+//        self.init(bytes)
+//    }
+//}
 
 extension Data {
     public var hexDescription: String {

@@ -31,7 +31,7 @@ public protocol RequestStreamParserType {
 }
 
 public protocol ResponseStreamSerializerType {
-    func serialize(response: Response) throws -> Data
+    func serialize(stream: StreamType, response: Response) throws
 }
 
 public protocol ServerType {
@@ -42,27 +42,38 @@ public protocol ServerType {
 }
 
 extension ServerType {
-    public func start() throws {
+    public func start(failure: ErrorType -> Void = Self.logError) throws {
         while true {
             let stream = try server.accept()
 
-            while !stream.closed {
+            do {
+                try processStream(stream)
+            } catch {
+                failure(error)
+            }
+        }
+    }
+
+    private func processStream(stream: StreamType) throws {
+        while !stream.closed {
+            do {
                 let data = try stream.receive()
                 if let request = try parser.parse(data) {
                     let response = try responder.respond(request)
-                    let data = try serializer.serialize(response)
-                    try stream.send(data)
-                    try stream.flush()
+                    try serializer.serialize(stream, response: response)
 
                     if let upgrade = response.upgrade {
-                        upgrade(stream)
+                        try upgrade(stream)
                         stream.close()
                     }
 
                     if !request.isKeepAlive {
                         stream.close()
+                        break
                     }
                 }
+            } catch StreamError.ClosedStream {
+                break
             }
         }
     }
@@ -78,10 +89,6 @@ extension ServerType {
     }
 
     private static func logError(e: ErrorType) -> Void {
-        do {
-            try log.error("Error: \(e)")
-        } catch {
-            print(e)
-        }
+        log.error("Error: \(e)")
     }
 }

@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 public protocol Sendable {
-    typealias T
+    associatedtype T
     func send(value: T)
 }
 

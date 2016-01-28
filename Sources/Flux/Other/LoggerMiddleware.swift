@@ -36,7 +36,7 @@ public struct LoggerMiddleware: MiddlewareType {
         message += "Response:\n"
         message += "\(response)\n"
         message += "================================================================================\n\n"
-        try log.info(message)
+        log.info(message)
         return response
     }
 }
@@ -55,7 +55,7 @@ public struct DebugLoggerMiddleware: MiddlewareType {
         message += "Response:\n"
         message += "\(response.debugDescription)\n"
         message += "================================================================================\n\n"
-        try log.info(message)
+        log.info(message)
         return response
     }
 }

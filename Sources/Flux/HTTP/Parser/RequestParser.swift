@@ -162,7 +162,7 @@ func onRequestHeadersComplete(parser: UnsafeMutablePointer<http_parser>) -> Int3
 func onRequestBody(parser: UnsafeMutablePointer<http_parser>, data: UnsafePointer<Int8>, length: Int) -> Int32 {
     let context = UnsafeMutablePointer<RequestParserContext>(parser.memory.data)
 
-    var buffer: Data = Data(count: length, repeatedValue: 0)
+    var buffer: [UInt8] = [UInt8](count: length, repeatedValue: 0)
     memcpy(&buffer, data, length)
     context.memory.body += buffer
 

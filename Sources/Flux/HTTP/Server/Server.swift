@@ -67,23 +67,33 @@ extension Server {
         )
     }
 
-//    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) throws {
-//        self.init(
-//            server: try TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey),
-//            parser: parser,
-//            middleware: middleware,
-//            responder: responder,
-//            serializer: serializer
-//        )
-//    }
-//
-//    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) throws {
-//        self.init(
-//            server: try TCPSSLStreamServer(port: port, certificate: certificate, privateKey: privateKey),
-//            parser: parser,
-//            middleware: middleware,
-//            serializer: serializer,
-//            respond: respond
-//        )
-//    }
+    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., responder: ResponderType, serializer: ResponseStreamSerializerType = ResponseStreamSerializer()) throws {
+        self.init(
+            server: try TCPSSLStreamServer(
+                port: port,
+                certificate: certificate,
+                privateKey: privateKey,
+                certificateChain: certificateChain
+            ),
+            parser: parser,
+            middleware: middleware,
+            responder: responder,
+            serializer: serializer
+        )
+    }
+
+    public init(port: Int, certificate: String, privateKey: String, certificateChain: String? = nil, parser: RequestStreamParserType = RequestStreamParser(), middleware: MiddlewareType..., serializer: ResponseStreamSerializerType = ResponseStreamSerializer(), respond: Respond) throws {
+        self.init(
+            server: try TCPSSLStreamServer(
+                port: port,
+                certificate: certificate,
+                privateKey: privateKey,
+                certificateChain: certificateChain
+            ),
+            parser: parser,
+            middleware: middleware,
+            serializer: serializer,
+            respond: respond
+        )
+    }
 }

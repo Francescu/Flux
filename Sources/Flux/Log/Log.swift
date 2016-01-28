@@ -44,7 +44,6 @@ public final class Log {
     public var stream: File
     public var levels: Level
     private let messageChannel = Channel<String>()
-    private let errorChannel = FallibleChannel<Void>()
     private let once = Once()
 
     public init(stream: File = standardErrorStream, levels: Level = [.Trace, .Debug, .Info, .Warning, .Error, .Fatal]) {
@@ -54,47 +53,45 @@ public final class Log {
 
     deinit {
         messageChannel.close()
-        errorChannel.close()
     }
 
-    public func log(level: Level, item: Any, terminator: String = "\n", flush: Bool = true) throws {
+    public func log(level: Level, item: Any, terminator: String = "\n", flush: Bool = true) {
         if levels.contains(level) {
             once.runInBackground {
                 for message in self.messageChannel {
                     do {
                         try self.stream.write(message)
-                        self.errorChannel.send()
                     } catch {
-                        self.errorChannel.sendError(error)
+                        print("Log error: \(error)")
+                        print("Log message: \(message)")
                     }
                 }
             }
             messageChannel.send(String(item) + terminator)
-            try errorChannel.receive()
         }
     }
 
-    public func trace(item: Any, terminator: String = "\n", flush: Bool = true) throws {
-        try log(.Trace, item: item, terminator: terminator, flush: flush)
+    public func trace(item: Any, terminator: String = "\n", flush: Bool = true) {
+        log(.Trace, item: item, terminator: terminator, flush: flush)
     }
 
-    public func debug(item: Any, terminator: String = "\n", flush: Bool = true) throws {
-        try log(.Debug, item: item, terminator: terminator, flush: flush)
+    public func debug(item: Any, terminator: String = "\n", flush: Bool = true) {
+        log(.Debug, item: item, terminator: terminator, flush: flush)
     }
 
-    public func info(item: Any, terminator: String = "\n", flush: Bool = true) throws {
-        try log(.Info, item: item, terminator: terminator, flush: flush)
+    public func info(item: Any, terminator: String = "\n", flush: Bool = true) {
+        log(.Info, item: item, terminator: terminator, flush: flush)
     }
 
-    public func warning(item: Any, terminator: String = "\n", flush: Bool = true) throws {
-        try log(.Warning, item: item, terminator: terminator, flush: flush)
+    public func warning(item: Any, terminator: String = "\n", flush: Bool = true) {
+        log(.Warning, item: item, terminator: terminator, flush: flush)
     }
 
-    public func error(item: Any, terminator: String = "\n", flush: Bool = true) throws {
-        try log(.Error, item: item, terminator: terminator, flush: flush)
+    public func error(item: Any, terminator: String = "\n", flush: Bool = true) {
+        log(.Error, item: item, terminator: terminator, flush: flush)
     }
 
-    public func fatal(item: Any, terminator: String = "\n", flush: Bool = true) throws {
-        try log(.Fatal, item: item, terminator: terminator, flush: flush)
+    public func fatal(item: Any, terminator: String = "\n", flush: Bool = true) {
+        log(.Fatal, item: item, terminator: terminator, flush: flush)
     }
 }

@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 public protocol Receivable {
-    typealias T
+    associatedtype T
     func receive() -> T?
     func close()
 }

@@ -23,7 +23,7 @@
 // SOFTWARE.
 
 public protocol FallibleReceivable {
-    typealias T
+    associatedtype T
     func receive() throws -> T?
 }
 

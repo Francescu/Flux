@@ -24,6 +24,12 @@
 
 import COpenSSL
 
+public enum SSLIOError: ErrorType {
+    case BIO(description: String)
+    case ShouldRetry(description: String)
+    case UnsupportedMethod(description: String)
+}
+
 public class SSLIO {
     public enum Method {
 		case Memory
@@ -36,11 +42,6 @@ public class SSLIO {
         }
 	}
 
-    enum SSLIOError: ErrorType {
-        case BIO(description: String)
-        case UnsupportedMethod(description: String)
-    }
-
     var bio: UnsafeMutablePointer<BIO>
 
 	public init(method: Method) throws {
@@ -52,29 +53,44 @@ public class SSLIO {
         }
 	}
 
-	public func write(data: Data) throws {
-		var data = data
-        let result = BIO_write(bio, &data, Int32(data.count))
-
-        if result == -2 {
-            throw SSLIOError.UnsupportedMethod(description: lastSSLErrorDescription)
+	public func write(data: Data) throws -> Int {
+        let result = data.withUnsafeBufferPointer {
+            BIO_write(bio, $0.baseAddress, Int32($0.count))
         }
+
+        if result < 0 {
+            if shouldRetry {
+                throw SSLIOError.ShouldRetry(description: lastSSLErrorDescription)
+            } else {
+                throw SSLIOError.BIO(description: lastSSLErrorDescription)
+            }
+        }
+
+        return Int(result)
 	}
+
+    public var pending: Int {
+        return BIO_ctrl_pending(bio)
+    }
+
+    public var shouldRetry: Bool {
+        return (bio.memory.flags & BIO_FLAGS_SHOULD_RETRY) != 0
+    }
 
 	public func read() throws -> Data {
-		var buffer: [UInt8] = Array(count: DEFAULT_BUFFER_SIZE, repeatedValue: 0)
-
-        let result = BIO_read(bio, &buffer, Int32(buffer.count))
-
-        if result == -2 {
-            throw SSLIOError.UnsupportedMethod(description: lastSSLErrorDescription)
+        var data = Data.bufferWithSize(DEFAULT_BUFFER_SIZE)
+        let result = data.withUnsafeMutableBufferPointer {
+            BIO_read(bio, $0.baseAddress, Int32($0.count))
         }
 
-		if result > 0 {
-            return Data(bytes: Array(buffer.prefix(Int(result))))
-		} else {
-            return Data()
-		}
-	}
+        if result < 0 {
+            if shouldRetry {
+                throw SSLIOError.ShouldRetry(description: lastSSLErrorDescription)
+            } else {
+                throw SSLIOError.BIO(description: lastSSLErrorDescription)
+            }
+        }
 
+        return data.prefix(Int(result))
+	}
 }

@@ -94,17 +94,12 @@ public final class ResponseParser {
 
 extension ResponseParser {
     public func parse(data: Data) throws {
-        var data = data
-        try parse(&data, length: data.count)
+        var bytes = Array(data)
+        try parse(&bytes, length: bytes.count)
     }
 
-    public func parse(string: String) throws {
-        var data = string.utf8.map { Int8($0) }
-        try parse(&data, length: data.count)
-    }
-
-    public func eof() throws {
-        try parse(nil, length: 0)
+    public func parse(convertible: DataConvertible) throws {
+        try parse(convertible.data)
     }
 }
 
@@ -160,7 +155,7 @@ func onResponseHeadersComplete(parser: UnsafeMutablePointer<http_parser>) -> Int
 func onResponseBody(parser: UnsafeMutablePointer<http_parser>, data: UnsafePointer<Int8>, length: Int) -> Int32 {
     let context = UnsafeMutablePointer<ResponseParserContext>(parser.memory.data)
 
-    var buffer: Data = Data(count: length, repeatedValue: 0)
+    var buffer: [UInt8] = [UInt8](count: length, repeatedValue: 0)
     memcpy(&buffer, data, length)
     context.memory.body += buffer
 
