@@ -29,40 +29,40 @@ public enum QueryParameter {
     case Text(String)
 }
 
-public protocol QueryParameterType {
+public protocol QueryParameterConvertible {
     var queryParameterValue: QueryParameter { get }
 }
 
-extension Int: QueryParameterType {
+extension Int: QueryParameterConvertible {
     public var queryParameterValue: QueryParameter {
         return .Text(String(self))
     }
 }
 
-extension UInt: QueryParameterType {
+extension UInt: QueryParameterConvertible {
     public var queryParameterValue: QueryParameter {
         return .Text(String(self))
     }
 }
 
-extension Double: QueryParameterType {
+extension Double: QueryParameterConvertible {
     public var queryParameterValue: QueryParameter {
         return .Text(String(self))
     }
 }
-extension Float: QueryParameterType {
+extension Float: QueryParameterConvertible {
     public var queryParameterValue: QueryParameter {
         return .Text(String(self))
     }
 }
 
-extension String: QueryParameterType {
+extension String: QueryParameterConvertible {
     public var queryParameterValue: QueryParameter {
         return .Text(self)
     }
 }
 
-extension NSData: QueryParameterType {
+extension NSData: QueryParameterConvertible {
     public var queryParameterValue: QueryParameter {
         
         var a = [UInt8](count: length / sizeof(UInt8), repeatedValue: 0)

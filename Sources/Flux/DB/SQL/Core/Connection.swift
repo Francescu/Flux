@@ -60,9 +60,9 @@ public protocol Connection {
     
     var status: StatusType { get }
 
-    func execute(statement: String, parameters: QueryParameterType...) throws -> ResultType
+    func execute(statement: String, parameters: QueryParameterConvertible...) throws -> ResultType
     
-    func execute(statement: String, parameters: [QueryParameterType]) throws -> ResultType
+    func execute(statement: String, parameters: [QueryParameterConvertible]) throws -> ResultType
     
     func begin() throws
     
@@ -108,7 +108,7 @@ public extension Connection {
         }
     }
     
-    public func execute(statement: String, parameters: QueryParameterType...) throws -> ResultType {
+    public func execute(statement: String, parameters: QueryParameterConvertible...) throws -> ResultType {
         return try execute(statement, parameters: parameters)
     }
     

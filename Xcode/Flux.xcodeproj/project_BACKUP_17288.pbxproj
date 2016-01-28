@@ -12,6 +12,7 @@
 		37B36EE31C4CB5FE00FE0D01 /* TrieMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B36EE21C4CB5FE00FE0D01 /* TrieMatcherTests.swift */; };
 		B001F8F11C5592310013B1E3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F01C5592310013B1E3 /* Error.swift */; };
 		B001F8F91C5729320013B1E3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F41C5729320013B1E3 /* Extensions.swift */; };
+		B001F8FA1C5729320013B1E3 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F51C5729320013B1E3 /* SHA1.swift */; };
 		B001F8FB1C5729320013B1E3 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F61C5729320013B1E3 /* WebSocket.swift */; };
 		B001F8FC1C5729320013B1E3 /* WebSocketFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F71C5729320013B1E3 /* WebSocketFrame.swift */; };
 		B001F8FD1C5729320013B1E3 /* WebSocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F81C5729320013B1E3 /* WebSocketServer.swift */; };
@@ -20,7 +21,6 @@
 		B015D0AB1C52EA9D0017727B /* URLEncodedFormParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C7E1C4AD455006ABA9E /* URLEncodedFormParser.swift */; };
 		B015D0AE1C5341720017727B /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = B015D0AD1C5341720017727B /* Log.swift */; };
 		B015D0B11C544C590017727B /* Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = B015D0B01C544C590017727B /* Once.swift */; };
-		B04CD7C51C5ABBBE00AAC403 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F51C5729320013B1E3 /* SHA1.swift */; };
 		B068CBB51C4F447000EF0B3E /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B068CBB41C4F447000EF0B3E /* MessageType.swift */; };
 		B0A918A71C4F6510002A2A98 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A918A61C4F6510002A2A98 /* Dictionary.swift */; };
 		B0B14CB91C4AD455006ABA9E /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C601C4AD455006ABA9E /* Base64.swift */; };
@@ -147,10 +147,18 @@
 		B71ADF7B1C4FA49C0065A276 /* QueryParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF731C4FA49C0065A276 /* QueryParameter.swift */; };
 		B71ADF7D1C4FA49C0065A276 /* MigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF761C4FA49C0065A276 /* MigrationManager.swift */; };
 		B71ADF841C4FAAF70065A276 /* SQLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71ADF821C4FAAE50065A276 /* SQLTests.swift */; };
+<<<<<<< HEAD
+=======
+		B76876FB1C58BDC400CB91D0 /* MySQLConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76876F11C58BDC400CB91D0 /* MySQLConnection.swift */; };
+		B76876FC1C58BDC400CB91D0 /* MySQLField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76876F21C58BDC400CB91D0 /* MySQLField.swift */; };
+		B76876FD1C58BDC400CB91D0 /* MySQLResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76876F31C58BDC400CB91D0 /* MySQLResult.swift */; };
+		B76876FE1C58BDC400CB91D0 /* MySQLRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76876F41C58BDC400CB91D0 /* MySQLRow.swift */; };
 		B76877001C58BDC400CB91D0 /* PostgreSQLConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76876F71C58BDC400CB91D0 /* PostgreSQLConnection.swift */; };
 		B76877011C58BDC400CB91D0 /* PostgreSQLField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76876F81C58BDC400CB91D0 /* PostgreSQLField.swift */; };
 		B76877021C58BDC400CB91D0 /* PostgreSQLResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76876F91C58BDC400CB91D0 /* PostgreSQLResult.swift */; };
 		B76877031C58BDC400CB91D0 /* PostgreSQLRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76876FA1C58BDC400CB91D0 /* PostgreSQLRow.swift */; };
+		B77775441C50359C004325E6 /* Coder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77775431C50359C004325E6 /* Coder.swift */; };
+>>>>>>> origin/master
 		B7D04A741C4E4E44006C4F2F /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A731C4E4E44006C4F2F /* Date.swift */; };
 		B7D04A7D1C4E94FA006C4F2F /* Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A7B1C4E94FA006C4F2F /* Regex.swift */; };
 		B7D04A7E1C4E94FA006C4F2F /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D04A7C1C4E94FA006C4F2F /* Time.swift */; };
@@ -336,6 +344,8 @@
 		B71ADF731C4FA49C0065A276 /* QueryParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryParameter.swift; sourceTree = "<group>"; };
 		B71ADF761C4FA49C0065A276 /* MigrationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MigrationManager.swift; sourceTree = "<group>"; };
 		B71ADF821C4FAAE50065A276 /* SQLTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLTests.swift; path = FluxTests/SQLTests.swift; sourceTree = SOURCE_ROOT; };
+<<<<<<< HEAD
+=======
 		B76876F11C58BDC400CB91D0 /* MySQLConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySQLConnection.swift; sourceTree = "<group>"; };
 		B76876F21C58BDC400CB91D0 /* MySQLField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySQLField.swift; sourceTree = "<group>"; };
 		B76876F31C58BDC400CB91D0 /* MySQLResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySQLResult.swift; sourceTree = "<group>"; };
@@ -344,6 +354,8 @@
 		B76876F81C58BDC400CB91D0 /* PostgreSQLField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgreSQLField.swift; sourceTree = "<group>"; };
 		B76876F91C58BDC400CB91D0 /* PostgreSQLResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgreSQLResult.swift; sourceTree = "<group>"; };
 		B76876FA1C58BDC400CB91D0 /* PostgreSQLRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostgreSQLRow.swift; sourceTree = "<group>"; };
+		B77775431C50359C004325E6 /* Coder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coder.swift; sourceTree = "<group>"; };
+>>>>>>> origin/master
 		B7D04A731C4E4E44006C4F2F /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		B7D04A7B1C4E94FA006C4F2F /* Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Regex.swift; sourceTree = "<group>"; };
 		B7D04A7C1C4E94FA006C4F2F /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
@@ -1245,6 +1257,7 @@
 				B0B14D101C4AD72F006ABA9E /* ContentNegotiatorMiddleware.swift in Sources */,
 				B7D04A741C4E4E44006C4F2F /* Date.swift in Sources */,
 				B0B14D111C4AD72F006ABA9E /* FileResponder.swift in Sources */,
+				B76876FD1C58BDC400CB91D0 /* MySQLResult.swift in Sources */,
 				B0B14D331C4BBAA5006ABA9E /* SSLKey.swift in Sources */,
 				B0B14CDF1C4AD455006ABA9E /* ResponseStreamSerializer.swift in Sources */,
 				B0B14CCD1C4AD455006ABA9E /* RequestStreamSerializer.swift in Sources */,
@@ -1277,7 +1290,9 @@
 				B0B14D161C4AD72F006ABA9E /* Response+File.swift in Sources */,
 				B0B14CCE1C4AD455006ABA9E /* ResponseStreamParser.swift in Sources */,
 				B76877011C58BDC400CB91D0 /* PostgreSQLField.swift in Sources */,
+				B76876FE1C58BDC400CB91D0 /* MySQLRow.swift in Sources */,
 				B0B14CE61C4AD455006ABA9E /* FallibleChannel.swift in Sources */,
+				B76876FB1C58BDC400CB91D0 /* MySQLConnection.swift in Sources */,
 				B0B14CD71C4AD455006ABA9E /* ResponderType.swift in Sources */,
 				B0B14D341C4BBAA5006ABA9E /* SSLMethod.swift in Sources */,
 				B0B14CDA1C4AD455006ABA9E /* RegexRouteMatcher.swift in Sources */,
@@ -1286,6 +1301,11 @@
 				B0B14CD11C4AD455006ABA9E /* Method+Parser.swift in Sources */,
 				B0F48C831C51EE5700FDACFE /* FileError.swift in Sources */,
 				B015D0AB1C52EA9D0017727B /* URLEncodedFormParser.swift in Sources */,
+<<<<<<< HEAD
+				B001F8FA1C5729320013B1E3 /* SHA1.swift in Sources */,
+=======
+				B76876FC1C58BDC400CB91D0 /* MySQLField.swift in Sources */,
+>>>>>>> origin/master
 				B0B14CBF1C4AD455006ABA9E /* Int.swift in Sources */,
 				B0B14CEC1C4AD455006ABA9E /* IPError.swift in Sources */,
 				B71ADF7B1C4FA49C0065A276 /* QueryParameter.swift in Sources */,
@@ -1293,7 +1313,6 @@
 				B0B14CBC1C4AD455006ABA9E /* EventEmitter.swift in Sources */,
 				B0B14CF31C4AD455006ABA9E /* SendingChannel.swift in Sources */,
 				B0B14CEF1C4AD455006ABA9E /* Receivable.swift in Sources */,
-				B04CD7C51C5ABBBE00AAC403 /* SHA1.swift in Sources */,
 				B0B14CE31C4AD455006ABA9E /* TCPStream.swift in Sources */,
 				B0B14CCA1C4AD455006ABA9E /* URLEncodedFormSerializer.swift in Sources */,
 				B0B14D121C4AD72F006ABA9E /* LoggerMiddleware.swift in Sources */,

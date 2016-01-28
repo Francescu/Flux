@@ -136,13 +136,6 @@ public struct TrieRouteMatcher: RouteMatcherType {
             return nil
         }
         
-        // if the last node has children,
-        // the parameters aren't wrong but aren't long enough
-        // ie: route: /api/v1/v2/v3, given: /api/v1/v2
-        if !head.children.isEmpty {
-            return nil
-        }
-        
         // get the actual route
         guard let route = head.payload else { return nil }
         
