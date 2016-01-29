@@ -25,11 +25,11 @@
 import COpenSSL
 
 public final class SSLServerStream: StreamType {
-	private let rawStream: StreamType
 	private let context: SSLServerContext
+    private let rawStream: StreamType
+    private let readIO: SSLIO
+    private let writeIO: SSLIO
 	private let ssl: SSLSession
-	private let readIO = try! SSLIO(method: .Memory)
-	private let writeIO = try! SSLIO(method: .Memory)
 
     public var closed: Bool = false
 
@@ -38,6 +38,9 @@ public final class SSLServerStream: StreamType {
 
         self.context = context
         self.rawStream = rawStream
+
+        readIO = try SSLIO(method: .Memory)
+        writeIO = try SSLIO(method: .Memory)
 
 		ssl = try SSLSession(context: context)
 		ssl.setIO(readIO: readIO, writeIO: writeIO)
@@ -58,10 +61,15 @@ public final class SSLServerStream: StreamType {
             try readIO.write(data)
         }
 
+        var decriptedData = Data()
+
         while true {
             do {
-                return try ssl.read()
+                decriptedData += try ssl.read()
             } catch SSLSessionError.WantRead {
+                if decriptedData.count > 0 {
+                    return decriptedData
+                }
                 let data = try rawStream.receive()
                 try readIO.write(data)
             }

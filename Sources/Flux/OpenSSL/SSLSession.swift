@@ -28,6 +28,7 @@ public enum SSLSessionError: ErrorType {
     case Session(description: String)
     case WantRead(description: String)
     case WantWrite(description: String)
+    case ZeroReturn(description: String)
 }
 
 public class SSLSession {
@@ -61,6 +62,10 @@ public class SSLSession {
 
     public func setAcceptState() {
         SSL_set_accept_state(ssl)
+    }
+
+    public func setConnectState() {
+        SSL_set_connect_state(ssl)
     }
 
     public var stateDescription: String {
@@ -124,11 +129,14 @@ public class SSLSession {
         }
 
         if result <= 0 {
-            switch SSL_get_error(ssl, result) {
+            let error = SSL_get_error(ssl, result)
+            switch error {
             case SSL_ERROR_WANT_READ:
                 throw SSLSessionError.WantRead(description: lastSSLErrorDescription)
             case SSL_ERROR_WANT_WRITE:
                 throw SSLSessionError.WantWrite(description: lastSSLErrorDescription)
+            case SSL_ERROR_ZERO_RETURN:
+                throw SSLSessionError.ZeroReturn(description: lastSSLErrorDescription)
             default:
                 throw SSLSessionError.Session(description: lastSSLErrorDescription)
             }

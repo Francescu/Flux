@@ -21,6 +21,7 @@
 		B015D0AE1C5341720017727B /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = B015D0AD1C5341720017727B /* Log.swift */; };
 		B015D0B11C544C590017727B /* Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = B015D0B01C544C590017727B /* Once.swift */; };
 		B04CD7C51C5ABBBE00AAC403 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001F8F51C5729320013B1E3 /* SHA1.swift */; };
+		B04CD7C71C5AC77B00AAC403 /* TCPSSLStreamClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04CD7C61C5AC77B00AAC403 /* TCPSSLStreamClient.swift */; };
 		B068CBB51C4F447000EF0B3E /* MessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B068CBB41C4F447000EF0B3E /* MessageType.swift */; };
 		B0A918A71C4F6510002A2A98 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A918A61C4F6510002A2A98 /* Dictionary.swift */; };
 		B0B14CB91C4AD455006ABA9E /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B14C601C4AD455006ABA9E /* Base64.swift */; };
@@ -203,6 +204,7 @@
 		B015D0A91C52DF530017727B /* BranchMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BranchMiddleware.swift; path = "Flux/Branch Middleware/BranchMiddleware.swift"; sourceTree = "<group>"; };
 		B015D0AD1C5341720017727B /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Flux/Log/Log.swift; sourceTree = "<group>"; };
 		B015D0B01C544C590017727B /* Once.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Once.swift; sourceTree = "<group>"; };
+		B04CD7C61C5AC77B00AAC403 /* TCPSSLStreamClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPSSLStreamClient.swift; sourceTree = "<group>"; };
 		B068CBB41C4F447000EF0B3E /* MessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageType.swift; path = Message/MessageType.swift; sourceTree = "<group>"; };
 		B0A918A61C4F6510002A2A98 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Dictionary.swift; path = Dictionary/Dictionary.swift; sourceTree = "<group>"; };
 		B0B14C5D1C4AD313006ABA9E /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
@@ -591,6 +593,7 @@
 				B0B14C841C4AD455006ABA9E /* RequestStreamSerializer.swift */,
 				B0B14C851C4AD455006ABA9E /* ResponseStreamParser.swift */,
 				B0B14C861C4AD455006ABA9E /* TCPStreamClient.swift */,
+				B04CD7C61C5AC77B00AAC403 /* TCPSSLStreamClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -1230,6 +1233,7 @@
 				B0B14CDC1C4AD455006ABA9E /* Router.swift in Sources */,
 				B0DCBFDE1C514C9000B2AFA3 /* file.c in Sources */,
 				B0B14CD31C4AD455006ABA9E /* RequestParser.swift in Sources */,
+				B04CD7C71C5AC77B00AAC403 /* TCPSSLStreamClient.swift in Sources */,
 				B0DCBFE71C514C9000B2AFA3 /* stack.c in Sources */,
 				B0B14CE81C4AD455006ABA9E /* FallibleReceivingChannel.swift in Sources */,
 				B001F8FC1C5729320013B1E3 /* WebSocketFrame.swift in Sources */,

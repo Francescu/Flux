@@ -46,6 +46,8 @@ extension ClientType {
     public func respond(request: Request) throws -> Response {
         var request = request
         request.headers["Host"] = "\(client.host):\(client.port)"
+        request.headers["User-Agent"] = "Zewo"
+        request.headers["Connection"] = "close"
 
         let stream = try client.connect()
         try serializer.serialize(request, stream: stream)

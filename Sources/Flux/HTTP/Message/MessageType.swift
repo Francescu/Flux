@@ -54,6 +54,20 @@ extension MessageType {
         }
     }
 
+    public var isChunkEncoded: Bool {
+        return transferEncoding == "chunked"
+    }
+
+    public var transferEncoding: String? {
+        get {
+            return getHeader("Transfer-Encoding")?.lowercaseString
+        }
+
+        set {
+            setHeader("Transfer-Encoding", value: newValue)
+        }
+    }
+
     public var headerDescription: String {
         var string = ""
 

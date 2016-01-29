@@ -1,4 +1,4 @@
-// ResponseStreamSerializer.swift
+// TCPSSLStreamClient.swift
 //
 // The MIT License (MIT)
 //
@@ -22,22 +22,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-struct ResponseStreamSerializer: ResponseStreamSerializerType {
-    func serialize(stream: StreamType, response: Response) throws {
-        var response = response
+public struct TCPSSLStreamClient: StreamClientType {
+    public let host: String
+    public let port: Int
+    private let ip: IP
+    let context: SSLClientContext
 
-        try stream.send("HTTP/\(response.majorVersion).\(response.minorVersion) \(response.statusCode) \(response.reasonPhrase)\r\n".data)
+    public init(host: String, port: Int, certificateChain: String? = nil) throws {
+        self.host = host
+        self.port = port
+        self.ip = try IP(address: host, port: port)
+        self.context = try SSLClientContext(
+            certificateChain: certificateChain
+        )
+    }
 
-        if response.isChunkEncoded {
-            response.transferEncoding = nil
-        }
-
-        for (name, value) in response.headers {
-            try stream.send("\(name): \(value)\r\n".data)
-        }
-
-        try stream.send("\r\n".data)
-        try stream.send(response.body)
-        try stream.flush()
+    public func connect() throws -> StreamType {
+        let socket = try TCPClientSocket(ip: ip)
+        let rawStream = TCPStream(socket: socket)
+        return try SSLClientStream(context: context, rawStream: rawStream)
     }
 }

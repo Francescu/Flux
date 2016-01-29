@@ -42,4 +42,16 @@ extension Client {
             parser: parser
         )
     }
+
+    public init(host: String, port: Int, certificateChain: String, serializer: RequestStreamSerializerType = RequestStreamSerializer(), parser: ResponseStreamParserType = ResponseStreamParser()) throws {
+        self.init(
+            client: try TCPSSLStreamClient(
+                host: host,
+                port: port,
+                certificateChain: certificateChain
+            ),
+            serializer: serializer,
+            parser: parser
+        )
+    }
 }

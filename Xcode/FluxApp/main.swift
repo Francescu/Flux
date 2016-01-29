@@ -10,6 +10,19 @@ let router = Router(middleware: logger) { route in
     }
 }
 
+let certificate = "/Users/paulofaria/server.crt"
+let privateKey = "/Users/paulofaria/server.key"
+let certificateChain = "/Users/paulofaria/rootCA.crt"
+
+try Server(port: 8080, responder: router).startInBackground()
+try Server(port: 8081, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain, responder: router).startInBackground()
+
+let pokeAPI = try Client(host: "pokeapi.co", port: 80)
+let github = try Client(host: "api.github.com", port: 443, certificateChain: certificateChain)
+
+try Server(port: 8082, middleware: logger, responder: pokeAPI).startInBackground()
+try Server(port: 8083, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain, middleware: logger, responder: github).startInBackground()
+
 let webSocketServer = WebSocketServer { webSocket in
     log.info("WebSocket connect:")
 
@@ -37,11 +50,5 @@ let webSocketServer = WebSocketServer { webSocket in
     }
 }
 
-let certificate = "/Users/paulofaria/server.crt"
-let privateKey = "/Users/paulofaria/server.key"
-let certificateChain = "/Users/paulofaria/rootCA.crt"
-
-try Server(port: 8080, responder: router).startInBackground()
-try Server(port: 8081, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain, responder: router).startInBackground()
-try Server(port: 8082, responder: webSocketServer).startInBackground()
-try Server(port: 8083, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain, responder: webSocketServer).start()
+try Server(port: 8084, responder: webSocketServer).startInBackground()
+try Server(port: 8085, certificate: certificate, privateKey: privateKey, certificateChain: certificateChain, responder: webSocketServer).start()

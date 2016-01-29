@@ -70,7 +70,7 @@ extension Response {
 
 extension Response: CustomStringConvertible {
     public var statusLineDescription: String {
-        return "HTTP/1.1 \(statusCode) \(reasonPhrase)"
+        return "HTTP/1.1 " + statusCode.description + " " + reasonPhrase
     }
 
     public var description: String {

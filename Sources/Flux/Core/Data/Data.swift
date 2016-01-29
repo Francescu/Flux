@@ -92,7 +92,11 @@ extension Data: MutableCollectionType {
     public func generate() -> AnyGenerator<Byte> {
         var index = 0
         return AnyGenerator {
-            let byte = self.bytes[safe: index]
+            if index < 0 || index >= self.count {
+                return nil
+            }
+
+            let byte = self.bytes[index]
             index += 1
             return byte
         }
