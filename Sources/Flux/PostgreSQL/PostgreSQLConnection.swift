@@ -220,7 +220,7 @@ public class PostgreSQLConnection: Connection {
     
     /**
      Execute a request stored in the file. 
-     Notice that it execute a non-parameterized request.
+     Notice that it executes a non-parameterized request.
      
      - parameter path: the path to the input file.
     
