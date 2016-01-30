@@ -224,11 +224,11 @@ public class PostgreSQLConnection: Connection {
      
      - parameter path: the path to the input file.
     
-     - throws: the call can throw either an error caused but the reading of the file or a PostgreSQLResult.Error.BadStatus error
+     - throws: the call can throw either an error caused by the reading of the file or a PostgreSQLResult.Error.BadStatus error
     
      - returns: returns a PostgreSQLResult
      */
-    public func fileExecute(path: String) throws -> PostgreSQLResult {
+    public func executeFromFile(atPath path: String) throws -> PostgreSQLResult {
         
         let file = try File(path: path, mode: .Read)
         let data = try file.read()
