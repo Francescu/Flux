@@ -64,6 +64,8 @@ public protocol Connection {
     
     func execute(statement: String, parameters: [QueryParameterConvertible]) throws -> ResultType
     
+    func executeFromFile(atPath path: String) throws -> ResultType
+    
     func begin() throws
     
     func commit() throws
