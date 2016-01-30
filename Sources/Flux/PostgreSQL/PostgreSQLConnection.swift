@@ -217,4 +217,28 @@ public class PostgreSQLConnection: Connection {
             )
         )
     }
+    
+    /**
+     Execute a request stored in the file. 
+     Notice that it execute a non-parameterized request.
+     
+     - parameter path: the path to the input file.
+    
+     - throws: the call can throw either an error caused but the reading of the file or a PostgreSQLResult.Error.BadStatus error
+    
+     - returns: returns a PostgreSQLResult
+     */
+    public func fileExecute(path: String) throws -> PostgreSQLResult {
+        
+        let file = try File(path: path, mode: .Read)
+        let data = try file.read()
+        let statement = try String(data: data)
+        
+        
+        return try PostgreSQLResult(
+            PQexec(connection,
+                statement
+            )
+        )
+    }
 }
