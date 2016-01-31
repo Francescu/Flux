@@ -209,22 +209,8 @@ public class MySQLConnection: Connection {
         let file = try File(path: path, mode: .Read)
         let data = try file.read()
         let statement = try String(data: data)
-        
-        guard mysql_real_query(connection, statement, UInt(statement.utf8.count)) == 0 else {
-            throw statusError
-        }
-        
-        let result = mysql_store_result(connection)
-        
-        guard result != nil else {
-            guard mysql_field_count(connection) == 0 else {
-                throw Error.BadResult
-            }
-            
-            return MySQLResult(nil)
-        }
-        
-        return MySQLResult(result)
+       
+        return try execute(statement)
     }
     
     public func createSavePointNamed(name: String) throws {
